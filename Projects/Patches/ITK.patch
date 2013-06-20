@@ -1,0 +1,39 @@
+diff --git CMake/FindOpenCL.cmake CMake/FindOpenCL.cmake
+index 03c4f8f..383f012 100644
+--- CMake/FindOpenCL.cmake
++++ CMake/FindOpenCL.cmake
+@@ -32,11 +32,14 @@ else ()
+ 
+   if (WIN32)
+ 
++    # [CmakeTools] OpenCL is distributed with CUDA
++    find_package(CUDA REQUIRED)
++
+     find_path(OPENCL_INCLUDE_DIRS CL/cl.h )
+     find_path(_OPENCL_CPP_INCLUDE_DIRS CL/cl.hpp )
+ 
+     if( ${OPENCL_INCLUDE_DIRS} STREQUAL "OPENCL_INCLUDE_DIRS-NOTFOUND" )
+-     set( SEARCH_PATH ${OPENCL_ROOT_DIR}/inc ${OPENCL_ROOT_DIR}/common/inc ${PATH} "C:/ProgramData/NVIDIA Corporation/NVIDIA GPU Computing SDK/OpenCL/common/inc" "$ENV{ATISTREAMSDKROOT}/include" "C:/Program Files (x86)/AMD APP/include")
++     set( SEARCH_PATH ${CUDA_TOOLKIT_INCLUDE} ${OPENCL_ROOT_DIR}/inc ${OPENCL_ROOT_DIR}/common/inc ${PATH} "C:/ProgramData/NVIDIA Corporation/NVIDIA GPU Computing SDK/OpenCL/common/inc" "$ENV{ATISTREAMSDKROOT}/include" "C:/Program Files (x86)/AMD APP/include")
+      find_path(OPENCL_INCLUDE_DIRS CL/cl.h PATHS ${SEARCH_PATH} )
+      find_path(_OPENCL_CPP_INCLUDE_DIRS CL/cl.hpp PATHS ${SEARCH_PATH} )
+     endif()
+diff --git CMake/itkOpenCL.cmake CMake/itkOpenCL.cmake
+index dafdd97..017b55d 100644
+--- CMake/itkOpenCL.cmake
++++ CMake/itkOpenCL.cmake
+@@ -35,8 +35,13 @@ if (ITK_USE_GPU)
+     set(${GPUFILTER_KERNELNAME}_KernelString
+         "${${GPUFILTER_KERNELNAME}_KernelString}}\n")
+ 
+-    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE}
++    # [CmakeTools] prevent recompilation after configuration
++    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE}_
+          "${${GPUFILTER_KERNELNAME}_KernelString}")
++    add_custom_command(
++      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE}
++      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE}_ ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE}
++      DEPENDS ${OPENCL_FILE})
+ 
+     add_custom_target(${GPUFILTER_KERNELNAME}_Target
+                       SOURCES ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE})

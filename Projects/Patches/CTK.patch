@@ -1,0 +1,106 @@
+diff --git CMake/ctkMacroCompilePythonScript.cmake CMake/ctkMacroCompilePythonScript.cmake
+index a3fc4d1..6ecb376 100644
+--- CMake/ctkMacroCompilePythonScript.cmake
++++ CMake/ctkMacroCompilePythonScript.cmake
+@@ -92,7 +92,7 @@ file.write('Done')
+ if(WIN32)
+     set(ENV{PATH} \"@PYTHON_LIBRARY_PATH@;\$ENV{PATH}\")
+ elseif(APPLE)
+-  set(ENV{DYLD_LIBRARY_PATH} \"@PYTHON_LIBRARY_PATH@:\$ENV{DYLD_LIBRARY_PATH}\")
++  set(ENV{DYLD_FALLBACK_LIBRARY_PATH} \"@PYTHON_LIBRARY_PATH@:\$ENV{DYLD_FALLBACK_LIBRARY_PATH}\")
+ else()
+   set(ENV{LD_LIBRARY_PATH} \"@PYTHON_LIBRARY_PATH@:\$ENV{LD_LIBRARY_PATH}\")
+ endif()
+diff --git CMake/ctkMacroSetPaths.cmake CMake/ctkMacroSetPaths.cmake
+index d5b907d..245bf9f 100644
+--- CMake/ctkMacroSetPaths.cmake
++++ CMake/ctkMacroSetPaths.cmake
+@@ -28,7 +28,7 @@ macro(ctkMacroSetPaths PATH_LIST)
+     if(WIN32)
+       set(ENV{PATH} "${p};$ENV{PATH}")
+     elseif(APPLE)
+-      set(ENV{DYLD_LIBRARY_PATH} "${p}:$ENV{DYLD_LIBRARY_PATH}")
++      set(ENV{DYLD_FALLBACK_LIBRARY_PATH} "${p}:$ENV{DYLD_FALLBACK_LIBRARY_PATH}")
+     else()
+       set(ENV{LD_LIBRARY_PATH} "${p}:$ENV{LD_LIBRARY_PATH}")
+     endif()
+diff --git CMake/ctkScriptMocPythonQtWrapper.cmake CMake/ctkScriptMocPythonQtWrapper.cmake
+index 3ba7bc3..46ef575 100644
+--- CMake/ctkScriptMocPythonQtWrapper.cmake
++++ CMake/ctkScriptMocPythonQtWrapper.cmake
+@@ -85,6 +85,16 @@ foreach(header ${wrapper_headers})
+   set(wrapper_moc_file ${OUTPUT_DIR}/${WRAP_INT_DIR}/moc_${header}.cpp)
+   #message("wrapper_h_file: ${wrapper_h_file}")
+   #message("wrapper_moc_file: ${wrapper_moc_file}")
++  # [CmakeTools] Fix for compilation error on Windows.
++  if(WIN32)
++    set(FLAGS "")
++    foreach(FLAG ${MOC_FLAGS})
++	  if(NOT FLAG MATCHES "^-I")
++	    list(APPEND FLAGS ${FLAG})
++	  endif()
++	endforeach()
++	set(MOC_FLAGS ${FLAGS})
++  endif()
+   execute_process(
+     COMMAND ${QT_MOC_EXECUTABLE} ${MOC_FLAGS} ${moc_options} -o ${wrapper_moc_file} ${wrapper_h_file}
+     WORKING_DIRECTORY ${OUTPUT_DIR}
+diff --git CMake/ctkScriptWrapPythonQt_Light.cmake CMake/ctkScriptWrapPythonQt_Light.cmake
+index 09c18bb..ee01f11 100644
+--- CMake/ctkScriptWrapPythonQt_Light.cmake
++++ CMake/ctkScriptWrapPythonQt_Light.cmake
+@@ -76,7 +76,7 @@ else: print \"TRUE\"
+   if(WIN32)
+     set(ENV{PATH} ${python_library_path};$ENV{PATH})
+   elseif(APPLE)
+-    set(ENV{DYLD_LIBRARY_PATH} ${python_library_path}:$ENV{DYLD_LIBRARY_PATH})
++    set(ENV{DYLD_FALLBACK_LIBRARY_PATH} ${python_library_path}:$ENV{DYLD_FALLBACK_LIBRARY_PATH})
+   else()
+     set(ENV{LD_LIBRARY_PATH} ${python_library_path}:$ENV{LD_LIBRARY_PATH})
+   endif()
+diff --git CMakeExternals/PythonQt.cmake CMakeExternals/PythonQt.cmake
+index f2044e0..fb7ef6b 100644
+--- CMakeExternals/PythonQt.cmake
++++ CMakeExternals/PythonQt.cmake
+@@ -88,6 +88,11 @@ if(${add_project})
+         )
+       set(PYTHONQT_INSTALL_DIR ${ep_install_dir})
+ 
++      # [CmakeTools] Patch PythonQt.
++      include(${CMT_CMAKE_DIR}/Macros.cmake)
++      include(${CMT_CMAKE_DIR}/Functions.cmake)
++      cmt_patch_project(PythonQt ${CMT_PythonQt_PATCH})
++
+       # Since the full path of PythonQt library is used, there is not need to add
+       # its corresponding library output directory to CTK_EXTERNAL_LIBRARY_DIRS
+ 
+diff --git Libs/Widgets/ctkPathLineEdit.cpp Libs/Widgets/ctkPathLineEdit.cpp
+index edfde3f..7cca9af 100644
+--- Libs/Widgets/ctkPathLineEdit.cpp
++++ Libs/Widgets/ctkPathLineEdit.cpp
+@@ -95,7 +95,7 @@ ctkPathLineEditPrivate::ctkPathLineEditPrivate(ctkPathLineEdit& object)
+   , ComboBox(0)
+   , BrowseButton(0)
+   , MinimumContentsLength(0)
+-  , SizeAdjustPolicy(ctkPathLineEdit::AdjustToContentsOnFirstShow)
++  , SizeAdjustPolicy(ctkPathLineEdit::AdjustToMinimumContentsLength)
+   , Filters(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Readable)
+   , HasValidInput(false)
+ {
+@@ -464,7 +464,7 @@ void ctkPathLineEdit::browse()
+     }
+   if (path.isEmpty())
+     {
+-    return;
++//    return;
+     }
+   this->setCurrentPath(path);
+ }
+@@ -572,6 +572,7 @@ QString ctkPathLineEdit::currentPath()const
+ void ctkPathLineEdit::setCurrentPath(const QString& path)
+ {
+   Q_D(ctkPathLineEdit);
++  d->LineEdit->clear();
+   d->LineEdit->setText(path);
+ }
+ 

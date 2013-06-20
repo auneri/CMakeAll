@@ -1,0 +1,182 @@
+Index: CMakeLists.txt
+===================================================================
+--- CMakeLists.txt	(revision 257)
++++ CMakeLists.txt	(working copy)
+@@ -1,14 +1,14 @@
+ cmake_minimum_required(VERSION 2.6)
+ 
+-project(ZaharescuUtils)
+-SET(CGAL_DIR /opt/local/lib/cmake/)
++project(TransforMesh)
++#SET(CGAL_DIR /opt/local/lib/cmake/)
+ 
+ #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/opt/local/lib/cmake/")
+ #SET(CMAKE_MODULE_PATH /opt/local/share/cmake-2.8/Modules)
+-SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
++list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+ 
+ #platform
+-set(CMAKE_OSX_ARCHITECTURES "x86_64")
++#set(CMAKE_OSX_ARCHITECTURES "x86_64")
+ #export CC=/usr/bin/clang
+ #export CXX=/usr/bin/clang++
+ 
+Index: src/MeshMorphing/MVAlgVerif.cpp
+===================================================================
+--- src/MeshMorphing/MVAlgVerif.cpp	(revision 257)
++++ src/MeshMorphing/MVAlgVerif.cpp	(working copy)
+@@ -153,6 +153,12 @@
+ 		
+ 	}
+ 	
++	if (alg_saveOutput) {
++		char filename[300];
++        sprintf(filename, "%s/output_%04d.pts", alg_saveOutputPrefix, cur_iter);
++        data->mesh.saveDisplacementField(filename);
++	}
++
+ 	emit stepFinished();
+ 	return total_elements;
+ //	return (++cur_iter < iter);	
+@@ -464,9 +470,10 @@
+ #endif
+ 			//float total_movement = RunColorStep();
+ 			float total_movement = RunStep();
+-			cout << "STEP (scale=" << s+1 << "/" << alg_scales <<", step=" << t+1 << "/" << alg_iters << ") moved=" << total_movement << endl;
++//			cout << "STEP (scale=" << s+1 << "/" << alg_scales <<", step=" << t+1 << "/" << alg_iters << ") moved=" << total_movement << endl;
++            std::cout << "\r                                                                                \r" << std::flush;
++			std::cout << (100.0 * (t + 1)) / alg_iters << "%" << std::flush;
+ 
+-
+ 			if ((total_movement==0.0) && (alg_autoStop==true)) {
+ 				//compute Housdorf distance
+ 				float max_dist_1=data->mesh.distanceTo(dst_mesh,true);
+Index: src/TransforMesh/Mesh.cpp
+===================================================================
+--- src/TransforMesh/Mesh.cpp	(revision 257)
++++ src/TransforMesh/Mesh.cpp	(working copy)
+@@ -57,7 +57,7 @@
+ #endif
+ 
+ 
+-#define DEBUG_MESH 1
++#define DEBUG_MESH 0
+ #define DEBUG_SELF_INTERSECTIONS 0 // 0 - none; 1 - self intersections only ; 2 - 1 + choosing startup-triangle
+ #define DEBUG_TESSELATE 0
+ 
+@@ -159,7 +159,7 @@
+ #if SEED_METHOD==4
+ 	_AABB_tree=NULL;
+ #endif	
+-	qual_mode = Qual_Color_Deriv;
++	qual_mode = Qual_Gaussian_Curv;
+ 	/*
+ 	 Vector v1=v_normalized(Vector(1,1,1));
+ 	 Vector v2=v_normalized(Vector(1,2,3));
+@@ -734,7 +734,7 @@
+ 		}
+ 		else
+ 			os << p;
+-		cout << "* Saving mesh: " << filename << " - " << p.size_of_facets() << " facets and " << p.size_of_vertices() << " vertices." << endl ;
++//		cout << "* Saving mesh: " << filename << " - " << p.size_of_facets() << " facets and " << p.size_of_vertices() << " vertices." << endl ;
+ 		return true;
+ 	}
+ 	else if ( ( strcmp ( file_type,"coff" ) ==0 ) || ( strcmp ( file_type,"COFF" ) ==0 ) || ( strcmp ( file_type,"noff" ) ==0 ) || ( strcmp ( file_type,"NOFF" ) ==0 ) )
+@@ -1450,13 +1450,13 @@
+ 		std::cerr << "Error: Unable to save '" << filePattern << "'" << std::endl;
+ 		return false;
+ 	}
+-	cout << "* Saving vectorfield: "; cout.flush();
++//	cout << "* Saving vectorfield: "; cout.flush();
+ 	for ( Vertex_iterator vi= p.vertices_begin(); vi != p.vertices_end();vi++ )
+ 	{
+ 		file << vi->motion_vec << endl;
+ 		//		cout << "written " << vi->motion_vec << endl;
+ 	}
+-	cout << filePattern << " OK" << endl;
++//	cout << filePattern << " OK" << endl;
+ 	return true;
+ }
+ 
+@@ -1469,16 +1469,32 @@
+ 		std::cerr << "Error: Unable to save '" << filePattern << "'" << std::endl;
+ 		return false;
+ 	}
+-	cout << "* Saving vertex indices: "; cout.flush();
++//	cout << "* Saving vertex indices: "; cout.flush();
+ 	for ( Vertex_iterator vi= p.vertices_begin(); vi != p.vertices_end();vi++ )
+ 	{
+ 		file << vi->id << endl;
+ 	}
+-	cout << filePattern << " OK" << endl;
++//	cout << filePattern << " OK" << endl;
+ 	return true;
+ }
+ 
+ //////////////////////////////////////////////////////////////////////////////////////////////////////
++bool Mesh::saveDisplacementField(const char *filePattern) {
++  std::ofstream file(filePattern);
++  if (!file) {
++    std::cerr << "Error: Unable to save '" << filePattern << "'" << std::endl;
++    return false;
++  }
++//  std::cout << "* Saving displacement field: ";
++//  std::cout.flush();
++  for (Vertex_iterator vi = p.vertices_begin(); vi != p.vertices_end(); ++vi) {
++    file << vi->point() << std::endl;
++  }
++//  std::cout << filePattern << " OK" << std::endl;
++  return true;
++}
++
++//////////////////////////////////////////////////////////////////////////////////////////////////////
+ void Mesh::dilate ( double delta ) {
+ 	lock();
+ 	for ( Vertex_iterator vi = p.vertices_begin(); vi!=p.vertices_end(); vi++ )
+@@ -3866,7 +3882,7 @@
+ 			i->removal_status = 'U';
+ 		}
+ 		
+-		cout << "Connected components of :";
++//		cout << "Connected components of :";
+ 		//traverse the mesh via facets
+ 		for ( Facet_iterator i = p.facets_begin(); i != p.facets_end(); ++i )
+ 		{
+@@ -3906,10 +3922,10 @@
+ 				} //done traversing the current component
+ 				lastComponent.edge_avg/=lastComponent.size*3;
+ 				connected_components.push_back ( lastComponent );
+-				cout << lastComponent.size << " ";
++//				cout << lastComponent.size << " ";
+ 			} // found a new component
+ 		}//done traversing the mesh
+-		cout << " - total : "<< connected_components.size() << endl;
++//		cout << " - total : "<< connected_components.size() << endl;
+ 		return connected_components.size();
+ 	}
+ 	
+Index: src/TransforMesh/Mesh.h
+===================================================================
+--- src/TransforMesh/Mesh.h	(revision 257)
++++ src/TransforMesh/Mesh.h	(working copy)
+@@ -153,6 +153,7 @@
+ 	bool loadVectorField(const char* filePattern, bool rememberFilename);
+ 	bool saveVectorField(const char* filePattern);	
+ 	bool saveVertexIndices(const char* filePattern);
++    bool saveDisplacementField(const char *filePattern);
+ 	
+ 	void createMeshFromPoints(const char *filename);
+ 	void mergeTriangleSoup();
+Index: src/TransforMesh/MeshIntersections.cpp
+===================================================================
+--- src/TransforMesh/MeshIntersections.cpp	(revision 257)
++++ src/TransforMesh/MeshIntersections.cpp	(working copy)
+@@ -44,7 +44,7 @@
+ #define CGAL_CFG_NO_AUTOMATIC_TEMPLATE_INCLUSION 1
+ #include <CEP/intersection/Triangle_3_Triangle_3.h>
+ 
+-#define DEBUG_MESH 1
++#define DEBUG_MESH 0
+ #define DEBUG_SELF_INTERSECTIONS 0 // 0 - none; 1 - self intersections only ; 2 - 1 + choosing startup-triangle
+ #define DEBUG_TESSELATE 0
+ 

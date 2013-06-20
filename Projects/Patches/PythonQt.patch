@@ -1,0 +1,18 @@
+diff --git src/PythonQtClassWrapper.cpp src/PythonQtClassWrapper.cpp
+index 17ffbcf..e4fc6b4 100644
+--- src/PythonQtClassWrapper.cpp
++++ src/PythonQtClassWrapper.cpp
+@@ -318,9 +318,10 @@ static PyObject *PythonQtClassWrapper_getattro(PyObject *obj, PyObject *name)
+   if ((attributeName = PyString_AsString(name)) == NULL) {
+     return NULL;
+   }
+-  if (obj == (PyObject*)&PythonQtInstanceWrapper_Type) {
+-    return NULL;
+-  }
++  // [CmakeTools] Enable code-completion in IPython.
++  //if (obj == (PyObject*)&PythonQtInstanceWrapper_Type) {
++  //  return NULL;
++  //}
+ 
+   if (qstrcmp(attributeName, "__dict__")==0) {
+     PyObject* objectDict  = ((PyTypeObject *)wrapper)->tp_dict;
