@@ -2,7 +2,7 @@
 # Date: 2012-10-28
 
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_OPTIONAL_PROJECTS CUDA DCMTK VTK)
+set(EP_OPTIONAL_PROJECTS CUDA DCMTK VTK zlib)
 set(EP_URL git://itk.org/ITK.git)
 set(EP_OPTION_DESCRIPTION "Insight Segmentation and Registration Toolkit")
 
@@ -18,6 +18,9 @@ endif()
 if(PROJECTS_VTK)
   list(APPEND EP_REQUIRED_PROJECTS VTK)
 endif()
+if(PROJECTS_zlib)
+  list(APPEND EP_REQUIRED_PROJECTS zlib)
+endif()
 
 cmt_end_definition()
 # -----------------------------------------------------------------------------
@@ -30,6 +33,7 @@ set(EP_CMAKE_ARGS
   -DITKV3_COMPATIBILITY:BOOL=ON
   -DITK_USE_GPU:BOOL=${PROJECTS_CUDA}
   -DITK_USE_REVIEW:BOOL=ON
+  -DITK_USE_SYSTEM_ZLIB:BOOL=${PROJECTS_zlib}
   -DModule_ITKIODCMTK:BOOL=${PROJECTS_DCMTK}
   -DModule_ITKVtkGlue:BOOL=${PROJECTS_VTK})
 
@@ -38,16 +42,20 @@ if(PROJECTS_DCMTK)
     -DITK_USE_SYSTEM_DCMTK:BOOL=ON
     -DDCMTK_DIR:PATH=${PROJECT_BINARY_DIR}/DCMTK-build)
 endif()
-
 if(PROJECTS_SimpleITK OR PROJECTS_Slicer)
   list(APPEND EP_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON)
 else()
   list(APPEND EP_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=OFF)
 endif()
-
 if(PROJECTS_VTK)
   list(APPEND EP_CMAKE_ARGS
     -DVTK_DIR:PATH=${PROJECT_BINARY_DIR}/VTK-build)
+endif()
+if(PROJECTS_zlib)
+  list(APPEND EP_CMAKE_ARGS
+    -DZLIB_ROOT:PATH=${CMT_ZLIB_ROOT}
+    -DZLIB_INCLUDE_DIR:PATH=${CMT_ZLIB_INCLUDE_DIR}
+    -DZLIB_LIBRARY:FILEPATH=${CMT_ZLIB_LIBRARY})
 endif()
 
 ExternalProject_Add(${EP_NAME}
