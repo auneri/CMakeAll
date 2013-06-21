@@ -372,7 +372,6 @@ endfunction()
 # -----------------------------------------------------------------------------
 #! Include provided projects in testing, if marked accordingly.
 function(cmt_test_projects)
-  set(CMT_BUILD_TESTING ON)
   add_custom_target("test")
   set_property(TARGET "test" PROPERTY PROJECT_LABEL "RUN_TESTS")
   foreach(DEFINITION ${ARGN})

@@ -9,9 +9,6 @@ set(CMT_CMAKE_DIR "${CMT_SOURCE_DIR}/CMake")
 set(CMT_PROJECTS_DIR "${CMT_SOURCE_DIR}/Projects")
 set(CMT_MODULES_DIR "${CMT_SOURCE_DIR}/Modules")
 
-file(GLOB CMT_PROJECTS "${CMT_PROJECTS_DIR}/*.cmake")
-file(GLOB CMT_MODULES "${CMT_MODULES_DIR}/*.cmake")
-
 list(APPEND CMAKE_MODULE_PATH "${CMT_SOURCE_DIR}/CMake")
 include(ExternalProject)
 include(CMakeDependentOption)
