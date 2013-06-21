@@ -1,0 +1,19 @@
+find_package(Doxygen REQUIRED)
+
+try_compile(
+  RESULT_VAR
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMakeDoxygenFilter.cxx
+  OUTPUT_VARIABLE COMPILATION_OUTPUT
+  COPY_FILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeDoxygenFilter${CMAKE_EXECUTABLE_SUFFIX})
+if(NOT RESULT_VAR)
+  message(FATAL_ERROR "Faild to compile Documentation/CMakeDoxygenFilter.cxx\n${COMPILATION_OUTPUT}")
+endif()
+
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+  ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+  @ONLY)
+add_custom_target(doc
+  COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
