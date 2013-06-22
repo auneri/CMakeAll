@@ -54,11 +54,9 @@ function(cmt_configure_launcher)
   set(EP_MATLABPATHS "")
   set(EP_MODULEPATHS "")
 
-  set(SELECTED_PROJECTS)
   foreach(DEFINITION ${CMT_DEFINITIONS})
     cmt_read_definition(${DEFINITION})
     if(${EP_OPTION_NAME})
-      list(APPEND SELECTED_PROJECTS ${EP_NAME})
       ExternalProject_Get_Property(${EP_NAME} SOURCE_DIR)
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
       ExternalProject_Get_Property(${EP_NAME} INSTALL_DIR)
@@ -82,7 +80,6 @@ function(cmt_configure_launcher)
   string(REPLACE ";" "::" MODULEPATH "${EP_MODULEPATHS}")
 
   add_custom_target(Launcher ALL
-    DEPENDS ${SELECTED_PROJECTS}
     COMMAND ${CMAKE_COMMAND}
       -DPATH:STRING=${PATH}
       -DLIBRARYPATH:STRING=${LIBRARYPATH}
