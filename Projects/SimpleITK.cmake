@@ -2,7 +2,6 @@
 # Date: 2012-10-29
 
 set(EP_REQUIRED_PROJECTS ITK SWIG)
-set(EP_OPTIONAL_PROJECTS VTK)
 set(EP_URL git://itk.org/SimpleITK.git)
 
 list(APPEND EP_LIBRARYPATH @BINARY_DIR@/lib)

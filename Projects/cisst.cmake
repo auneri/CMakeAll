@@ -2,7 +2,6 @@
 # Date: 2011-07-25
 
 set(EP_REQUIRED_PROJECTS Patch Qt Subversion)
-set(EP_OPTIONAL_PROJECTS OpenCV SWIG)
 set(EP_URL https://svn.lcsr.jhu.edu/cisst/trunk)
 set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)
 set(EP_OPTION_DESCRIPTION "Computer-Integrated Surgical Systems and Technology")

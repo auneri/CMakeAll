@@ -2,7 +2,6 @@
 # Date: 2011-07-25
 
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_OPTIONAL_PROJECTS Python)
 set(EP_URL git://github.com/Itseez/opencv.git)
 set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
 

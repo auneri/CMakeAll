@@ -2,7 +2,6 @@
 # Date: 2012-10-28
 
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_OPTIONAL_PROJECTS CUDA DCMTK VTK zlib)
 set(EP_URL git://itk.org/ITK.git)
 set(EP_OPTION_DESCRIPTION "Insight Segmentation and Registration Toolkit")
 
