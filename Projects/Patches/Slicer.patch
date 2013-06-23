@@ -68,37 +68,6 @@ Index: Base/QTGUI/qSlicerScriptedLoadableModuleWidget.cxx
    PyRun_CloseFile(pyfile);
  #else
    fclose(pyfile);
-Index: Base/QTGUI/qSlicerStyle.cxx
-===================================================================
---- Base/QTGUI/qSlicerStyle.cxx	(revision 21513)
-+++ Base/QTGUI/qSlicerStyle.cxx	(working copy)
-@@ -251,16 +251,17 @@
- //------------------------------------------------------------------------------
- QPalette qSlicerStyle::standardPalette()const
- {
-+  // [CmakeTools] Modify color scheme.
-   QPalette palette = this->Superclass::standardPalette();
--  palette.setColor(QPalette::Button, "#fcfcfc");
--  palette.setColor(QPalette::Light, "#c8c8c8");
--  palette.setColor(QPalette::Midlight, "#e6e6e6");
--  palette.setColor(QPalette::Dark, "#aaaaaa");
--  palette.setColor(QPalette::Mid, "#c8c8c8");
--  palette.setColor(QPalette::Base, Qt::white);
--  palette.setColor(QPalette::Window, Qt::white);
--  palette.setColor(QPalette::Shadow, "#5a5a5a");
--  palette.setColor(QPalette::AlternateBase, QColor("#e4e4fe"));
-+  //palette.setColor(QPalette::Button, "#fcfcfc");
-+  //palette.setColor(QPalette::Light, "#c8c8c8");
-+  //palette.setColor(QPalette::Midlight, "#e6e6e6");
-+  //palette.setColor(QPalette::Dark, "#aaaaaa");
-+  //palette.setColor(QPalette::Mid, "#c8c8c8");
-+  //palette.setColor(QPalette::Base, Qt::white);
-+  //palette.setColor(QPalette::Window, Qt::white);
-+  //palette.setColor(QPalette::Shadow, "#5a5a5a");
-+  //palette.setColor(QPalette::AlternateBase, QColor("#e4e4fe"));
-   return palette;
- }
- 
 Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
 ===================================================================
 --- CMake/SlicerBlockCTKAppLauncherSettings.cmake	(revision 21513)
@@ -112,18 +81,17 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
    set(SLICER_PYTHONHOME ${Slicer_SUPERBUILD_DIR}/python-build)
    get_filename_component(SLICER_PYTHON_LIB_DIR ${PYTHON_LIBRARY} PATH)
    list(APPEND SLICER_LIBRARY_PATHS_BUILD
-@@ -143,6 +143,10 @@
+@@ -143,6 +143,9 @@
    if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
      set(pythonpath_subdir "Lib")
    endif()
 +elseif(DEFINED CMT_PYTHON_EXECUTABLE)
 +  list(APPEND SLICER_LIBRARY_PATHS_BUILD
-+    ${CTK_DIR}/PythonQt-build/<CMAKE_CFG_INTDIR>
-+    )
++    ${CTK_DIR}/PythonQt-build/<CMAKE_CFG_INTDIR>)
  endif()
  
  if(Slicer_USE_QtTesting)
-@@ -151,7 +155,7 @@
+@@ -151,7 +154,7 @@
      )
  endif()
  
@@ -132,7 +100,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
    list(APPEND SLICER_LIBRARY_PATHS_BUILD
      ${SLICER_PYTHONHOME}/${pythonpath_subdir}/site-packages/numpy/core
      ${SLICER_PYTHONHOME}/${pythonpath_subdir}/site-packages/numpy/lib
-@@ -194,7 +198,7 @@
+@@ -194,7 +197,7 @@
  #       Please note that the environment variable is SLICER_HOME,
  #       CMake refers to the variable as Slicer_HOME, and the tcl variable is SlicerHome.
  
@@ -141,7 +109,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
    set(PYTHONPATH "<APPLAUNCHER_DIR>/bin/<CMAKE_CFG_INTDIR>")
    set(PYTHONPATH "${PYTHONPATH}<PATHSEP><APPLAUNCHER_DIR>/bin/Python")
    set(PYTHONPATH "${PYTHONPATH}<PATHSEP>${SLICER_PYTHONHOME}/${pythonpath_subdir}")
-@@ -270,7 +274,7 @@
+@@ -270,7 +273,7 @@
      )
  endif()
  
@@ -150,7 +118,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
    # On windows, both pythonQt and python libraries are installed allong with the executable
    list(APPEND SLICER_LIBRARY_PATHS_INSTALLED
      <APPLAUNCHER_DIR>/lib/Python/lib
-@@ -290,14 +294,14 @@
+@@ -290,14 +293,14 @@
      )
  endif()
  
@@ -167,7 +135,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
    list(APPEND SLICER_LIBRARY_PATHS_INSTALLED
      <APPLAUNCHER_DIR>/lib/Python/${pythonpath_subdir}/site-packages/numpy/core
      <APPLAUNCHER_DIR>/lib/Python/${pythonpath_subdir}/site-packages/numpy/lib
-@@ -324,7 +328,7 @@
+@@ -324,7 +327,7 @@
    "SLICER_HOME=<APPLAUNCHER_DIR>"
    )
  
@@ -226,32 +194,6 @@ Index: Libs/MRML/Core/vtkMRMLVolumeArchetypeStorageNode.cxx
  }
  
  //----------------------------------------------------------------------------
-Index: Libs/MRML/Widgets/qMRMLCheckableNodeComboBox.h
-===================================================================
---- Libs/MRML/Widgets/qMRMLCheckableNodeComboBox.h	(revision 21513)
-+++ Libs/MRML/Widgets/qMRMLCheckableNodeComboBox.h	(working copy)
-@@ -42,7 +42,7 @@
- 
-   /// Return the list of checked nodes.
-   /// \sa uncheckedNodes(), nodes()
--  QList<vtkMRMLNode*> checkedNodes()const;
-+  Q_INVOKABLE QList<vtkMRMLNode*> checkedNodes()const;
- 
-   /// Return the list of unchecked nodes.
-   /// \sa checkedNodes(), nodes()
-Index: Modules/Loadable/Annotations/Widgets/qMRMLAnnotationTreeView.h
-===================================================================
---- Modules/Loadable/Annotations/Widgets/qMRMLAnnotationTreeView.h	(revision 21513)
-+++ Modules/Loadable/Annotations/Widgets/qMRMLAnnotationTreeView.h	(working copy)
-@@ -50,7 +50,7 @@
- 
-   void hideScene();
- 
--  const char* firstSelectedNode();
-+  Q_INVOKABLE const char* firstSelectedNode();
- 
-   // Register the logic
-   void setLogic(vtkSlicerAnnotationModuleLogic* logic);
 Index: Modules/Loadable/CMakeLists.txt
 ===================================================================
 --- Modules/Loadable/CMakeLists.txt	(revision 21513)
@@ -286,7 +228,7 @@ Index: SuperBuild.cmake
  
 +# [CmakeTools] Forward CMake options to internal Slicer project.
 +set(CMT_CMAKE_ARGS
-+  -DCMT_PYTHON_EXECUTABLE:FILEPATH=${CMT_PYTHON_EXECUTABLE}
++  -DCMT_PYTHON_EXECUTABLE:FILEPATH=${CMT_PYTHON_EXECUTABLE})
 +if(WIN32)
 +  list(APPEND CMT_CMAKE_ARGS
 +    -DSlicer_BUILD_WIN32_CONSOLE:BOOL=ON)

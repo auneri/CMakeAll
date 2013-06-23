@@ -25,7 +25,7 @@ index d5b907d..245bf9f 100644
        set(ENV{LD_LIBRARY_PATH} "${p}:$ENV{LD_LIBRARY_PATH}")
      endif()
 diff --git CMake/ctkScriptMocPythonQtWrapper.cmake CMake/ctkScriptMocPythonQtWrapper.cmake
-index 3ba7bc3..46ef575 100644
+index 3ba7bc3..6d79b1f 100644
 --- CMake/ctkScriptMocPythonQtWrapper.cmake
 +++ CMake/ctkScriptMocPythonQtWrapper.cmake
 @@ -85,6 +85,16 @@ foreach(header ${wrapper_headers})
@@ -59,15 +59,14 @@ index 09c18bb..ee01f11 100644
      set(ENV{LD_LIBRARY_PATH} ${python_library_path}:$ENV{LD_LIBRARY_PATH})
    endif()
 diff --git CMakeExternals/PythonQt.cmake CMakeExternals/PythonQt.cmake
-index f2044e0..fb7ef6b 100644
+index f2044e0..f480d03 100644
 --- CMakeExternals/PythonQt.cmake
 +++ CMakeExternals/PythonQt.cmake
-@@ -88,6 +88,11 @@ if(${add_project})
+@@ -88,6 +88,10 @@ if(${add_project})
          )
        set(PYTHONQT_INSTALL_DIR ${ep_install_dir})
  
 +      # [CmakeTools] Patch PythonQt.
-+      include(${CMT_CMAKE_DIR}/Macros.cmake)
 +      include(${CMT_CMAKE_DIR}/Functions.cmake)
 +      cmt_patch_project(PythonQt ${CMT_PythonQt_PATCH})
 +

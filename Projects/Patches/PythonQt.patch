@@ -1,5 +1,5 @@
 diff --git src/PythonQtClassWrapper.cpp src/PythonQtClassWrapper.cpp
-index 17ffbcf..e4fc6b4 100644
+index 17ffbcf..211453a 100644
 --- src/PythonQtClassWrapper.cpp
 +++ src/PythonQtClassWrapper.cpp
 @@ -318,9 +318,10 @@ static PyObject *PythonQtClassWrapper_getattro(PyObject *obj, PyObject *name)
