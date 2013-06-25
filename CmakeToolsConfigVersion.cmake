@@ -29,10 +29,3 @@ endif()
 if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "" OR "8" STREQUAL "")
   return()
 endif()
-
-# check that the installed version has the same 32/64bit-ness as the one which is currently searching:
-if(NOT "${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
-  math(EXPR installedBits "8 * 8")
-  set(PACKAGE_VERSION "${PACKAGE_VERSION} (${installedBits}bit)")
-  set(PACKAGE_VERSION_UNSUITABLE TRUE)
-endif()
