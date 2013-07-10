@@ -1,6 +1,7 @@
 #! \file
 #! \author Ali Uneri
 #! \date 2013-05-03
+#! \brief Variables used to define a project.
 
 
 # -----------------------------------------------------------------------------
@@ -15,9 +16,9 @@ endmacro()
 #! Initialize, [document] and read project definition.
 macro(cmt_read_definition DEFINITION)
   get_filename_component(FILENAME ${DEFINITION} NAME_WE)
-  get_filename_component(PARENT_DIR ${DEFINITION} PATH)
-  get_filename_component(PARENT_DIRNAME ${PARENT_DIR} NAME)
-  string(TOUPPER ${PARENT_DIRNAME} PARENT_DIRNAME)
+  get_filename_component(DIR ${DEFINITION} PATH)
+  get_filename_component(DIRNAME ${DIR} NAME)
+  string(TOUPPER ${DIRNAME} DIRNAME)
 
   #! Project name.
   set(EP_NAME "${FILENAME}")
@@ -31,7 +32,7 @@ macro(cmt_read_definition DEFINITION)
   set(EP_PATCH "")
 
   #! Project CMake option.
-  set(EP_OPTION_NAME "${PARENT_DIRNAME}_${EP_NAME}")
+  set(EP_OPTION_NAME "${DIRNAME}_${EP_NAME}")
   #! Default value of option.
   set(EP_OPTION_DEFAULT OFF)
   #! Hide option until requirements are met.
