@@ -1,9 +1,8 @@
 # Author: Ali Uneri
 # Date: 2011-07-25
 
-set(EP_REQUIRED_PROJECTS Patch Qt Subversion)
+set(EP_REQUIRED_PROJECTS Qt Subversion)
 set(EP_URL https://svn.lcsr.jhu.edu/cisst/trunk)
-set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)
 set(EP_OPTION_DESCRIPTION "Computer-Integrated Surgical Systems and Technology")
 
 list(APPEND EP_PATH
@@ -16,9 +15,6 @@ list(APPEND EP_LIBRARYPATH
 if(PROJECTS_OpenCV)
   list(APPEND EP_REQUIRED_PROJECTS OpenCV)
 endif()
-if(PROJECTS_Slicer_OpenIGTLink)
-  list(APPEND EP_REQUIRED_PROJECTS Slicer)
-endif()
 if(PROJECTS_SWIG)
   list(APPEND EP_REQUIRED_PROJECTS SWIG)
   list(APPEND EP_PYTHONPATH @BINARY_DIR@/cisst/lib/@INTDIR@)
@@ -27,11 +23,7 @@ endif()
 cmt_end_definition()
 # -----------------------------------------------------------------------------
 
-if(WIN32)
-  cmake_dependent_option(${EP_OPTION_NAME}_MicronTracker "Support for Claron MicronTracker" OFF ${EP_OPTION_NAME} OFF)
-endif()
-
-set(EP_REVISION 4092)
+set(EP_REVISION 4336)
 set(EP_CMAKE_ARGS
   -DCISST_BUILD_APPLICATIONS:BOOL=OFF
   -DCISST_BUILD_SHARED_LIBS:BOOL=ON
@@ -86,11 +78,6 @@ set(EP_CMAKE_ARGS_RECONFIGURE
   -DSAW_ClaronMicronTracker:BOOL=${${EP_OPTION_NAME}_MicronTracker}
   -DSAW_NDITracker:BOOL=ON
   -DSAW_OpenIGTLink:BOOL=${PROJECTS_Slicer_OpenIGTLink})
-
-if(PROJECTS_Slicer_OpenIGTLink)
-  list(APPEND EP_CMAKE_ARGS_RECONFIGURE
-    -DOpenIGTLink_DIR:PATH=${PROJECT_BINARY_DIR}/Slicer-build/OpenIGTLink-build)
-endif()
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
