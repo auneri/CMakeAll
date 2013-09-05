@@ -14,7 +14,7 @@ endif()
 cmt_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION 2.4.5)
+set(EP_REVISION 2.4.6.1)
 set(EP_CMAKE_ARGS
   -DBUILD_DOCS:BOOL=OFF
   -DBUILD_opencv_python:BOOL=${PROJECTS_Python}
