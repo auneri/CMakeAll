@@ -278,6 +278,29 @@ endfunction()
 
 
 # -----------------------------------------------------------------------------
+#! Get Git revision of a project source.
+function(cmt_git_revision SOURCE_DIR REVISION_)
+  set(REVISION 0)  # default to 0
+
+  find_package(Git QUIET)
+  if(GIT_FOUND)
+    execute_process(
+      COMMAND ${GIT_EXECUTABLE} rev-list HEAD --count
+      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+      RESULT_VARIABLE RESULT1
+      OUTPUT_VARIABLE GIT_WC_REVISION
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      ERROR_QUIET)
+    if(NOT RESULT1)
+      set(REVISION ${GIT_WC_REVISION})
+    endif()
+  endif()
+
+  set(${REVISION_} ${REVISION} PARENT_SCOPE)
+endfunction()
+
+
+# -----------------------------------------------------------------------------
 #! Get Subversion revision of a project source.
 function(cmt_subversion_revision SOURCE_DIR REVISION_)
   set(REVISION 0)  # default to 0
@@ -304,12 +327,14 @@ function(cmt_subversion_revision SOURCE_DIR REVISION_)
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       RESULT_VARIABLE RESULT1
       OUTPUT_VARIABLE GIT_WC_REVISION
+      OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_QUIET)
     execute_process(
       COMMAND ${GIT_EXECUTABLE} svn find-rev ${GIT_WC_REVISION}
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       RESULT_VARIABLE RESULT2
       OUTPUT_VARIABLE SVN_WC_REVISION
+      OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_QUIET)
     if(NOT RESULT1 AND NOT RESULT2)
       set(REVISION ${SVN_WC_REVISION})
