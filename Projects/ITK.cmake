@@ -24,7 +24,7 @@ endif()
 cmt_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION v4.4.0)
+set(EP_REVISION v4.4.2)
 set(EP_CMAKE_ARGS
   -DBUILD_EXAMPLES:BOOL=OFF
   -DBUILD_TESTING:BOOL=OFF
