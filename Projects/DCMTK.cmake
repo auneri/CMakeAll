@@ -5,6 +5,8 @@ set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL git://git.dcmtk.org/dcmtk.git)
 set(EP_OPTION_DESCRIPTION "DICOM Toolkit")
 
+list(APPEND EP_LIBRARYPATH @BINARY_DIR@/bin/@INTDIR@)
+
 cmt_end_definition()
 # -----------------------------------------------------------------------------
 
