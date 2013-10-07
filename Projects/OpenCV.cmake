@@ -14,7 +14,7 @@ endif()
 cmt_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION 2.4.6.1)
+set(EP_REVISION 2.4.6)
 set(EP_CMAKE_ARGS
   -DBUILD_DOCS:BOOL=OFF
   -DBUILD_opencv_python:BOOL=${PROJECTS_Python}
@@ -22,7 +22,9 @@ set(EP_CMAKE_ARGS
   -DBUILD_WITH_DEBUG_INFO:BOOL=OFF
   -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
   -DWITH_CUDA:BOOL=OFF
-  -DWITH_QT:BOOL=OFF)
+  -DWITH_FFMPEG:BOOL=OFF
+  -DWITH_OPENCL:BOOL=OFF
+  -DWITH_QT:BOOL=${PROJECTS_Qt})
 
 if(PROJECTS_Python)
   list(APPEND EP_CMAKE_ARGS
