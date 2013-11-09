@@ -1,10 +1,12 @@
 # Author: Ali Uneri
 # Date: 2013-06-01
 
+set(ENVVAR "@ENVVAR@")
 set(PATH "@PATH@")
 set(LIBRARYPATH "@LIBRARYPATH@")
 set(PYTHONPATH "@PYTHONPATH@")
 set(MODULEPATH "@MODULEPATH@")
+set(NATIVE_ENVVAR "")
 set(NATIVE_PATH "")
 set(NATIVE_LIBRARYPATH "")
 set(NATIVE_PYTHONPATH "")
@@ -42,6 +44,13 @@ endif()
 
 
 # setup environment variables
+foreach(X ${ENVVAR})
+  string(REPLACE "+=" ";" X ${X})
+  list(GET X 0 KEY)
+  list(GET X 1 VALUE)
+  file(TO_NATIVE_PATH ${VALUE} VALUE)
+  set(ENV{${KEY}} "${VALUE}${PATHSEP}$ENV{${KEY}}")
+endforeach()
 foreach(X ${PATH})
   file(TO_NATIVE_PATH ${X} Y)
   list(APPEND NATIVE_PATH ${Y})
@@ -58,6 +67,7 @@ foreach(X ${MODULEPATH})
   file(TO_NATIVE_PATH ${X} Y)
   list(APPEND NATIVE_MODULEPATH ${Y})
 endforeach()
+string(REPLACE ";" "${PATHSEP}" PATH "${NATIVE_ENVVAR}")
 string(REPLACE ";" "${PATHSEP}" PATH "${NATIVE_PATH}")
 string(REPLACE ";" "${PATHSEP}" LIBRARYPATH "${NATIVE_LIBRARYPATH}")
 string(REPLACE ";" "${PATHSEP}" PYTHONPATH "${NATIVE_PYTHONPATH}")

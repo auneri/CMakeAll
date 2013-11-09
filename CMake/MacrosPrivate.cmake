@@ -43,6 +43,7 @@ macro(cmt_read_definition DEFINITION)
   set(EP_OPTION_ADVANCED OFF)
 
   #! Environment variables.
+  set(EP_ENVVAR "")
   set(EP_PATH "")
   set(EP_LIBRARYPATH "")
   set(EP_PYTHONPATH "")
