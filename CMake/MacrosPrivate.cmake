@@ -48,7 +48,6 @@ macro(cmt_read_definition DEFINITION)
   set(EP_LIBRARYPATH "")
   set(EP_PYTHONPATH "")
   set(EP_MATLABPATH "")
-  set(EP_MODULEPATH "")
 
   #! Variables that expand at build-time.
   set(INTDIR "@INTDIR@")
