@@ -91,6 +91,7 @@ function(cmt_configure_launcher)
       -DSOURCE_DIR:PATH=${CMT_CMAKE_DIR}
       -DBINARY_DIR:PATH=${PROJECT_BINARY_DIR}
       -DNAME:STRING=${PROJECT_NAME}
+      -DCUSTOMIZATIONS:PATH=${ARGV0}
       -P ${CMT_CMAKE_DIR}/ConfigureLauncher.cmake)
 
   add_custom_target(run_terminal COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake Terminal)

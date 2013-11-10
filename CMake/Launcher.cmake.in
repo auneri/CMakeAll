@@ -5,6 +5,8 @@ set(ENVVAR "@ENVVAR@")
 set(PATH "@PATH@")
 set(LIBRARYPATH "@LIBRARYPATH@")
 set(PYTHONPATH "@PYTHONPATH@")
+set(NAME "@NAME@")
+set(CUSTOMIZATIONS "@CUSTOMIZATIONS@")
 set(NATIVE_ENVVAR "")
 set(NATIVE_PATH "")
 set(NATIVE_LIBRARYPATH "")
@@ -14,32 +16,25 @@ if(WIN32)
   set(PATHSEP ";")
 endif()
 
-
 # handle command-line arguments
 set(ARGV "")
 foreach(I RANGE 3 ${CMAKE_ARGC})
   list(APPEND ARGV ${CMAKE_ARGV${I}})
 endforeach()
 
-
-# display help
-if(NOT ARGV)
-  set(HELP
-    "Usage: cmake -P @NAME@.cmake <command>\n\n"
-    "A cross-platform launcher that configures environment variables and executes\n"
-    "the provided command within the current shell.\n\n"
-    "Command aliases:\n"
-    "  Terminal - Open a terminal.\n"
-    "  Slicer - Launch Slicer interface.\n"
-    "  Slicelet <path> - Launch a Slicer scripted module as a standalone application.\n")
-  if(UNIX)
-    list(APPEND HELP
-      "  Patch <path> - Create and dry-run a patch of a source directory under svn/git.\n")
-  endif()
-  message(${HELP})
-  return()
+# default help
+set(HELP
+  "Usage: cmake -P ${NAME}.cmake <command>\n\n"
+  "A cross-platform launcher that configures environment variables and executes\n"
+  "the provided command within the current shell.\n\n"
+  "Command aliases:\n"
+  "  Terminal - Open a terminal.\n"
+  "  Slicer - Launch Slicer interface.\n"
+  "  Slicelet <path> - Launch a Slicer scripted module as a standalone application.\n")
+if(UNIX)
+  list(APPEND HELP
+    "  Patch <path> - Create and dry-run a patch of a source directory under svn/git.\n")
 endif()
-
 
 # setup environment variables
 foreach(X ${ENVVAR})
@@ -84,7 +79,6 @@ else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()
 
-
 # command alias: Terminal
 if(ARGV MATCHES "^Terminal$")
   if(WIN32)
@@ -100,20 +94,17 @@ if(ARGV MATCHES "^Terminal$")
   endif()
 endif()
 
-
 # command alias: Slicer
 if(ARGV MATCHES "^Slicer$")
   string(REPLACE "${PATHSEP}" ";" SLICERPATH "$ENV{SLICERPATH}")
   set(ARGV ${SLICER} --additional-module-paths ${SLICERPATH})
 endif()
 
-
 # command alias: Slicelet
 if(ARGV MATCHES "^Slicelet")
   list(GET ARGV 1 MODULE)
   set(ARGV ${SLICER} --no-main-window --disable-cli-modules --disable-loadable-modules --disable-scripted-loadable-modules --python-script ${MODULE})
 endif()
-
 
 # command alias: Patch
 if(ARGV MATCHES "^Patch")
@@ -123,5 +114,14 @@ if(ARGV MATCHES "^Patch")
   endif()
 endif()
 
+# include customizations
+if(CUSTOMIZATIONS)
+  include(${CUSTOMIZATIONS})
+endif()
 
-execute_process(COMMAND ${ARGV})
+# execute commands
+if(ARGV)
+  execute_process(COMMAND ${ARGV})
+else()
+  message(${HELP})
+endif()
