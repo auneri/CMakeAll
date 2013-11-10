@@ -96,10 +96,6 @@ function(cmt_configure_launcher)
 
   add_custom_target(run_terminal COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake Terminal)
   set_property(TARGET run_terminal PROPERTY PROJECT_LABEL "RUN_TERMINAL")
-  if(PROJECTS_Slicer)
-    add_custom_target(run_slicer COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake Slicer)
-    set_property(TARGET run_slicer PROPERTY PROJECT_LABEL "RUN_SLICER")
-  endif()
 endfunction()
 
 

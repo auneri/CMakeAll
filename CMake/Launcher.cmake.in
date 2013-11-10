@@ -28,9 +28,7 @@ set(HELP
   "A cross-platform launcher that configures environment variables and executes\n"
   "the provided command within the current shell.\n\n"
   "Command aliases:\n"
-  "  Terminal - Open a terminal.\n"
-  "  Slicer - Launch Slicer interface.\n"
-  "  Slicelet <path> - Launch a Slicer scripted module as a standalone application.\n")
+  "  Terminal - Open a terminal.\n")
 if(UNIX)
   list(APPEND HELP
     "  Patch <path> - Create and dry-run a patch of a source directory under svn/git.\n")
@@ -64,17 +62,14 @@ if(WIN32)
   set(ENV{PATH} "${LIBRARYPATH};$ENV{PATH}")
   set(ENV{PATH} "${PATH};$ENV{PATH}")
   set(ENV{PYTHONPATH} "${PYTHONPATH};$ENV{PYTHONPATH}")
-  set(SLICER cmd.exe /c "${CMAKE_CURRENT_LIST_DIR}\\Slicer-build\\Slicer-build\\bin\\Release\\SlicerApp-real.exe")
 elseif(APPLE)
   set(ENV{PATH} "${PATH}:$ENV{PATH}")
   set(ENV{DYLD_LIBRARY_PATH} "${LIBRARYPATH}:$ENV{DYLD_LIBRARY_PATH}")
   set(ENV{PYTHONPATH} "${PYTHONPATH}:$ENV{PYTHONPATH}")
-  set(SLICER "${CMAKE_CURRENT_LIST_DIR}/Slicer-build/Slicer-build/bin/Slicer.app/Contents/MacOS/Slicer")
 elseif(UNIX)
   set(ENV{PATH} "${PATH}:$ENV{PATH}")
   set(ENV{LD_LIBRARY_PATH} "${LIBRARYPATH}:$ENV{LD_LIBRARY_PATH}")
   set(ENV{PYTHONPATH} "${PYTHONPATH}:$ENV{PYTHONPATH}")
-  set(SLICER "${CMAKE_CURRENT_LIST_DIR}/Slicer-build/Slicer-build/bin/SlicerApp-real")
 else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()
@@ -92,18 +87,6 @@ if(ARGV MATCHES "^Terminal$")
   elseif(UNIX)
     set(ARGV bash)
   endif()
-endif()
-
-# command alias: Slicer
-if(ARGV MATCHES "^Slicer$")
-  string(REPLACE "${PATHSEP}" ";" SLICERPATH "$ENV{SLICERPATH}")
-  set(ARGV ${SLICER} --additional-module-paths ${SLICERPATH})
-endif()
-
-# command alias: Slicelet
-if(ARGV MATCHES "^Slicelet")
-  list(GET ARGV 1 MODULE)
-  set(ARGV ${SLICER} --no-main-window --disable-cli-modules --disable-loadable-modules --disable-scripted-loadable-modules --python-script ${MODULE})
 endif()
 
 # command alias: Patch
