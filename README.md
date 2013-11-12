@@ -1,8 +1,8 @@
-## CMakeAll
-A solution built on [**CMake**](http://cmake.org/) and its **ExternalProject** module to provide explicit and extensible management of external project dependencies.
+# CMakeAll
+A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of external project dependencies.
 
 
-### Minimal Example
+## Minimal Example
 
 ```cmake
 cmake_minimum_required(VERSION 2.8.7)
@@ -19,7 +19,7 @@ cma_configure_projects()
 where `ProjectN.cmake` is referred to as a *project definition*.
 
 
-### Project Definition
+## Project Definition
 
 An example project definition for [OpenCV](http://opencv.org/) may be as follows.
 
@@ -78,9 +78,9 @@ set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
 ```
 
 
-### Launcher
+## Launcher
 
-Each project may define its own required modifications to the environment through the following variables.
+Each project may define its own modifications to the environment through the following variables.
 
 ```cmake
 # environment variables for launcher
@@ -105,7 +105,7 @@ cmake -P MyProject.cmake
 ```
 
 
-### Advanced Example
+## Advanced Example
 
 ```cmake
 cmake_minimum_required(VERSION 2.8.7)
