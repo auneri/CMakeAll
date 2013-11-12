@@ -1,24 +1,24 @@
 #! \file
 #! \author Ali Uneri
 #! \date 2012-09-11
-#! \brief Public API of CmakeTools.
+#! \brief Public API of CMakeAll.
 
 
 # -----------------------------------------------------------------------------
 #! Cache project definitions and define CMake options.
-function(cmt_add_projects)
+function(cma_add_projects)
   cmake_parse_arguments(CMT "" "PREFIX;SUFFIX" "" ${ARGN})
 
   set(PROJECTS "")
   set(DEFINITIONS "")
-  foreach(DEFINITION ${CMT_UNPARSED_ARGUMENTS})
-    if(CMT_PREFIX)
-      set(DEFINITION "${CMT_PREFIX}${DEFINITION}")
+  foreach(DEFINITION ${CMA_UNPARSED_ARGUMENTS})
+    if(CMA_PREFIX)
+      set(DEFINITION "${CMA_PREFIX}${DEFINITION}")
     endif()
-    if(CMT_SUFFIX)
-      set(DEFINITION "${DEFINITION}${CMT_SUFFIX}")
+    if(CMA_SUFFIX)
+      set(DEFINITION "${DEFINITION}${CMA_SUFFIX}")
     endif()
-    cmt_read_definition(${DEFINITION})
+    cma_read_definition(${DEFINITION})
 
     # check if project is already defined
     list(FIND PROJECTS ${EP_NAME} I)
@@ -41,79 +41,76 @@ function(cmt_add_projects)
     endif()
 
   endforeach()
-  set(CMT_PROJECTS "${CMT_PROJECTS};${PROJECTS}" CACHE INTERNAL "")
-  set(CMT_DEFINITIONS "${CMT_DEFINITIONS};${DEFINITIONS}" CACHE INTERNAL "")
+  set(CMA_PROJECTS "${CMA_PROJECTS};${PROJECTS}" CACHE INTERNAL "")
+  set(CMA_DEFINITIONS "${CMA_DEFINITIONS};${DEFINITIONS}" CACHE INTERNAL "")
 endfunction()
 
 
 # -----------------------------------------------------------------------------
 #! Configure the CMake launcher script.
-function(cmt_configure_launcher)
+function(cma_configure_launcher)
+  set(EP_ENVVARS)
   set(EP_PATHS "")
   set(EP_LIBRARYPATHS "")
   set(EP_PYTHONPATHS ${PROJECT_BINARY_DIR})
   set(EP_MATLABPATHS "")
-  set(EP_MODULEPATHS "")
 
-  foreach(DEFINITION ${CMT_DEFINITIONS})
-    cmt_read_definition(${DEFINITION})
+  foreach(DEFINITION ${CMA_DEFINITIONS})
+    cma_read_definition(${DEFINITION})
     if(${EP_OPTION_NAME})
       ExternalProject_Get_Property(${EP_NAME} SOURCE_DIR)
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
       ExternalProject_Get_Property(${EP_NAME} INSTALL_DIR)
+      string(CONFIGURE "${EP_ENVVAR}" EP_ENVVAR @ONLY)
       string(CONFIGURE "${EP_PATH}" EP_PATH @ONLY)
       string(CONFIGURE "${EP_LIBRARYPATH}" EP_LIBRARYPATH @ONLY)
       string(CONFIGURE "${EP_PYTHONPATH}" EP_PYTHONPATH @ONLY)
       string(CONFIGURE "${EP_MATLABPATH}" EP_MATLABPATH @ONLY)
-      string(CONFIGURE "${EP_MODULEPATH}" EP_MODULEPATH @ONLY)
+      list(APPEND EP_ENVVARS ${EP_ENVVAR})
       list(APPEND EP_PATHS ${EP_PATH})
       list(APPEND EP_LIBRARYPATHS ${EP_LIBRARYPATH})
       list(APPEND EP_PYTHONPATHS ${EP_PYTHONPATH})
       list(APPEND EP_MATLABPATHS ${EP_MATLABPATH})
-      list(APPEND EP_MODULEPATHS ${EP_MODULEPATH})
     endif()
   endforeach()
 
+  string(REPLACE ";" "::" ENVVAR "${EP_ENVVARS}")
   string(REPLACE ";" "::" PATH "${EP_PATHS}")
   string(REPLACE ";" "::" LIBRARYPATH "${EP_LIBRARYPATHS}")
   string(REPLACE ";" "::" PYTHONPATH "${EP_PYTHONPATHS}")
   string(REPLACE ";" "::" MATLABPATH "${EP_MATLABPATHS}")
-  string(REPLACE ";" "::" MODULEPATH "${EP_MODULEPATHS}")
 
   add_custom_target(Launcher ALL
     COMMAND ${CMAKE_COMMAND}
+      -DENVVAR:STRING=${ENVVAR}
       -DPATH:STRING=${PATH}
       -DLIBRARYPATH:STRING=${LIBRARYPATH}
       -DPYTHONPATH:STRING=${PYTHONPATH}
       -DMATLABPATH:STRING=${MATLABPATH}
-      -DMODULEPATH:STRING=${MODULEPATH}
       -DINTDIR:STRING=${CMAKE_CFG_INTDIR}
-      -DSOURCE_DIR:PATH=${CMT_CMAKE_DIR}
+      -DSOURCE_DIR:PATH=${CMA_CMAKE_DIR}
       -DBINARY_DIR:PATH=${PROJECT_BINARY_DIR}
       -DNAME:STRING=${PROJECT_NAME}
-      -P ${CMT_CMAKE_DIR}/ConfigureLauncher.cmake)
+      -DCUSTOMIZATIONS:PATH=${ARGV0}
+      -P ${CMA_CMAKE_DIR}/ConfigureLauncher.cmake)
 
   add_custom_target(run_terminal COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake Terminal)
   set_property(TARGET run_terminal PROPERTY PROJECT_LABEL "RUN_TERMINAL")
-  if(PROJECTS_Slicer)
-    add_custom_target(run_slicer COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake Slicer)
-    set_property(TARGET run_slicer PROPERTY PROJECT_LABEL "RUN_SLICER")
-  endif()
 endfunction()
 
 
 # -----------------------------------------------------------------------------
 #! Configure added projects.
-function(cmt_configure_projects)
+function(cma_configure_projects)
   cmake_parse_arguments(CMT "RESOLVE_DEPENDENCIES;VERIFY_URLS" "" "" ${ARGN})
 
-  if(CMT_RESOLVE_DEPENDENCIES)
+  if(CMA_RESOLVE_DEPENDENCIES)
     set(DEPENDENCY_RESOLVED ON)
     while(DEPENDENCY_RESOLVED)
       set(DEPENDENCY_RESOLVED OFF)
 
-      foreach(DEFINITION ${CMT_DEFINITIONS})
-        cmt_read_definition(${DEFINITION})
+      foreach(DEFINITION ${CMA_DEFINITIONS})
+        cma_read_definition(${DEFINITION})
 
         set(NAME ${EP_NAME})
         set(OPTION_NAME ${EP_OPTION_NAME})
@@ -121,12 +118,12 @@ function(cmt_configure_projects)
 
         if(${OPTION_NAME})
           foreach(REQUIRED_PROJECT ${REQUIRED_PROJECTS})
-            list(FIND CMT_PROJECTS ${REQUIRED_PROJECT} I)
+            list(FIND CMA_PROJECTS ${REQUIRED_PROJECT} I)
             if(I EQUAL -1)
               message(FATAL_ERROR "Failed to locate project definition for ${REQUIRED_PROJECT}")
             endif()
-            list(GET CMT_DEFINITIONS ${I} REQUIRED_DEFINITION)
-            cmt_read_definition(${REQUIRED_DEFINITION})
+            list(GET CMA_DEFINITIONS ${I} REQUIRED_DEFINITION)
+            cma_read_definition(${REQUIRED_DEFINITION})
 
             if(NOT ${EP_OPTION_NAME})
               message("${NAME} is enabling ${REQUIRED_PROJECT}")
@@ -139,20 +136,20 @@ function(cmt_configure_projects)
     endwhile()
   endif()
 
-  if(CMT_VERIFY_URLS)
-    foreach(DEFINITION ${CMT_DEFINITIONS})
-      cmt_read_definition(${DEFINITION})
+  if(CMA_VERIFY_URLS)
+    foreach(DEFINITION ${CMA_DEFINITIONS})
+      cma_read_definition(${DEFINITION})
       if(${EP_OPTION_NAME})
         foreach(URL ${EP_URL})
           if(URL MATCHES "^svn://")
             execute_process(
-              COMMAND ${CMT_SVN_EXECUTABLE} info ${URL}
+              COMMAND ${CMA_SVN_EXECUTABLE} info ${URL}
               OUTPUT_QUIET
               ERROR_QUIET
               RESULT_VARIABLE RESULT)
           elseif(URL MATCHES "^git://")
             execute_process(
-              COMMAND ${CMT_GIT_EXECUTABLE} ls-remote ${URL}
+              COMMAND ${CMA_GIT_EXECUTABLE} ls-remote ${URL}
               OUTPUT_QUIET
               ERROR_QUIET
               RESULT_VARIABLE RESULT)
@@ -178,13 +175,13 @@ function(cmt_configure_projects)
     endforeach()
   endif()
 
-  foreach(DEFINITION ${CMT_DEFINITIONS})
+  foreach(DEFINITION ${CMA_DEFINITIONS})
     set(PROJECTS_ADDED "")
-    cmt_configure_project(${DEFINITION})
+    cma_configure_project(${DEFINITION})
 
-    cmt_read_definition(${DEFINITION})
+    cma_read_definition(${DEFINITION})
     if(${EP_OPTION_NAME} AND EP_PATCH)
-      cmt_patch_project(${EP_NAME} ${EP_PATCH})
+      cma_patch_project(${EP_NAME} ${EP_PATCH})
     endif()
   endforeach()
 endfunction()
@@ -192,15 +189,15 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Include provided projects in packaging, if marked accordingly.
-function(cmt_package_projects)
+function(cma_package_projects)
   set(CPACK_INSTALL_CMAKE_PROJECTS "")
   foreach(NAME ${ARGN})
-    list(FIND CMT_PROJECTS ${NAME} I)
+    list(FIND CMA_PROJECTS ${NAME} I)
     if(I EQUAL -1)
       message(FATAL_ERROR "Failed to locate project definition for ${NAME}")
     endif()
-    list(GET CMT_DEFINITIONS ${I} DEFINITION)
-    cmt_read_definition(${DEFINITION})
+    list(GET CMA_DEFINITIONS ${I} DEFINITION)
+    cma_read_definition(${DEFINITION})
 
     if(${EP_OPTION_NAME})
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
@@ -213,7 +210,7 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Patch a project using the patch file provided.
-function(cmt_patch_project NAME PATCH_FILE)
+function(cma_patch_project NAME PATCH_FILE)
   if(NOT EXISTS ${PATCH_FILE})
     message(FATAL_ERROR "Failed to locate ${PATCH_FILE}")
   endif()
@@ -221,10 +218,10 @@ function(cmt_patch_project NAME PATCH_FILE)
   ExternalProject_Add_Step(${NAME} RevertProject
     COMMENT "Reverting changes to '${NAME}'"
     COMMAND ${CMAKE_COMMAND}
-      -DGIT_EXECUTABLE:FILEPATH=${CMT_GIT_EXECUTABLE}
+      -DGIT_EXECUTABLE:FILEPATH=${CMA_GIT_EXECUTABLE}
       -DSOURCE_DIR:PATH=<SOURCE_DIR>
-      -DSVN_EXECUTABLE:FILEPATH=${CMT_SVN_EXECUTABLE}
-      -P ${CMT_CMAKE_DIR}/PatchProject.cmake
+      -DSVN_EXECUTABLE:FILEPATH=${CMA_SVN_EXECUTABLE}
+      -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDERS download
     DEPENDS ${PATCH_FILE}
     WORKING_DIRECTORY <SOURCE_DIR>)
@@ -232,12 +229,12 @@ function(cmt_patch_project NAME PATCH_FILE)
   ExternalProject_Add_Step(${NAME} PatchProject
     COMMENT "Patching '${NAME}'"
     COMMAND ${CMAKE_COMMAND}
-      -DGIT_EXECUTABLE:FILEPATH=${CMT_GIT_EXECUTABLE}
-      -DPATCH_EXECUTABLE:FILEPATH=${CMT_PATCH_EXECUTABLE}
+      -DGIT_EXECUTABLE:FILEPATH=${CMA_GIT_EXECUTABLE}
+      -DPATCH_EXECUTABLE:FILEPATH=${CMA_PATCH_EXECUTABLE}
       -DPATCH_FILE:FILEPATH=${PATCH_FILE}
       -DSOURCE_DIR:PATH=<SOURCE_DIR>
-      -DSVN_EXECUTABLE:FILEPATH=${CMT_SVN_EXECUTABLE}
-      -P ${CMT_CMAKE_DIR}/PatchProject.cmake
+      -DSVN_EXECUTABLE:FILEPATH=${CMA_SVN_EXECUTABLE}
+      -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDEES download
     DEPENDERS update
     WORKING_DIRECTORY <SOURCE_DIR>)
@@ -246,21 +243,21 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Include provided projects in packaging, if marked accordingly.
-function(cmt_print_projects)
+function(cma_print_projects)
   cmake_parse_arguments(CMT "SELECTED" "" "" ${ARGN})
 
   # compute maximum name length for printing purposes
-  cmt_string_length_max("${CMT_PROJECTS}" LENGTH_MAX)
+  cma_string_length_max("${CMA_PROJECTS}" LENGTH_MAX)
 
-  foreach(DEFINITION ${CMT_DEFINITIONS})
-    cmt_read_definition(${DEFINITION})
+  foreach(DEFINITION ${CMA_DEFINITIONS})
+    cma_read_definition(${DEFINITION})
 
     set(SELECTED " ")
     if(${EP_OPTION_NAME})
       set(SELECTED "+")
     endif()
 
-    cmt_string_pad(${EP_NAME} ${LENGTH_MAX} " " NAME)
+    cma_string_pad(${EP_NAME} ${LENGTH_MAX} " " NAME)
 
     set(REQUIREDS ${EP_REQUIRED_PROJECTS} ${EP_REQUIRED_OPTIONS})
     string(REPLACE ";" ", " REQUIREDS "${REQUIREDS}")
@@ -268,9 +265,9 @@ function(cmt_print_projects)
       set(REQUIREDS " < ${REQUIREDS}")
     endif()
 
-    if(CMT_SELECTED AND ${EP_OPTION_NAME})
+    if(CMA_SELECTED AND ${EP_OPTION_NAME})
       message(STATUS "${NAME}${REQUIREDS}")
-    elseif(NOT CMT_SELECTED)
+    elseif(NOT CMA_SELECTED)
       message(STATUS "[${SELECTED}] ${NAME}${REQUIREDS}")
     endif()
   endforeach()
@@ -279,7 +276,7 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Get Git revision of a project source.
-function(cmt_git_revision SOURCE_DIR REVISION_)
+function(cma_git_revision SOURCE_DIR REVISION_)
   set(REVISION 0)  # default to 0
 
   find_package(Git QUIET)
@@ -302,7 +299,7 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Get Subversion revision of a project source.
-function(cmt_subversion_revision SOURCE_DIR REVISION_)
+function(cma_subversion_revision SOURCE_DIR REVISION_)
   set(REVISION 0)  # default to 0
 
   find_package(Subversion QUIET)
@@ -347,16 +344,16 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Include provided projects in testing, if marked accordingly.
-function(cmt_test_projects)
+function(cma_test_projects)
   add_custom_target("test")
   set_property(TARGET "test" PROPERTY PROJECT_LABEL "RUN_TESTS")
   foreach(NAME ${ARGN})
-    list(FIND CMT_PROJECTS ${NAME} I)
+    list(FIND CMA_PROJECTS ${NAME} I)
     if(I EQUAL -1)
       message(FATAL_ERROR "Failed to locate project definition for ${NAME}")
     endif()
-    list(GET CMT_DEFINITIONS ${I} DEFINITION)
-    cmt_read_definition(${DEFINITION})
+    list(GET CMA_DEFINITIONS ${I} DEFINITION)
+    cma_read_definition(${DEFINITION})
 
     if(${EP_OPTION_NAME})
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
@@ -367,7 +364,7 @@ function(cmt_test_projects)
           -DLAUNCHER:FILEPATH=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake
           -DINTDIR:STRING=${CMAKE_CFG_INTDIR}
           -DBINARY_DIR:PATH=${BINARY_DIR}
-          -P ${CMT_CMAKE_DIR}/TestProject.cmake
+          -P ${CMA_CMAKE_DIR}/TestProject.cmake
         WORKING_DIRECTORY ${BINARY_DIR})
     endif()
   endforeach()
@@ -376,14 +373,14 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Touch projects (retrigger execution of an external project's steps), if marked accordingly.
-function(cmt_touch_projects)
+function(cma_touch_projects)
   foreach(NAME ${ARGN})
-    list(FIND CMT_PROJECTS ${NAME} I)
+    list(FIND CMA_PROJECTS ${NAME} I)
     if(I EQUAL -1)
       message(FATAL_ERROR "Failed to locate project definition for ${NAME}")
     endif()
-    list(GET CMT_DEFINITIONS ${I} DEFINITION)
-    cmt_read_definition(${DEFINITION})
+    list(GET CMA_DEFINITIONS ${I} DEFINITION)
+    cma_read_definition(${DEFINITION})
 
     if(${EP_OPTION_NAME})
       ExternalProject_Add_Step(${EP_NAME} TouchProject
@@ -399,7 +396,7 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Verify existence of an executable via successful execution of provided command.
-function(cmt_verify_executable)
+function(cma_verify_executable)
   execute_process(
     COMMAND ${ARGN}
     RESULT_VARIABLE RESULT

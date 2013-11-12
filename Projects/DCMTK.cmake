@@ -7,7 +7,7 @@ set(EP_OPTION_DESCRIPTION "DICOM Toolkit")
 
 list(APPEND EP_LIBRARYPATH @BINARY_DIR@/bin/@INTDIR@)
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 set(EP_REVISION DCMTK-3.6.1_20121102)

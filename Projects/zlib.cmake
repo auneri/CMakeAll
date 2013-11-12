@@ -4,13 +4,13 @@
 set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL git://github.com/commontk/zlib.git)
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 set(EP_REVISION 66a753054b356da85e1838a081aa94287226823e)
 set(EP_CMAKE_ARGS
   -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-  -DZLIB_MANGLE_PREFIX:STRING=cmt_
+  -DZLIB_MANGLE_PREFIX:STRING=cma_
   -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>)
 
 ExternalProject_Add(${EP_NAME}
@@ -31,10 +31,10 @@ ExternalProject_Add(${EP_NAME}
   # test
   )
 
-set(CMT_ZLIB_ROOT "${PROJECT_BINARY_DIR}/${EP_NAME}-install" CACHE INTERNAL "")
-set(CMT_ZLIB_INCLUDE_DIR "${CMT_ZLIB_ROOT}/include" CACHE INTERNAL "")
+set(CMA_ZLIB_ROOT "${PROJECT_BINARY_DIR}/${EP_NAME}-install" CACHE INTERNAL "")
+set(CMA_ZLIB_INCLUDE_DIR "${CMA_ZLIB_ROOT}/include" CACHE INTERNAL "")
 if(WIN32)
-  set(CMT_ZLIB_LIBRARY "${CMT_ZLIB_ROOT}/lib/zlib.lib" CACHE INTERNAL "")
+  set(CMA_ZLIB_LIBRARY "${CMA_ZLIB_ROOT}/lib/zlib.lib" CACHE INTERNAL "")
 else()
-  set(CMT_ZLIB_LIBRARY "${CMT_ZLIB_ROOT}/lib/libzlib.a" CACHE INTERNAL "")
+  set(CMA_ZLIB_LIBRARY "${CMA_ZLIB_ROOT}/lib/libzlib.a" CACHE INTERNAL "")
 endif()

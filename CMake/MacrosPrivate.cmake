@@ -6,7 +6,7 @@
 
 # -----------------------------------------------------------------------------
 #! Include project definition.
-macro(cmt_add_definition DEFINITION)
+macro(cma_add_definition DEFINITION)
   set(EP_READONLY)
   include(${DEFINITION})
 endmacro()
@@ -14,7 +14,7 @@ endmacro()
 
 # -----------------------------------------------------------------------------
 #! Initialize, [document] and read project definition.
-macro(cmt_read_definition DEFINITION)
+macro(cma_read_definition DEFINITION)
   get_filename_component(FILENAME ${DEFINITION} NAME_WE)
   get_filename_component(DIR ${DEFINITION} PATH)
   get_filename_component(DIRNAME ${DIR} NAME)
@@ -43,11 +43,11 @@ macro(cmt_read_definition DEFINITION)
   set(EP_OPTION_ADVANCED OFF)
 
   #! Environment variables.
+  set(EP_ENVVAR "")
   set(EP_PATH "")
   set(EP_LIBRARYPATH "")
   set(EP_PYTHONPATH "")
   set(EP_MATLABPATH "")
-  set(EP_MODULEPATH "")
 
   #! Variables that expand at build-time.
   set(INTDIR "@INTDIR@")

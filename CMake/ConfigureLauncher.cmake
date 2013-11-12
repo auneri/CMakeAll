@@ -1,22 +1,19 @@
-# Author: Ali Uneri
-# Date: 2013-06-02
-
 set(LIBDIR lib)
 if(WIN32)
   set(LIBDIR bin)
 endif()
 
+string(REPLACE "::" ";" ENVVAR "${ENVVAR}")
 string(REPLACE "::" ";" PATH "${PATH}")
 string(REPLACE "::" ";" LIBRARYPATH "${LIBRARYPATH}")
 string(REPLACE "::" ";" PYTHONPATH "${PYTHONPATH}")
 string(REPLACE "::" ";" MATLABPATH "${MATLABPATH}")
-string(REPLACE "::" ";" MODULEPATH "${MODULEPATH}")
 
+string(CONFIGURE "${ENVVAR}" ENVVAR @ONLY)
 string(CONFIGURE "${PATH}" PATH @ONLY)
 string(CONFIGURE "${LIBRARYPATH}" LIBRARYPATH @ONLY)
 string(CONFIGURE "${PYTHONPATH}" PYTHONPATH @ONLY)
 string(CONFIGURE "${MATLABPATH}" MATLABPATH @ONLY)
-string(CONFIGURE "${MODULEPATH}" MODULEPATH @ONLY)
 
 # configure launcher
 configure_file(

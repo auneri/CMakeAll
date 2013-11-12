@@ -6,7 +6,7 @@ index 03c4f8f..383f012 100644
  
    if (WIN32)
  
-+    # [CmakeTools] OpenCL is distributed with CUDA
++    # [CMakeAll] OpenCL is distributed with CUDA
 +    find_package(CUDA REQUIRED)
 +
      find_path(OPENCL_INCLUDE_DIRS CL/cl.h )
@@ -27,7 +27,7 @@ index dafdd97..017b55d 100644
          "${${GPUFILTER_KERNELNAME}_KernelString}}\n")
  
 -    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE}
-+    # [CmakeTools] prevent recompilation after configuration
++    # [CMakeAll] prevent recompilation after configuration
 +    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_FILE}_
           "${${GPUFILTER_KERNELNAME}_KernelString}")
 +    add_custom_command(

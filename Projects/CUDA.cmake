@@ -1,7 +1,7 @@
 # Author: Ali Uneri
 # Date: 2013-05-02
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 find_package(CUDA REQUIRED)

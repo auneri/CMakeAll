@@ -1,12 +1,12 @@
 # Author: Ali Uneri
 # Date: 2013-05-02
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
-cmt_verify_executable(patch --help)
+cma_verify_executable(patch --help)
 
-set(CMT_PATCH_EXECUTABLE "patch" CACHE INTERNAL "")
+set(CMA_PATCH_EXECUTABLE "patch" CACHE INTERNAL "")
 
 ExternalProject_Add(${EP_NAME}
   DOWNLOAD_COMMAND ""

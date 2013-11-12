@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2013-06-19
-
 set(PACKAGE_VERSION "1.0")
 
 if("${PACKAGE_VERSION}" MATCHES "^([0-9]+\\.[0-9]+\\.[0-9]+)\\..*")  # strip the tweak version

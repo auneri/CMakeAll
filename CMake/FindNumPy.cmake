@@ -13,7 +13,7 @@ endif()
 find_path(PYTHON_NUMPY_INCLUDE_DIR arrayobject.h
   HINTS "${NUMPY_INCLUDE_DIR}/numpy"
         "${PYTHON_INCLUDE_PATH}/numpy"
-  DOC "Directory containing arrayobject.h, a file included in the NumPy package.")
+  DOC "Directory containing arrayobject.h of NumPy.")
 mark_as_advanced(PYTHON_NUMPY_INCLUDE_DIR)
 
 include(FindPackageHandleStandardArgs)

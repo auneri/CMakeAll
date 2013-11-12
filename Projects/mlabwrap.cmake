@@ -7,7 +7,7 @@ set(EP_URL git://github.com/auneri/mlabwrap.git)
 list(APPEND EP_LIBRARYPATH @INSTALL_DIR@/lib/python)
 list(APPEND EP_PYTHONPATH @INSTALL_DIR@/lib/python)
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 set(EP_REVISION c9105fe06e9bcdbdf9600087f1c683866cead244)
@@ -27,7 +27,7 @@ ExternalProject_Add(${EP_NAME}
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CONFIGURE_COMMAND ""
   # build
-  BUILD_COMMAND ${CMT_PYTHON_EXECUTABLE} ./setup.py
+  BUILD_COMMAND ${CMA_PYTHON_EXECUTABLE} ./setup.py
     build --build-base=${PROJECT_BINARY_NATIVE_DIR}/${EP_NAME}-build
     install --home=${PROJECT_BINARY_NATIVE_DIR}/${EP_NAME}-install
   BUILD_IN_SOURCE 1
