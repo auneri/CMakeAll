@@ -32,7 +32,7 @@ index 3ba7bc3..6d79b1f 100644
    set(wrapper_moc_file ${OUTPUT_DIR}/${WRAP_INT_DIR}/moc_${header}.cpp)
    #message("wrapper_h_file: ${wrapper_h_file}")
    #message("wrapper_moc_file: ${wrapper_moc_file}")
-+  # [CmakeTools] Fix for compilation error on Windows.
++  # [CMakeAll] Fix for compilation error on Windows.
 +  if(WIN32)
 +    set(FLAGS "")
 +    foreach(FLAG ${MOC_FLAGS})
@@ -66,9 +66,9 @@ index f2044e0..f480d03 100644
          )
        set(PYTHONQT_INSTALL_DIR ${ep_install_dir})
  
-+      # [CmakeTools] Patch PythonQt.
-+      include(${CMT_CMAKE_DIR}/Functions.cmake)
-+      cmt_patch_project(PythonQt ${CMT_PythonQt_PATCH})
++      # [CMakeAll] Patch PythonQt.
++      include(${CMA_CMAKE_DIR}/Functions.cmake)
++      cma_patch_project(PythonQt ${CMA_PythonQt_PATCH})
 +
        # Since the full path of PythonQt library is used, there is not need to add
        # its corresponding library output directory to CTK_EXTERNAL_LIBRARY_DIRS

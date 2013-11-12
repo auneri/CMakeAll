@@ -6,7 +6,7 @@ index 57c4a94..917c5b0 100644
  
    IF (WIN32)
  
-+    # [CmakeTools] OpenCL is distributed with CUDA
++    # [CMakeAll] OpenCL is distributed with CUDA
 +    find_package(CUDA REQUIRED)
 +
      FIND_PATH(OPENCL_INCLUDE_DIRS CL/cl.h )
@@ -26,7 +26,7 @@ index 313e34f..cb96a9c 100644
         rtkCudaFFTRampImageFilter.cu
         rtkCudaForwardProjectionImageFilter.cu
         rtkCudaBackProjectionImageFilter.cu )
-+  # [CmakeTools] reduce number of include directories on Windows
++  # [CMakeAll] reduce number of include directories on Windows
 +  if(WIN32)
 +    get_directory_property(SAVED_INCLUDE_DIRS INCLUDE_DIRECTORIES)
 +    set(CUSTOM_INCLUDE_DIRS ${SAVED_INCLUDE_DIRS})
@@ -65,7 +65,7 @@ index 8d59982..c4bcde2 100644
  
  // std include
  #include <stdio.h>
-+// [CmakeTools] define missing types on Windows
++// [CMakeAll] define missing types on Windows
 +#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 +  typedef __int32 int32_t;
 +  typedef unsigned __int32 uint32_t;

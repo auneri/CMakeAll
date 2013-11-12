@@ -6,7 +6,7 @@ set(EP_OPTION_DESCRIPTION "Computational Geometry Algorithms Library")
 
 list(APPEND EP_LIBRARYPATH @BINARY_DIR@/lib)
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 set(EP_URL_MD5 2584ebc298afd4e7ff461bd471ca19fa)

@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2013-06-01
-
 set(ENVVAR "@ENVVAR@")
 set(PATH "@PATH@")
 set(LIBRARYPATH "@LIBRARYPATH@")

@@ -21,7 +21,7 @@ if(PROJECTS_zlib)
   list(APPEND EP_REQUIRED_PROJECTS zlib)
 endif()
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 set(EP_REVISION v4.4.2)
@@ -52,9 +52,9 @@ if(PROJECTS_VTK)
 endif()
 if(PROJECTS_zlib)
   list(APPEND EP_CMAKE_ARGS
-    -DZLIB_ROOT:PATH=${CMT_ZLIB_ROOT}
-    -DZLIB_INCLUDE_DIR:PATH=${CMT_ZLIB_INCLUDE_DIR}
-    -DZLIB_LIBRARY:FILEPATH=${CMT_ZLIB_LIBRARY})
+    -DZLIB_ROOT:PATH=${CMA_ZLIB_ROOT}
+    -DZLIB_INCLUDE_DIR:PATH=${CMA_ZLIB_INCLUDE_DIR}
+    -DZLIB_LIBRARY:FILEPATH=${CMA_ZLIB_LIBRARY})
 endif()
 
 ExternalProject_Add(${EP_NAME}

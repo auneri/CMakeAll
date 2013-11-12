@@ -6,7 +6,7 @@ Index: Applications/SlicerApp/CMakeLists.txt
  endif(Q_WS_MAC)
  
  if(QT_MAC_USE_COCOA)
-+  # [CmakeTools] Fix for using Qt from MacPorts.
++  # [CMakeAll] Fix for using Qt from MacPorts.
 +  find_path(qt_menu_nib_path
 +    qt_menu.nib
 +    PATHS "@QT_QTGUI_LIBRARY_RELEASE@/Resources"
@@ -29,7 +29,7 @@ Index: Base/QTGUI/qSlicerScriptedLoadableModule.cxx
  
    // Open the file
 -#ifdef _WIN32
-+  // [CmakeTools] Fix compilation error on Windows.
++  // [CMakeAll] Fix compilation error on Windows.
 +#if 0
    FILE* pyfile = PyRun_OpenFile(newPythonSource.toLatin1());
  #else
@@ -39,7 +39,7 @@ Index: Base/QTGUI/qSlicerScriptedLoadableModule.cxx
      PyDict_SetItemString(global_dict, "__name__", PyString_FromString("__main__"));
      }
 -#ifdef _WIN32
-+    // [CmakeTools] Fix compilation error on Windows.
++    // [CMakeAll] Fix compilation error on Windows.
 +#if 0
    PyRun_CloseFile(pyfile);
  #else
@@ -53,7 +53,7 @@ Index: Base/QTGUI/qSlicerScriptedLoadableModuleWidget.cxx
  
    // Open the file
 -#ifdef _WIN32
-+  // [CmakeTools] Fix compilation error on Windows.
++  // [CMakeAll] Fix compilation error on Windows.
 +#if 0
    FILE* pyfile = PyRun_OpenFile(newPythonSource.toLatin1());
  #else
@@ -63,7 +63,7 @@ Index: Base/QTGUI/qSlicerScriptedLoadableModuleWidget.cxx
      }
  
 -#ifdef _WIN32
-+    // [CmakeTools] Fix compilation error on Windows.
++    // [CMakeAll] Fix compilation error on Windows.
 +#if 0
    PyRun_CloseFile(pyfile);
  #else
@@ -77,7 +77,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
  endif()
  
 -if(Slicer_USE_PYTHONQT)
-+if(Slicer_USE_PYTHONQT AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++if(Slicer_USE_PYTHONQT AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
    set(SLICER_PYTHONHOME ${Slicer_SUPERBUILD_DIR}/python-build)
    get_filename_component(SLICER_PYTHON_LIB_DIR ${PYTHON_LIBRARY} PATH)
    list(APPEND SLICER_LIBRARY_PATHS_BUILD
@@ -85,7 +85,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
    if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
      set(pythonpath_subdir "Lib")
    endif()
-+elseif(DEFINED CMT_PYTHON_EXECUTABLE)
++elseif(DEFINED CMA_PYTHON_EXECUTABLE)
 +  list(APPEND SLICER_LIBRARY_PATHS_BUILD
 +    ${CTK_DIR}/PythonQt-build/<CMAKE_CFG_INTDIR>)
  endif()
@@ -96,7 +96,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
  endif()
  
 -if(Slicer_USE_NUMPY)
-+if(Slicer_USE_NUMPY AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++if(Slicer_USE_NUMPY AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
    list(APPEND SLICER_LIBRARY_PATHS_BUILD
      ${SLICER_PYTHONHOME}/${pythonpath_subdir}/site-packages/numpy/core
      ${SLICER_PYTHONHOME}/${pythonpath_subdir}/site-packages/numpy/lib
@@ -105,7 +105,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
  #       CMake refers to the variable as Slicer_HOME, and the tcl variable is SlicerHome.
  
 -if(Slicer_USE_PYTHONQT)
-+if(Slicer_USE_PYTHONQT AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++if(Slicer_USE_PYTHONQT AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
    set(PYTHONPATH "<APPLAUNCHER_DIR>/bin/<CMAKE_CFG_INTDIR>")
    set(PYTHONPATH "${PYTHONPATH}<PATHSEP><APPLAUNCHER_DIR>/bin/Python")
    set(PYTHONPATH "${PYTHONPATH}<PATHSEP>${SLICER_PYTHONHOME}/${pythonpath_subdir}")
@@ -114,7 +114,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
  endif()
  
 -if(UNIX AND Slicer_USE_PYTHONQT)
-+if(UNIX AND Slicer_USE_PYTHONQT AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++if(UNIX AND Slicer_USE_PYTHONQT AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
    # On windows, both pythonQt and python libraries are installed allong with the executable
    list(APPEND SLICER_LIBRARY_PATHS_INSTALLED
      <APPLAUNCHER_DIR>/lib/Python/lib
@@ -123,7 +123,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
  endif()
  
 -if(Slicer_USE_PYTHONQT)
-+if(Slicer_USE_PYTHONQT AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++if(Slicer_USE_PYTHONQT AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
    set(pythonpath_subdir lib/python${Slicer_PYTHON_VERSION_DOT})
    if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
      set(pythonpath_subdir "Lib")
@@ -131,7 +131,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
  endif()
  
 -if(Slicer_USE_NUMPY)
-+if(Slicer_USE_NUMPY AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++if(Slicer_USE_NUMPY AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
    list(APPEND SLICER_LIBRARY_PATHS_INSTALLED
      <APPLAUNCHER_DIR>/lib/Python/${pythonpath_subdir}/site-packages/numpy/core
      <APPLAUNCHER_DIR>/lib/Python/${pythonpath_subdir}/site-packages/numpy/lib
@@ -140,7 +140,7 @@ Index: CMake/SlicerBlockCTKAppLauncherSettings.cmake
    )
  
 -if(Slicer_USE_PYTHONQT)
-+if(Slicer_USE_PYTHONQT AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++if(Slicer_USE_PYTHONQT AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
    set(pythonpath_subdir lib/python${Slicer_PYTHON_VERSION_DOT})
    if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
      set(pythonpath_subdir "Lib")
@@ -153,8 +153,8 @@ Index: CMake/SlicerBlockInstallPython.cmake
  # Find and install python
  # -------------------------------------------------------------------------
 -if(Slicer_USE_PYTHONQT)
-+# [CmakeTools] Disable installation if CMT_PYTHON_EXECUTABLE is provided.
-+if(Slicer_USE_PYTHONQT AND NOT DEFINED CMT_PYTHON_EXECUTABLE)
++# [CMakeAll] Disable installation if CMA_PYTHON_EXECUTABLE is provided.
++if(Slicer_USE_PYTHONQT AND NOT DEFINED CMA_PYTHON_EXECUTABLE)
  
    get_filename_component(SUPER_BUILD_DIR "${Slicer_BINARY_DIR}" PATH)
    set(PYTHON_DIR "${SUPER_BUILD_DIR}/python-build")
@@ -203,18 +203,18 @@ Index: Modules/Loadable/CMakeLists.txt
    SceneViews
    SlicerWelcome
 -  TractographyDisplay
-+  #TractographyDisplay  # [CmakeTools] Introduces build errors on Linux.
++  #TractographyDisplay  # [CMakeAll] Introduces build errors on Linux.
    Reformat
    ViewControllers
    Volumes
 -  TractographyInteractiveSeeding # tractography depends of Volumes
-+  #TractographyInteractiveSeeding # tractography depends of Volumes  # [CmakeTools] Introduces build errors on Linux.
++  #TractographyInteractiveSeeding # tractography depends of Volumes  # [CMakeAll] Introduces build errors on Linux.
    VolumeRendering # Volume Rendering depends of Volumes
    )
  if(Slicer_BUILD_CLI_SUPPORT)
    list(APPEND qtmodules
 -    CropVolume
-+    #CropVolume  # [CmakeTools] Introduces runtime errors.
++    #CropVolume  # [CMakeAll] Introduces runtime errors.
      )
  endif()
  
@@ -226,11 +226,11 @@ Index: SuperBuild.cmake
  #------------------------------------------------------------------------------
  set(proj Slicer)
  
-+# [CmakeTools] Forward CMake options to internal Slicer project.
-+set(CMT_CMAKE_ARGS
-+  -DCMT_PYTHON_EXECUTABLE:FILEPATH=${CMT_PYTHON_EXECUTABLE})
++# [CMakeAll] Forward CMake options to internal Slicer project.
++set(CMA_CMAKE_ARGS
++  -DCMA_PYTHON_EXECUTABLE:FILEPATH=${CMA_PYTHON_EXECUTABLE})
 +if(WIN32)
-+  list(APPEND CMT_CMAKE_ARGS
++  list(APPEND CMA_CMAKE_ARGS
 +    -DSlicer_BUILD_WIN32_CONSOLE:BOOL=ON)
 +endif()
 +
@@ -241,8 +241,8 @@ Index: SuperBuild.cmake
      -DjqPlot_DIR:PATH=${jqPlot_DIR}
      # LibArchive
      -DLibArchive_DIR:PATH=${LibArchive_DIR}
-+    # [CmakeTools] Forward CMake options to internal Slicer project.
-+    ${CMT_CMAKE_ARGS}
++    # [CMakeAll] Forward CMake options to internal Slicer project.
++    ${CMA_CMAKE_ARGS}
    INSTALL_COMMAND ""
    )
  
@@ -254,19 +254,19 @@ Index: SuperBuild/External_CTK.cmake
        -DCTK_USE_QTTESTING:BOOL=${Slicer_USE_QtTesting}
        -DGIT_EXECUTABLE:FILEPATH=${GIT_EXECUTABLE}
        ${optional_ep_args}
-+      -DCMT_CMAKE_DIR:PATH=${CMT_CMAKE_DIR}
-+      -DCMT_GIT_EXECUTABLE:FILEPATH=${CMT_GIT_EXECUTABLE}
-+      -DCMT_PATCH_EXECUTABLE:FILEPATH=${CMT_PATCH_EXECUTABLE}
-+      -DCMT_PythonQt_PATCH:FILEPATH=${CMT_PythonQt_PATCH}
++      -DCMA_CMAKE_DIR:PATH=${CMA_CMAKE_DIR}
++      -DCMA_GIT_EXECUTABLE:FILEPATH=${CMA_GIT_EXECUTABLE}
++      -DCMA_PATCH_EXECUTABLE:FILEPATH=${CMA_PATCH_EXECUTABLE}
++      -DCMA_PythonQt_PATCH:FILEPATH=${CMA_PythonQt_PATCH}
      INSTALL_COMMAND ""
      DEPENDS
        ${CTK_DEPENDENCIES}
      )
    set(CTK_DIR ${CMAKE_BINARY_DIR}/${proj}-build)
  
-+  # [CmakeTools] Patch CTK and PythonQt subproject.
-+  include(${CMT_CMAKE_DIR}/Functions.cmake)
-+  cmt_patch_project(CTK ${CMT_CTK_PATCH})
++  # [CMakeAll] Patch CTK and PythonQt subproject.
++  include(${CMA_CMAKE_DIR}/Functions.cmake)
++  cma_patch_project(CTK ${CMA_CTK_PATCH})
 +
  else()
    # The project is provided using CTK_DIR, nevertheless since other project may depend on CTK,
@@ -279,8 +279,8 @@ Index: SuperBuild/External_NUMPY.cmake
  endif()
  set(${CMAKE_CURRENT_LIST_FILENAME}_FILE_INCLUDED 1)
  
-+# [CmakeTools] If CMT_PYTHON_EXECUTABLE is provided.
-+if(DEFINED CMT_PYTHON_EXECUTABLE)
++# [CMakeAll] If CMA_PYTHON_EXECUTABLE is provided.
++if(DEFINED CMA_PYTHON_EXECUTABLE)
 +  ExternalProject_Add(NUMPY
 +    DOWNLOAD_COMMAND ""
 +    CONFIGURE_COMMAND ""
@@ -301,16 +301,16 @@ Index: SuperBuild/External_python.cmake
  # Include dependent projects if any
  SlicerMacroCheckExternalProjectDependency(python)
 +
-+# [CmakeTools] If CMT_PYTHON_EXECUTABLE is provided.
-+if(DEFINED CMT_PYTHON_EXECUTABLE)
++# [CMakeAll] If CMA_PYTHON_EXECUTABLE is provided.
++if(DEFINED CMA_PYTHON_EXECUTABLE)
 +  ExternalProject_Add(python
 +    DOWNLOAD_COMMAND ""
 +    CONFIGURE_COMMAND ""
 +    BUILD_COMMAND ""
 +    INSTALL_COMMAND "")
-+  set(slicer_PYTHON_INCLUDE ${CMT_PYTHON_INCLUDE_DIR})
-+  set(slicer_PYTHON_LIBRARY ${CMT_PYTHON_LIBRARY})
-+  set(slicer_PYTHON_EXECUTABLE ${CMT_PYTHON_EXECUTABLE})
++  set(slicer_PYTHON_INCLUDE ${CMA_PYTHON_INCLUDE_DIR})
++  set(slicer_PYTHON_LIBRARY ${CMA_PYTHON_LIBRARY})
++  set(slicer_PYTHON_EXECUTABLE ${CMA_PYTHON_EXECUTABLE})
 +  return()
 +endif()
 +

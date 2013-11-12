@@ -11,7 +11,7 @@ list(APPEND EP_PYTHONPATH
   ${PROJECT_BINARY_DIR}/SphinxBase-install/lib/python2.7/site-packages
   ${PROJECT_BINARY_DIR}/PocketSphinx-install/lib/python2.7/site-packages)
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 list(GET EP_URL 0 URL)

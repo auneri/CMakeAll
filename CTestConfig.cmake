@@ -1,9 +1,9 @@
-set(CTEST_PROJECT_NAME "CmakeTools")
+set(CTEST_PROJECT_NAME "CMakeAll")
 set(CTEST_NIGHTLY_START_TIME "01:00:00 EDT")
 
 set(CTEST_DROP_METHOD "http")
 set(CTEST_DROP_SITE "cs.jhu.edu")
-set(CTEST_DROP_LOCATION "/istar/cdash/submit.php?project=CmakeTools")
+set(CTEST_DROP_LOCATION "/istar/cdash/submit.php?project=CMakeAll")
 set(CTEST_DROP_SITE_CDASH TRUE)
 
 set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 5000)

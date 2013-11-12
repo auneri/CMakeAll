@@ -6,7 +6,7 @@
 
 # -----------------------------------------------------------------------------
 #! Include project definition.
-macro(cmt_add_definition DEFINITION)
+macro(cma_add_definition DEFINITION)
   set(EP_READONLY)
   include(${DEFINITION})
 endmacro()
@@ -14,7 +14,7 @@ endmacro()
 
 # -----------------------------------------------------------------------------
 #! Initialize, [document] and read project definition.
-macro(cmt_read_definition DEFINITION)
+macro(cma_read_definition DEFINITION)
   get_filename_component(FILENAME ${DEFINITION} NAME_WE)
   get_filename_component(DIR ${DEFINITION} PATH)
   get_filename_component(DIRNAME ${DIR} NAME)

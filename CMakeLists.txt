@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.7)
 
-project(CmakeTools)
+project(CMakeAll NONE)
 
 set(PROJECT_VERSION 1.0)
 

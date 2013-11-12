@@ -11,7 +11,7 @@ if(PROJECTS_Python)
   list(APPEND EP_REQUIRED_PROJECTS Python)
 endif()
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 set(EP_REVISION 2.4.6)
@@ -28,9 +28,9 @@ set(EP_CMAKE_ARGS
 
 if(PROJECTS_Python)
   list(APPEND EP_CMAKE_ARGS
-    -DPYTHON_EXECUTABLE:FILEPATH=${CMT_PYTHON_EXECUTABLE}
-    -DPYTHON_INCLUDE_DIR:PATH=${CMT_PYTHON_INCLUDE_DIR}
-    -DPYTHON_LIBRARY:FILEPATH=${CMT_PYTHON_LIBRARY})
+    -DPYTHON_EXECUTABLE:FILEPATH=${CMA_PYTHON_EXECUTABLE}
+    -DPYTHON_INCLUDE_DIR:PATH=${CMA_PYTHON_INCLUDE_DIR}
+    -DPYTHON_LIBRARY:FILEPATH=${CMA_PYTHON_LIBRARY})
 endif()
 
 ExternalProject_Add(${EP_NAME}

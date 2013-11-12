@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2011-12-16
-
 if(EXISTS ${SOURCE_DIR}/.svn)
   set(REVERT_COMMAND ${SVN_EXECUTABLE} revert --recursive .)
 elseif(EXISTS ${SOURCE_DIR}/.git)

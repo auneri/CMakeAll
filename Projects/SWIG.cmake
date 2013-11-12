@@ -16,7 +16,7 @@ else()
                  291ba57c0acd218da0b0916c280dcbae)
 endif()
 
-cmt_end_definition()
+cma_end_definition()
 # -----------------------------------------------------------------------------
 
 if(WIN32)
@@ -87,6 +87,6 @@ else()
     )
 endif()
 
-set(CMT_SWIG_DIR "${SWIG_DIR}" CACHE INTERNAL "")
-set(CMT_SWIG_EXECUTABLE "${SWIG_EXECUTABLE}" CACHE INTERNAL "")
-set(CMT_SWIG_VERSION "${EP_VERSION}" CACHE INTERNAL "")
+set(CMA_SWIG_DIR "${SWIG_DIR}" CACHE INTERNAL "")
+set(CMA_SWIG_EXECUTABLE "${SWIG_EXECUTABLE}" CACHE INTERNAL "")
+set(CMA_SWIG_VERSION "${EP_VERSION}" CACHE INTERNAL "")

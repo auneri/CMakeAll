@@ -1,6 +1,3 @@
-% author Ali Uneri
-% date 2013-06-07
-
 for i = {@MATLABPATH@}
   addpath(char(i));
 end

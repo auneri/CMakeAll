@@ -9,7 +9,7 @@ index 17ffbcf..211453a 100644
 -  if (obj == (PyObject*)&PythonQtInstanceWrapper_Type) {
 -    return NULL;
 -  }
-+  // [CmakeTools] Enable code-completion in IPython.
++  // [CMakeAll] Enable code-completion in IPython.
 +  //if (obj == (PyObject*)&PythonQtInstanceWrapper_Type) {
 +  //  return NULL;
 +  //}

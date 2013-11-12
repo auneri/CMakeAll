@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2013-06-02
-
 set(LIBDIR lib)
 if(WIN32)
   set(LIBDIR bin)
