@@ -7,7 +7,7 @@
 # -----------------------------------------------------------------------------
 #! Cache project definitions and define CMake options.
 function(cma_add_projects)
-  cmake_parse_arguments(CMT "" "PREFIX;SUFFIX" "" ${ARGN})
+  cmake_parse_arguments(CMA "" "PREFIX;SUFFIX" "" ${ARGN})
 
   set(PROJECTS "")
   set(DEFINITIONS "")
@@ -102,7 +102,7 @@ endfunction()
 # -----------------------------------------------------------------------------
 #! Configure added projects.
 function(cma_configure_projects)
-  cmake_parse_arguments(CMT "RESOLVE_DEPENDENCIES;VERIFY_URLS" "" "" ${ARGN})
+  cmake_parse_arguments(CMA "RESOLVE_DEPENDENCIES;VERIFY_URLS" "" "" ${ARGN})
 
   if(CMA_RESOLVE_DEPENDENCIES)
     set(DEPENDENCY_RESOLVED ON)
@@ -244,7 +244,7 @@ endfunction()
 # -----------------------------------------------------------------------------
 #! Include provided projects in packaging, if marked accordingly.
 function(cma_print_projects)
-  cmake_parse_arguments(CMT "SELECTED" "" "" ${ARGN})
+  cmake_parse_arguments(CMA "SELECTED" "" "" ${ARGN})
 
   # compute maximum name length for printing purposes
   cma_string_length_max("${CMA_PROJECTS}" LENGTH_MAX)
