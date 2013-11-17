@@ -1,5 +1,5 @@
 # CMakeAll
-A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of external project dependencies.
+A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
 
 
 ## Minimal Example
