@@ -20,7 +20,6 @@ ExternalProject_Add(${EP_NAME}
   GIT_TAG ${EP_REVISION}
   # patch
   # update
-  UPDATE_COMMAND ""
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS ${EP_CMAKE_ARGS}

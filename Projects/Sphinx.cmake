@@ -21,7 +21,6 @@ ExternalProject_Add(SphinxBase
   SVN_REPOSITORY ${URL}
   # patch
   # update
-  UPDATE_COMMAND ""
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/SphinxBase
   CONFIGURE_COMMAND
@@ -43,7 +42,6 @@ ExternalProject_Add(PocketSphinx
   SVN_REPOSITORY ${URL}
   # patch
   # update
-  UPDATE_COMMAND ""
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/PocketSphinx
   CONFIGURE_COMMAND

@@ -86,7 +86,6 @@ ExternalProject_Add(${EP_NAME}
   SVN_REVISION -r ${EP_REVISION}
   # patch
   # update
-  UPDATE_COMMAND ""
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS ${EP_CMAKE_ARGS}
