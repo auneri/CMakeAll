@@ -23,8 +23,8 @@ project(MyProject)
 find_package(CMakeAll 1.0 REQUIRED)
 
 cma_add_projects(
-  "/path/to/ProjectA.cmake"
-  "/path/to/ProjectB.cmake")
+  "/source/ProjectA.cmake"
+  "/source/ProjectB.cmake")
 
 cma_configure_projects()
 ```
@@ -112,7 +112,7 @@ set(INSTALL_DIR "@INSTALL_DIR@")
 which are then used to configure a cross-platform launcher script that can be used as follows.
 
 ```bash
-cmake -P MyProject.cmake
+cmake -P /binary/MyProject.cmake
 ```
 
 
