@@ -51,38 +51,37 @@ where `ProjectN.cmake` is referred to as a *project definition*.
 
 ## Project Definition
 
-An example project definition for [OpenCV](http://opencv.org/) may be as follows.
+An example definition for ProjectB may be as follows.
 
 ```cmake
-set(EP_REQUIRED_PROJECTS Git)
-set(EP_URL git://github.com/Itseez/opencv.git)
-set(EP_OPTION_NAME USE_OpenCV)
-set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
+set(EP_REQUIRED_PROJECTS ProjectA)
+set(EP_URL git://github.com/auneri/ProjectB.git)
+set(EP_OPTION_NAME USE_ProjectB)
 
 list(APPEND EP_LIBRARYPATH @BINARY_DIR@/@LIBDIR@/@INTDIR@)
 
 if(USE_Python)
   list(APPEND EP_REQUIRED_PROJECTS Python)
+  list(APPEND EP_PYTHONPATH @BINARY_DIR@/Python)
 endif()
 
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION 2.4.7)
-set(EP_CMAKE_ARGS
-  -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-  -DBUILD_opencv_python:BOOL=${USE_Python})
+set(CMAKE_ARGS
+  -DBUILD_PYTHON_BINDINGS:BOOL=${USE_Python}
+  -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE})
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
+  GIT_TAG v1.0
   # patch
   # update
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
-  CMAKE_ARGS ${EP_CMAKE_ARGS}
+  CMAKE_ARGS ${CMAKE_ARGS}
   # build
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
   # install
