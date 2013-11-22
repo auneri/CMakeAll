@@ -14,6 +14,24 @@ In solving scientific problems, we often rely on external solutions such as
 with the aim to leverage on previous solutions and maximize code reuse, such that we can focus on the novel aspects of research.
 
 
+## Obtaining
+**Option 1.** Tell CMake the path to your local copy.
+```cmake
+find_package(CMakeAll 1.0 REQUIRED)
+```
+
+**Option 2.** Tell CMake to clone/checkout from GitHub.
+```cmake
+set(CMakeAll_DIR ${CMAKE_CURRENT_BINARY_DIR}/CMakeAll)
+find_program(GIT NAMES git)
+if(NOT EXISTS ${CMakeAll_DIR})
+  execute_process(COMMAND ${GIT} clone https://github.com/auneri/CMakeAll.git ${CMakeAll_DIR})
+endif()
+execute_process(COMMAND ${GIT} checkout v1.0 WORKING_DIRECTORY ${CMakeAll_DIR})
+find_package(CMakeAll 1.0 REQUIRED HINTS ${CMakeAll_DIR})
+```
+
+
 ## Minimal Example
 
 ```cmake
