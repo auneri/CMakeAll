@@ -36,7 +36,7 @@ find_package(CMakeAll 1.0 REQUIRED HINTS ${CMakeAll_DIR})
 
 ```cmake
 cmake_minimum_required(VERSION 2.8.7)
-project(MyProject)
+project(HelloWorld)
 
 find_package(CMakeAll 1.0 REQUIRED)
 
@@ -129,7 +129,7 @@ set(INSTALL_DIR "@INSTALL_DIR@")
 which are then used to configure a cross-platform launcher script that can be used as follows.
 
 ```bash
-cmake -P /binary/MyProject.cmake
+cmake -P /binary/HelloWorld.cmake
 ```
 
 
@@ -137,7 +137,7 @@ cmake -P /binary/MyProject.cmake
 
 ```cmake
 cmake_minimum_required(VERSION 2.8.7)
-project(MyProject)
+project(HelloWorld)
 
 find_package(CMakeAll 1.0 REQUIRED)
 
