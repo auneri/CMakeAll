@@ -11,11 +11,11 @@ find_package(CMakeAll 1.0 REQUIRED)
 **Option 2.** Tell CMake to clone/checkout from GitHub.
 ```cmake
 set(CMakeAll_DIR ${CMAKE_CURRENT_BINARY_DIR}/CMakeAll)
-find_program(GIT NAMES git)
+find_package(Git REQUIRED)
 if(NOT EXISTS ${CMakeAll_DIR})
-  execute_process(COMMAND ${GIT} clone https://github.com/auneri/CMakeAll.git ${CMakeAll_DIR})
+  execute_process(COMMAND ${GIT_EXECUTABLE} clone https://github.com/auneri/CMakeAll.git ${CMakeAll_DIR})
 endif()
-execute_process(COMMAND ${GIT} checkout v1.0 WORKING_DIRECTORY ${CMakeAll_DIR})
+execute_process(COMMAND ${GIT_EXECUTABLE} checkout v1.0 WORKING_DIRECTORY ${CMakeAll_DIR})
 find_package(CMakeAll 1.0 REQUIRED HINTS ${CMakeAll_DIR})
 ```
 
