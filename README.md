@@ -2,18 +2,6 @@
 A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
 
 
-## Motivation
-
-In solving scientific problems, we often rely on external solutions such as
-
-* Large open-source projects
-* Commercial products
-* Propriety source code shared with industry partners
-* Solutions from colleagues
-
-with the aim to leverage on previous solutions and maximize code reuse, such that we can focus on the novel aspects of research.
-
-
 ## Obtaining
 **Option 1.** Tell CMake the path to your local copy.
 ```cmake
