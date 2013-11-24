@@ -56,11 +56,6 @@ if(USE_Python)
 endif()
 
 cma_end_definition()
-# -----------------------------------------------------------------------------
-
-set(CMAKE_ARGS
-  -DBUILD_PYTHON_BINDINGS:BOOL=${USE_Python}
-  -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE})
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
@@ -71,7 +66,8 @@ ExternalProject_Add(${EP_NAME}
   # update
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
-  CMAKE_ARGS ${CMAKE_ARGS}
+  CMAKE_ARGS -DBUILD_PYTHON_BINDINGS:BOOL=${USE_Python}
+             -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
   # build
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
   # install
