@@ -4,11 +4,13 @@ A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module 
 
 ## Obtaining
 **Option 1.** Tell CMake the path to your local copy.
+
 ```cmake
 find_package(CMakeAll 1.0 REQUIRED)
 ```
 
 **Option 2.** Tell CMake to clone/checkout from GitHub.
+
 ```cmake
 set(CMakeAll_DIR ${CMAKE_CURRENT_BINARY_DIR}/CMakeAll)
 find_package(Git REQUIRED)
