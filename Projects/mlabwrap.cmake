@@ -10,16 +10,13 @@ list(APPEND EP_PYTHONPATH @INSTALL_DIR@/lib/python)
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION c9105fe06e9bcdbdf9600087f1c683866cead244)
-set(EP_CMAKE_ARGS)
-
 file(TO_NATIVE_PATH ${PROJECT_BINARY_DIR} PROJECT_BINARY_NATIVE_DIR)
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
+  GIT_TAG c9105fe06e9bcdbdf9600087f1c683866cead244
   # patch
   # update
   # configure

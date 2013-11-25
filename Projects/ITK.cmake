@@ -24,7 +24,6 @@ endif()
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION v4.4.2)
 set(EP_CMAKE_ARGS
   -DBUILD_EXAMPLES:BOOL=OFF
   -DBUILD_TESTING:BOOL=OFF
@@ -61,7 +60,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
+  GIT_TAG v4.4.2
   # patch
   # update
   # configure

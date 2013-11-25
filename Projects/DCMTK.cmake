@@ -10,7 +10,6 @@ list(APPEND EP_LIBRARYPATH @BINARY_DIR@/bin/@INTDIR@)
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION DCMTK-3.6.1_20121102)
 set(EP_CMAKE_ARGS
   -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
   -DDCMTK_WITH_DOXYGEN:BOOL=OFF
@@ -29,7 +28,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
+  GIT_TAG DCMTK-3.6.1_20121102
   # patch
   # update
   # configure

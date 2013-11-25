@@ -24,6 +24,7 @@ cma_end_definition()
 # -----------------------------------------------------------------------------
 
 set(EP_REVISION 4541)
+
 set(EP_CMAKE_ARGS
   -DCISST_BUILD_APPLICATIONS:BOOL=OFF
   -DCISST_BUILD_SHARED_LIBS:BOOL=ON

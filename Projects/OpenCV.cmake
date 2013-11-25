@@ -14,7 +14,6 @@ endif()
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION 2.4.6)
 set(EP_CMAKE_ARGS
   -DBUILD_DOCS:BOOL=OFF
   -DBUILD_opencv_python:BOOL=${PROJECTS_Python}
@@ -37,7 +36,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
+  GIT_TAG 2.4.6
   # patch
   # update
   # configure

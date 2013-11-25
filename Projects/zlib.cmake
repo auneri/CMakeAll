@@ -7,7 +7,6 @@ set(EP_URL git://github.com/commontk/zlib.git)
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION 66a753054b356da85e1838a081aa94287226823e)
 set(EP_CMAKE_ARGS
   -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
   -DZLIB_MANGLE_PREFIX:STRING=cma_
@@ -17,7 +16,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
+  GIT_TAG 66a753054b356da85e1838a081aa94287226823e
   # patch
   # update
   # configure

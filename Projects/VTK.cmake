@@ -26,7 +26,6 @@ cma_end_definition()
 
 cmake_dependent_option(${EP_OPTION_NAME}_TDx "Support for 3DConnexion devices" OFF ${EP_OPTION_NAME} OFF)
 
-set(EP_REVISION v5.10.1)
 set(EP_CMAKE_ARGS
   -DBUILD_SHARED_LIBS:BOOL=${PROJECTS_Python}
   -DBUILD_TESTING:BOOL=OFF
@@ -63,7 +62,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
+  GIT_TAG v5.10.1
   # patch
   # update
   # configure
