@@ -185,6 +185,79 @@ endfunction()
 
 
 # -----------------------------------------------------------------------------
+#! Create a platform-specific shortcut for executing a command through launcher.
+function(cma_launcher_shortcut)
+  cmake_parse_arguments(CMA "" "NAME;ICON;COMMENT" "" ${ARGN})
+
+  if(WIN32)
+    if(CMA_ICON)
+      set(CMA_ICON ${CMA_ICON}.ico)
+      if(NOT EXISTS ${CMA_ICON})
+        message(FATAL_ERROR "Failed to locate ${CMA_ICON}")
+      endif()
+    endif()
+
+    file(TO_NATIVE_PATH ${PROJECT_BINARY_DIR} PROJECT_BINARY_NATIVE_DIR)
+    file(TO_NATIVE_PATH ${CMA_ICON} CMA_ICON_NATIVE)
+    file(WRITE ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.vbs
+      "set shell = WScript.CreateObject(\"WScript.Shell\")\n"
+      "set shortcut = shell.CreateShortcut(\"${PROJECT_BINARY_NATIVE_DIR}\\${CMA_NAME}.lnk\")\n"
+      "shortcut.TargetPath = shell.ExpandEnvironmentStrings(\"%WinDir%\") & \"\\System32\\cmd.exe\"\n"
+      "shortcut.Arguments = \"/C\" & \" ${CMAKE_COMMAND} -P ${PROJECT_BINARY_NATIVE_DIR}\\${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\"\n"
+      "shortcut.WorkingDirectory = \"${PROJECT_NATIVE_BINARY_DIR}\"\n"
+      "shortcut.WindowStyle = 1\n"
+      "shortcut.Description = \"${CMA_COMMENT}\"\n"
+      "shortcut.IconLocation = \"${CMA_ICON_NATIVE}\"\n"
+      "shortcut.Save\n")
+    execute_process(COMMAND wscript.exe ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.vbs)
+
+  elseif(APPLE)
+    if(CMA_ICON)
+      set(CMA_ICON ${CMA_ICON}.icns)
+      if(NOT EXISTS ${CMA_ICON})
+        message(FATAL_ERROR "Failed to locate ${CMA_ICON}")
+      endif()
+    endif()
+
+    execute_process(COMMAND osacompile -o ${PROJECT_BINARY_DIR}/${CMA_NAME}.app -e "do shell script \"${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\"")
+    if(CMA_ICON)
+      file(REMOVE ${PROJECT_BINARY_DIR}/${CMA_NAME}.app/Contents/Resources/applet.icns)
+      configure_file(
+        ${CMA_ICON}
+        ${PROJECT_BINARY_DIR}/${CMA_NAME}.app/Contents/Resources/applet.icns
+        COPYONLY)
+    endif()
+
+  elseif(UNIX)
+    if(CMA_ICON)
+      set(CMA_ICON ${CMA_ICON}.png)
+      if(NOT EXISTS ${CMA_ICON})
+        message(FATAL_ERROR "Failed to locate ${CMA_ICON}")
+      endif()
+    endif()
+
+    file(WRITE ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.desktop
+      "[Desktop Entry]\n"
+      "Version=${PROJECT_VERSION}\n"
+      "Name=${CMA_NAME}\n"
+      "Comment=${CMA_COMMENT}\n"
+      "Exec=${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\n"
+      "Icon=${CMA_ICON}\n"
+      "Terminal=true\n"
+      "Type=Application\n"
+      "Categories=Application;\n")
+    file(COPY
+      ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.desktop
+      DESTINATION ${PROJECT_BINARY_DIR}
+      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+
+  else()
+    message(FATAL_ERROR "Platform is not supported.")
+  endif()
+endfunction()
+
+
+# -----------------------------------------------------------------------------
 #! Create a target for executing a command through launcher.
 function(cma_launcher_target)
   cmake_parse_arguments(CMA "" "NAME" "" ${ARGN})
