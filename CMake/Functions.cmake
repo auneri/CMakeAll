@@ -93,9 +93,6 @@ function(cma_configure_launcher)
       -DNAME:STRING=${PROJECT_NAME}
       -DCUSTOMIZATIONS:PATH=${ARGV0}
       -P ${CMA_CMAKE_DIR}/ConfigureLauncher.cmake)
-
-  add_custom_target(run_terminal COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake Terminal)
-  set_property(TARGET run_terminal PROPERTY PROJECT_LABEL "RUN_TERMINAL")
 endfunction()
 
 
@@ -184,6 +181,17 @@ function(cma_configure_projects)
       cma_patch_project(${EP_NAME} ${EP_PATCH})
     endif()
   endforeach()
+endfunction()
+
+
+# -----------------------------------------------------------------------------
+#! Create a target for executing a command through launcher.
+function(cma_launcher_target)
+  cmake_parse_arguments(CMA "" "NAME" "" ${ARGN})
+  add_custom_target(${CMA_NAME}
+    COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS})
+  string(TOUPPER ${CMA_NAME} CMA_NAME_UPPER)
+  set_property(TARGET ${CMA_NAME} PROPERTY PROJECT_LABEL ${CMA_NAME_UPPER})
 endfunction()
 
 
