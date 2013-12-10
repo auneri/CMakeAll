@@ -70,7 +70,7 @@ endif()
 # command alias: Terminal
 if(ARGV MATCHES "^Terminal$")
   if(WIN32)
-    set(ARGV cmd.exe /c start cmd.exe)
+    set(ARGV cmd.exe /c cmd.exe)
   elseif(APPLE)
     execute_process(COMMAND bash -c "env | pbcopy")
     set(ARGV osascript
