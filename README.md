@@ -3,22 +3,17 @@ A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module 
 
 
 ## Obtaining
-**Option 1.** Tell CMake the path to your local copy.
+**Option 1.** Standard method where CMake will request the path to your local copy.
 
 ```cmake
 find_package(CMakeAll 1.0 REQUIRED)
 ```
 
-**Option 2.** Tell CMake to clone/checkout from GitHub.
+**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub, if `CMakeAll_DIR` is not provided. If version is not specified, master branch is cloned and updated with each configure.
 
 ```cmake
-set(CMakeAll_DIR ${CMAKE_CURRENT_BINARY_DIR}/CMakeAll)
-find_package(Git REQUIRED)
-if(NOT EXISTS ${CMakeAll_DIR})
-  execute_process(COMMAND ${GIT_EXECUTABLE} clone https://github.com/auneri/CMakeAll.git ${CMakeAll_DIR})
-endif()
-execute_process(COMMAND ${GIT_EXECUTABLE} checkout v1.0 WORKING_DIRECTORY ${CMakeAll_DIR})
-find_package(CMakeAll 1.0 REQUIRED HINTS ${CMakeAll_DIR})
+list(APPEND CMAKE_MODULE_PATH "/dir/of/FindCMakeAll.cmake")
+find_package(CMakeAll 1.0 REQUIRED)
 ```
 
 
@@ -31,8 +26,8 @@ project(HelloWorld)
 find_package(CMakeAll 1.0 REQUIRED)
 
 cma_add_projects(
-  "/source/ProjectA.cmake"
-  "/source/ProjectB.cmake")
+  "/source/dir/ProjectA.cmake"
+  "/source/dir/ProjectB.cmake")
 
 cma_configure_projects()
 ```
@@ -59,20 +54,13 @@ cma_end_definition()
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
-  # download
   GIT_REPOSITORY ${EP_URL}
   GIT_TAG v1.0
-  # patch
-  # update
-  # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS -DBUILD_PYTHON_BINDINGS:BOOL=${USE_Python}
              -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-  # build
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
-  # install
-  INSTALL_COMMAND ""
-  # test)
+  INSTALL_COMMAND "")
 ```
 
 Variables listed below can be used to define a project, and should be set prior to calling `cma_end_definition`.
@@ -115,7 +103,7 @@ set(INSTALL_DIR "@INSTALL_DIR@")
 which are then used to configure a cross-platform launcher script that can be used as follows.
 
 ```bash
-cmake -P /binary/HelloWorld.cmake
+cmake -P /binary/dir/HelloWorld.cmake
 ```
 
 
