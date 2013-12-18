@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.7)
 
 project(CMakeAll)
 
-set(PROJECT_VERSION 1.0)
+set(PROJECT_VERSION 1.1)
 
 option(${PROJECT_NAME}_BUILD_DOCUMENTATION "" OFF)
 option(${PROJECT_NAME}_BUILD_TESTING "" OFF)
