@@ -6,14 +6,14 @@ A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module 
 **Option 1.** Standard method where CMake will request the path to your local copy.
 
 ```cmake
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 ```
 
 **Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub, if `CMakeAll_DIR` is not provided. If version is not specified, master branch is cloned and updated with each configure.
 
 ```cmake
 list(APPEND CMAKE_MODULE_PATH "/dir/of/FindCMakeAll.cmake")
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 ```
 
 
@@ -23,7 +23,7 @@ find_package(CMakeAll 1.0 REQUIRED)
 cmake_minimum_required(VERSION 2.8.7)
 project(HelloWorld)
 
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 
 cma_add_projects(
   "/source/dir/ProjectA.cmake"
@@ -113,7 +113,7 @@ cmake -P /binary/dir/HelloWorld.cmake
 cmake_minimum_required(VERSION 2.8.7)
 project(HelloWorld)
 
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 
 cma_add_projects(
   ProjectA ProjectB ProjectC
