@@ -1,4 +1,5 @@
 language: cpp
+
 compiler:
   - clang
 
@@ -8,10 +9,3 @@ before_script:
   - cmake -DCMakeAll_BUILD_TESTING:BOOL=ON ..
 
 script: make && make test
-
-notifications:
-  recipients:
-    - auneri@gmail.com
-  email:
-    on_success: change
-    on_failure: always
