@@ -2,6 +2,10 @@
 #! \author Ali Uneri
 #! \date 2012-09-11
 #! \brief Public API of CMakeAll.
+#!
+#! \todo Add advanced option to use system version (find_package) of select projects.
+#! \todo Use find_program function in cma_verify_executable.
+#! \todo Create CMake options for cma_touch_projects, RESOLVE_DEPENDENCIES, VERIFY_URLS.
 
 
 # -----------------------------------------------------------------------------
