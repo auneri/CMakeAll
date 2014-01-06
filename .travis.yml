@@ -5,7 +5,7 @@ compiler:
 before_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DCMakeAll_BUILD_TESTING:BOOL=ON ..
 
 script: make && make test
 
