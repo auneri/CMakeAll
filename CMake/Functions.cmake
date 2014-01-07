@@ -4,7 +4,6 @@
 #! \brief Public API of CMakeAll.
 #!
 #! \todo Add advanced option to use system version (find_package) of select projects.
-#! \todo Use find_program function in cma_verify_executable.
 #! \todo Create CMake options for cma_touch_projects, RESOLVE_DEPENDENCIES, VERIFY_URLS.
 
 
@@ -487,17 +486,4 @@ function(cma_touch_projects)
         ALWAYS 1)
     endif()
   endforeach()
-endfunction()
-
-
-# -----------------------------------------------------------------------------
-#! Verify existence of an executable via successful execution of provided command.
-function(cma_verify_executable)
-  execute_process(
-    COMMAND ${ARGN}
-    RESULT_VARIABLE RESULT
-    OUTPUT_QUIET)
-  if(NOT RESULT MATCHES "^-?[01]$")
-    message(FATAL_ERROR "Failed to find '${ARGV0}' in PATH")
-  endif()
 endfunction()

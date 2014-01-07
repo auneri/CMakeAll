@@ -53,8 +53,8 @@ else()
     UPDATE_COMMAND ""
     # configure
     SOURCE_DIR ${PROJECT_BINARY_DIR}/PCRE
-    CONFIGURE_COMMAND ${PROJECT_BINARY_DIR}/PCRE/configure
-      --prefix=${PROJECT_BINARY_DIR}/PCRE-install
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure
+      --prefix=<INSTALL_DIR>
       --disable-shared
     # build
     BINARY_DIR ${PROJECT_BINARY_DIR}/PCRE-build
@@ -74,8 +74,8 @@ else()
     UPDATE_COMMAND ""
     # configure
     SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
-    CONFIGURE_COMMAND ${PROJECT_BINARY_DIR}/${EP_NAME}/configure
-      --prefix=${PROJECT_BINARY_DIR}/${EP_NAME}-install
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure
+      --prefix=<INSTALL_DIR>
       --with-pcre-prefix=${PROJECT_BINARY_DIR}/PCRE-install
     # build
     BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build

@@ -1,12 +1,21 @@
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-cma_verify_executable(matlab -h)
-if(UNIX)
-  cma_verify_executable(csh -c exit)
+find_program(MATLAB_EXECUTABLE matlab)
+if(NOT MATLAB_EXECUTABLE)
+  message(FATAL_ERROR "Please specify MATLAB_EXECUTABLE")
 endif()
 
-find_program(CMA_MATLAB_EXECUTABLE matlab)
+set(CMA_MATLAB_EXECUTABLE "${MATLAB_EXECUTABLE}" CACHE INTERNAL "")
+
+if(UNIX)
+  find_program(CSH_EXECUTABLE csh)
+  if(NOT CSH_EXECUTABLE)
+    message(FATAL_ERROR "Please specify CSH_EXECUTABLE")
+  endif()
+
+  set(CMA_CSH_EXECUTABLE "${CSH_EXECUTABLE}" CACHE INTERNAL "")
+endif()
 
 ExternalProject_Add(${EP_NAME}
   DOWNLOAD_COMMAND ""
