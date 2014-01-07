@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2011-07-25
-
 set(EP_REQUIRED_PROJECTS Qt Subversion)
 set(EP_URL https://svn.lcsr.jhu.edu/cisst/trunk)
 set(EP_OPTION_DESCRIPTION "Computer-Integrated Surgical Systems and Technology")

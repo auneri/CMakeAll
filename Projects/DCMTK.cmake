@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2012-10-28
-
 set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL git://git.dcmtk.org/dcmtk.git)
 set(EP_OPTION_DESCRIPTION "DICOM Toolkit")

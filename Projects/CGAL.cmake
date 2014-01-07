@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2011-12-11
-
 set(EP_URL http://cs.jhu.edu/istar/files/CGAL-3.9.zip)
 set(EP_OPTION_DESCRIPTION "Computational Geometry Algorithms Library")
 

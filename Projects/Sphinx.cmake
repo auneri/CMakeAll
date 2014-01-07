@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2012-09-18
-
 set(EP_REQUIRED_PROJECTS Python Subversion)
 set(EP_REQUIRED_OPTIONS UNIX)
 set(EP_URL svn://svn.code.sf.net/p/cmusphinx/code/tags/sphinxbase-0.8

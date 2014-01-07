@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2012-10-28
-
 set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL git://itk.org/ITK.git)
 set(EP_OPTION_DESCRIPTION "Insight Segmentation and Registration Toolkit")
@@ -60,7 +57,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG v4.4.2
+  GIT_TAG v4.5.0
   # patch
   # update
   # configure

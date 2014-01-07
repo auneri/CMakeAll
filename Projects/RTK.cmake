@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2012-08-31
-
 set(EP_REQUIRED_PROJECTS Git ITK Patch)
 set(EP_URL git://github.com/SimonRit/RTK.git)
 set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)

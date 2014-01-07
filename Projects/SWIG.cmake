@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2011-11-07
-
 set(EP_REQUIRED_PROJECTS Python)
 set(EP_OPTION_DESCRIPTION "Simplified Wrapper and Interface Generator")
 

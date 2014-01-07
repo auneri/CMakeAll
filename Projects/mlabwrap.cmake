@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2012-06-09
-
 set(EP_REQUIRED_PROJECTS Git MATLAB Python)
 set(EP_URL git://github.com/auneri/mlabwrap.git)
 
@@ -19,6 +16,7 @@ ExternalProject_Add(${EP_NAME}
   GIT_TAG c9105fe06e9bcdbdf9600087f1c683866cead244
   # patch
   # update
+  UPDATE_COMMAND ""
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CONFIGURE_COMMAND ""

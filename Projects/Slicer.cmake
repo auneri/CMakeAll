@@ -1,6 +1,3 @@
-# Author: Ali Uneri
-# Date: 2011-07-25
-
 set(CMA_SLICER_VERSION 4.2 CACHE INTERNAL "")
 
 set(EP_REQUIRED_PROJECTS ITK Patch Python PythonTools Qt Subversion VTK)
