@@ -20,7 +20,7 @@ before_script:
 script: make && make test
 
 after_success:
-  - ssh auneri1@masters1.cs.jhu.edu rm -rf /users/istar/public_html/doxygen_public/CMakeAll
+  - ssh -oStrictHostKeyChecking=no auneri1@masters1.cs.jhu.edu rm -rf /users/istar/public_html/doxygen_public/CMakeAll
   - make doc
-  - scp -r Documentation/html auneri1@masters1.cs.jhu.edu:/users/istar/public_html/doxygen_public/CMakeAll
-  - ssh auneri1@masters1.cs.jhu.edu chmod -R 775 /users/istar/public_html/doxygen_public/CMakeAll
+  - scp -oStrictHostKeyChecking=no -r Documentation/html auneri1@masters1.cs.jhu.edu:/users/istar/public_html/doxygen_public/CMakeAll
+  - ssh -oStrictHostKeyChecking=no auneri1@masters1.cs.jhu.edu chmod -R 775 /users/istar/public_html/doxygen_public/CMakeAll
