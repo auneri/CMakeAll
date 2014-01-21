@@ -31,9 +31,6 @@ cma_end_definition()
 cmake_dependent_option(${EP_OPTION_NAME}_CLI_MODULES "Build Slicer's CLI Modules" OFF ${EP_OPTION_NAME} OFF)
 cmake_dependent_option(${EP_OPTION_NAME}_OpenIGTLink "Support for OpenIGTLink" OFF ${EP_OPTION_NAME} OFF)
 
-# http://www.slicer.org/slicerWiki/index.php/Release_Details
-set(EP_REVISION 21513)
-
 set(EP_CMAKE_ARGS
   -DBUILD_TESTING:BOOL=OFF
   -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
@@ -68,7 +65,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   SVN_REPOSITORY ${EP_URL}
-  SVN_REVISION -r ${EP_REVISION}
+  SVN_REVISION -r 21513  # http://www.slicer.org/slicerWiki/index.php/Release_Details
   # patch
   # update
   # configure

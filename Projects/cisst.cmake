@@ -20,8 +20,6 @@ endif()
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-set(EP_REVISION 4541)
-
 set(EP_CMAKE_ARGS
   -DCISST_BUILD_APPLICATIONS:BOOL=OFF
   -DCISST_BUILD_SHARED_LIBS:BOOL=ON
@@ -83,7 +81,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   SVN_REPOSITORY ${EP_URL}
-  SVN_REVISION -r ${EP_REVISION}
+  SVN_REVISION -r 4541
   # patch
   # update
   # configure
