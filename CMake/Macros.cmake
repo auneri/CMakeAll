@@ -11,3 +11,13 @@ macro(cma_end_definition)
     return()
   endif()
 endmacro()
+
+
+# -----------------------------------------------------------------------------
+#! Built-in list method with an optional IF argument.
+macro(cma_list)
+  cmake_parse_arguments(CMA "" "IF" "" ${ARGN})
+  if(${CMA_IF})
+    list(${CMA_UNPARSED_ARGUMENTS})
+  endif()
+endmacro()
