@@ -2,11 +2,9 @@ set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL git://github.com/Itseez/opencv.git)
 set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
 
-list(APPEND EP_LIBRARYPATH @BINARY_DIR@/@LIBDIR@/@INTDIR@)
+cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)
 
-if(PROJECTS_Python)
-  list(APPEND EP_REQUIRED_PROJECTS Python)
-endif()
+list(APPEND EP_LIBRARYPATH @BINARY_DIR@/@LIBDIR@/@INTDIR@)
 
 cma_end_definition()
 # -----------------------------------------------------------------------------

@@ -2,20 +2,17 @@ set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL git://vtk.org/VTK.git)
 set(EP_OPTION_DESCRIPTION "Visualization Toolkit")
 
+cma_list(APPEND EP_REQUIRED_PROJECTS Patch Python IF PROJECTS_Python)
+cma_list(APPEND EP_REQUIRED_PROJECTS Qt IF PROJECTS_Qt)
+cma_list(APPEND EP_REQUIRED_PROJECTS zlib IF PROJECTS_zlib)
+
 list(APPEND EP_LIBRARYPATH @BINARY_DIR@/bin/@INTDIR@)
 list(APPEND EP_PYTHONPATH
   @BINARY_DIR@/bin/@INTDIR@
   @BINARY_DIR@/Wrapping/Python)
 
 if(PROJECTS_Python)
-  list(APPEND EP_REQUIRED_PROJECTS Patch Python)
   set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)
-endif()
-if(PROJECTS_Qt)
-  list(APPEND EP_REQUIRED_PROJECTS Qt)
-endif()
-if(PROJECTS_zlib)
-  list(APPEND EP_REQUIRED_PROJECTS zlib)
 endif()
 
 cma_end_definition()

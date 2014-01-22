@@ -20,10 +20,7 @@ list(APPEND EP_PYTHONPATH
   @BINARY_DIR@/${EP_NAME}-build/bin/Python
   @BINARY_DIR@/${EP_NAME}-build/lib/Slicer-${CMA_SLICER_VERSION}/qt-loadable-modules/@INTDIR@
   @BINARY_DIR@/${EP_NAME}-build/bin/lib/Slicer-${CMA_SLICER_VERSION}/qt-loadable-modules/Python)
-
-if(${EP_OPTION_NAME}_OpenIGTLink)
-  list(APPEND EP_LIBRARYPATH @BINARY_DIR@/OpenIGTLink-build/bin/@INTDIR@)
-endif()
+cma_list(APPEND EP_LIBRARYPATH @BINARY_DIR@/OpenIGTLink-build/bin/@INTDIR@ IF ${EP_OPTION_NAME}_OpenIGTLink)
 
 cma_end_definition()
 # -----------------------------------------------------------------------------

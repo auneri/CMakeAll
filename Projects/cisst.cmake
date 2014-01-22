@@ -2,20 +2,16 @@ set(EP_REQUIRED_PROJECTS Qt Subversion)
 set(EP_URL https://svn.lcsr.jhu.edu/cisst/trunk)
 set(EP_OPTION_DESCRIPTION "Computer-Integrated Surgical Systems and Technology")
 
+cma_list(APPEND EP_REQUIRED_PROJECTS OpenCV IF PROJECTS_OpenCV)
+cma_list(APPEND EP_REQUIRED_PROJECTS SWIG IF PROJECTS_SWIG)
+
 list(APPEND EP_PATH
   @BINARY_DIR@/cisst/bin/@INTDIR@
   @BINARY_DIR@/saw/bin/@INTDIR@)
 list(APPEND EP_LIBRARYPATH
   @BINARY_DIR@/cisst/lib/@INTDIR@
   @BINARY_DIR@/saw/lib/@INTDIR@)
-
-if(PROJECTS_OpenCV)
-  list(APPEND EP_REQUIRED_PROJECTS OpenCV)
-endif()
-if(PROJECTS_SWIG)
-  list(APPEND EP_REQUIRED_PROJECTS SWIG)
-  list(APPEND EP_PYTHONPATH @BINARY_DIR@/cisst/lib/@INTDIR@)
-endif()
+cma_list(APPEND EP_PYTHONPATH @BINARY_DIR@/cisst/lib/@INTDIR@ IF PROJECTS_SWIG)
 
 cma_end_definition()
 # -----------------------------------------------------------------------------
