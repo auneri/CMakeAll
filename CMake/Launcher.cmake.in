@@ -76,9 +76,12 @@ if(ARGV MATCHES "^Terminal$")
     set(ARGV osascript
       -e "tell application \"Terminal\" to activate"
       -e "tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down"
-      -e "tell application \"Terminal\" to do script \"for env in `pbpaste`\; do export $env\; done\" in selected tab of the front window")
+      -e "tell application \"Terminal\" to do script \"bash\" in selected tab of the front window"
+      -e "tell application \"Terminal\" to do script \"for env in `pbpaste`\; do export $env\; done\; clear\" in selected tab of the front window")
   elseif(UNIX)
     set(ARGV bash)
+  else()
+    message(FATAL_ERROR "Platform is not supported.")
   endif()
 endif()
 
