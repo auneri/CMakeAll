@@ -5,21 +5,21 @@ A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module 
 ## Obtaining
 **Option 1.** Standard method where CMake will request the path to your local copy.
 
-```cmake
+~~~cmake
 find_package(CMakeAll 1.1 REQUIRED)
-```
+~~~
 
 **Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub, if `CMakeAll_DIR` is not provided. If version is not specified, master branch is cloned and updated with each configure.
 
-```cmake
+~~~cmake
 list(APPEND CMAKE_MODULE_PATH "/dir/of/FindCMakeAll.cmake")
 find_package(CMakeAll 1.1 REQUIRED)
-```
+~~~
 
 
 ## Minimal Example
 
-```cmake
+~~~cmake
 cmake_minimum_required(VERSION 2.8.7)
 project(HelloWorld)
 
@@ -30,7 +30,7 @@ cma_add_projects(
   "/source/dir/ProjectB.cmake")
 
 cma_configure_projects()
-```
+~~~
 where `ProjectN.cmake` is referred to as a *project definition*.
 
 
@@ -38,7 +38,7 @@ where `ProjectN.cmake` is referred to as a *project definition*.
 
 An example definition for ProjectB may be as follows.
 
-```cmake
+~~~cmake
 set(EP_REQUIRED_PROJECTS ProjectA)
 set(EP_URL git://github.com/auneri/ProjectB.git)
 set(EP_OPTION_NAME USE_ProjectB)
@@ -61,11 +61,11 @@ ExternalProject_Add(${EP_NAME}
              -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
   INSTALL_COMMAND "")
-```
+~~~
 
 Variables listed below can be used to define a project, and should be set prior to calling `cma_end_definition`.
 
-```cmake
+~~~cmake
 set(EP_NAME "${FILENAME}")    # project name
 set(EP_REQUIRED_PROJECTS "")  # list of required projects
 set(EP_REQUIRED_OPTIONS "")   # list of required options
@@ -77,14 +77,14 @@ set(EP_OPTION_DEFAULT OFF)                   # default value of option
 set(EP_OPTION_DEPENDENT OFF)                 # hide option until requirements are met
 set(EP_OPTION_DESCRIPTION "")                # option description
 set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
-```
+~~~
 
 
 ## Launcher
 
 Each project may define its own modifications to the environment through the following variables.
 
-```cmake
+~~~cmake
 # environment variables for launcher
 set(EP_PATH "")
 set(EP_LIBRARYPATH "")
@@ -98,18 +98,18 @@ set(LIBDIR "@LIBDIR@")
 set(SOURCE_DIR "@SOURCE_DIR@")
 set(BINARY_DIR "@BINARY_DIR@")
 set(INSTALL_DIR "@INSTALL_DIR@")
-```
+~~~
 
 which are then used to configure a cross-platform launcher script that can be used as follows.
 
-```bash
+~~~bash
 cmake -P /binary/dir/HelloWorld.cmake
-```
+~~~
 
 
 ## Advanced Example
 
-```cmake
+~~~cmake
 cmake_minimum_required(VERSION 2.8.7)
 project(HelloWorld)
 
