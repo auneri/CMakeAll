@@ -2,26 +2,11 @@
 A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
 
 
-## Obtaining
-**Option 1.** Standard method where CMake will request the path to your local copy.
-
-~~~cmake
-find_package(CMakeAll 1.1 REQUIRED)
-~~~
-
-**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub, if `CMakeAll_DIR` is not provided. If version is not specified, master branch is cloned and updated with each configure.
-
-~~~cmake
-list(APPEND CMAKE_MODULE_PATH "/dir/of/FindCMakeAll.cmake")
-find_package(CMakeAll 1.1 REQUIRED)
-~~~
-
-
-## Minimal Example
+## Basic Example
 
 ~~~cmake
 cmake_minimum_required(VERSION 2.8.7)
-project(HelloWorld)
+project(BasicExample)
 
 find_package(CMakeAll 1.1 REQUIRED)
 
@@ -36,19 +21,15 @@ where `ProjectN.cmake` is referred to as a *project definition*.
 
 ## Project Definition
 
-An example definition for ProjectB may be as follows.
+An example definition for ProjectA may be as follows.
 
 ~~~cmake
-set(EP_REQUIRED_PROJECTS ProjectA)
-set(EP_URL git://github.com/auneri/ProjectB.git)
-set(EP_OPTION_NAME USE_ProjectB)
+set(EP_REQUIRED_PROJECTS ProjectB)
+set(EP_URL git://github.com/auneri/ProjectA.git)
+set(EP_OPTION_NAME USE_ProjectA)
 
-list(APPEND EP_LIBRARYPATH @BINARY_DIR@/@LIBDIR@/@INTDIR@)
-
-if(USE_Python)
-  list(APPEND EP_REQUIRED_PROJECTS Python)
-  list(APPEND EP_PYTHONPATH @BINARY_DIR@/Python)
-endif()
+cma_list(APPEND EP_REQUIRED_PROJECTS Python IF USE_Python)
+cma_list(APPEND EP_PYTHONPATH @SOURCE_DIR@ IF USE_Python)
 
 cma_end_definition()
 
@@ -103,7 +84,7 @@ set(INSTALL_DIR "@INSTALL_DIR@")
 which are then used to configure a cross-platform launcher script that can be used as follows.
 
 ~~~bash
-cmake -P /binary/dir/HelloWorld.cmake
+cmake -P /binary/dir/BasicExample.cmake
 ~~~
 
 
@@ -111,7 +92,7 @@ cmake -P /binary/dir/HelloWorld.cmake
 
 ~~~cmake
 cmake_minimum_required(VERSION 2.8.7)
-project(HelloWorld)
+project(AdvancedExample)
 
 find_package(CMakeAll 1.1 REQUIRED)
 
@@ -120,13 +101,23 @@ cma_add_projects(
   PREFIX "${CMA_PROJECTS_DIR}/"
   SUFFIX ".cmake")
 
-cma_configure_projects(RESOLVE_DEPENDENCIES VERIFY_URLS)
-
-cma_print_projects(SELECTED)
-
-cma_test_projects(ProjectA ProjectB)
-
-cma_package_projects(ProjectA ProjectC)
-
+cma_configure_projects(RESOLVE_DEPENDENCIES)
 cma_configure_launcher()
-```
+
+cma_print_projects()
+~~~
+
+
+## Obtaining
+**Option 1.** Standard method where CMake will request the path to your local copy.
+
+~~~cmake
+find_package(CMakeAll 1.1 REQUIRED)
+~~~
+
+**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub, if `CMakeAll_DIR` is not provided. If version is not specified, master branch is cloned and updated with each configure.
+
+~~~cmake
+list(APPEND CMAKE_MODULE_PATH "/dir/of/FindCMakeAll.cmake")
+find_package(CMakeAll 1.1 REQUIRED)
+~~~
