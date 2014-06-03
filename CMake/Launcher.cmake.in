@@ -21,12 +21,12 @@ endforeach()
 
 # default help
 set(HELP
-  "Usage: cmake -P ${NAME}.cmake <command>\n\n"
-  "A cross-platform launcher that configures environment variables and executes\n"
-  "the provided command within the current shell.\n\n"
-  "Command aliases:\n"
-  "  Terminal - Open a terminal.\n"
-  "  Patch <path> - Create and dry-run a patch of a source directory under svn/git.\n")
+  "\n A cross-platform launcher that configures environment variables and executes\n"
+  " the provided command within the current shell.\n\n"
+  " Usage: cmake -P ${NAME}.cmake <command>\n"
+  " Command aliases:\n"
+  "   Terminal - Open a terminal.\n"
+  "   Patch <path> - Create and dry-run a patch of a source directory under svn/git.\n")
 
 # setup environment variables
 foreach(X ${ENVVAR})
@@ -70,7 +70,7 @@ endif()
 # command alias: Terminal
 if(ARGV MATCHES "^Terminal$")
   if(WIN32)
-    set(ARGV cmd.exe /c cmd.exe)
+    set(ARGV cmd.exe /c start cmd.exe)
   elseif(APPLE)
     execute_process(COMMAND bash -c "env | pbcopy")
     set(ARGV osascript
