@@ -2,7 +2,7 @@ set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL git://vtk.org/VTK.git)
 set(EP_OPTION_DESCRIPTION "Visualization Toolkit")
 
-cma_list(APPEND EP_REQUIRED_PROJECTS Patch Python IF PROJECTS_Python)
+cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)
 cma_list(APPEND EP_REQUIRED_PROJECTS Qt IF PROJECTS_Qt)
 cma_list(APPEND EP_REQUIRED_PROJECTS zlib IF PROJECTS_zlib)
 

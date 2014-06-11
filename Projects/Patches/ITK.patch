@@ -1,7 +1,7 @@
-diff --git CMake/FindOpenCL.cmake CMake/FindOpenCL.cmake
+diff --git a/CMake/FindOpenCL.cmake b/CMake/FindOpenCL.cmake
 index 03c4f8f..383f012 100644
---- CMake/FindOpenCL.cmake
-+++ CMake/FindOpenCL.cmake
+--- a/CMake/FindOpenCL.cmake
++++ b/CMake/FindOpenCL.cmake
 @@ -32,11 +32,14 @@ else ()
  
    if (WIN32)
@@ -18,10 +18,10 @@ index 03c4f8f..383f012 100644
       find_path(OPENCL_INCLUDE_DIRS CL/cl.h PATHS ${SEARCH_PATH} )
       find_path(_OPENCL_CPP_INCLUDE_DIRS CL/cl.hpp PATHS ${SEARCH_PATH} )
      endif()
-diff --git CMake/itkOpenCL.cmake CMake/itkOpenCL.cmake
+diff --git a/CMake/itkOpenCL.cmake b/CMake/itkOpenCL.cmake
 index dafdd97..017b55d 100644
---- CMake/itkOpenCL.cmake
-+++ CMake/itkOpenCL.cmake
+--- a/CMake/itkOpenCL.cmake
++++ b/CMake/itkOpenCL.cmake
 @@ -35,8 +35,13 @@ if (ITK_USE_GPU)
      set(${GPUFILTER_KERNELNAME}_KernelString
          "${${GPUFILTER_KERNELNAME}_KernelString}}\n")
