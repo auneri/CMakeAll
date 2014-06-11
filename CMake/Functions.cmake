@@ -154,7 +154,7 @@ function(cma_configure_projects)
               ERROR_QUIET
               RESULT_VARIABLE RESULT)
           else()
-            find_package(PythonInterp)
+            find_package(PythonInterp QUIET)
             if(PYTHONINTERP_FOUND)
               execute_process(
                 COMMAND ${PYTHON_EXECUTABLE} -c "import urllib2; urllib2.urlopen('${URL}')"
