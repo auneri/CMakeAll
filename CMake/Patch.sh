@@ -8,6 +8,8 @@ cd ${1}
 
 if [ -d ./.git ]; then
     git diff > ${patch_file}
+elif [ -d ./.hg ]; then
+    hg export > ${patch_file}
 elif [ -d ./.svn ]; then
     cat /dev/null > ${patch_file}
     filepaths=$(svn diff | lsdiff | LC_ALL=C sort)
@@ -22,6 +24,8 @@ else
 fi
 
 if [ -d ./.git ]; then
+    patch --dry-run --forward --strip=1 --input=${patch_file}
+elif [ -d ./.hg ]; then
     patch --dry-run --forward --strip=1 --input=${patch_file}
 elif [ -d ./.svn ]; then
     patch --dry-run --forward --strip=0 --input=${patch_file}
