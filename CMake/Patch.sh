@@ -1,12 +1,14 @@
 if [ -z "${1}" ]; then
-    echo "ERROR! project source directory was not provided"
+    echo "Project directory was not provided" 1>&2
     exit 1
 fi
 
 patch_file=$(pwd)/$(basename "${1}").patch
 cd ${1}
 
-if [ -d ./.svn ]; then
+if [ -d ./.git ]; then
+    git diff > ${patch_file}
+elif [ -d ./.svn ]; then
     cat /dev/null > ${patch_file}
     filepaths=$(svn diff | lsdiff | LC_ALL=C sort)
     for filepath in ${filepaths}
@@ -15,11 +17,14 @@ if [ -d ./.svn ]; then
         echo "===================================================================" >> ${patch_file}
         svn diff --extensions --ignore-eol-style | filterdiff -i ${filepath} >> ${patch_file}
     done
-elif [ -d ./.git ]; then
-    git diff --no-prefix > ${patch_file}
 else
-    echo "ERROR! source directory \"${1}\" is not under svn/git control"
-    exit 1
+    echo "Skipping diff, \"${1}\" is not under git/hg/svn version control"
 fi
 
-patch --dry-run --strip 0 --forward --fuzz 1 --input ${patch_file}
+if [ -d ./.git ]; then
+    patch --dry-run --forward --strip=1 --input=${patch_file}
+elif [ -d ./.svn ]; then
+    patch --dry-run --forward --strip=0 --input=${patch_file}
+else
+    patch --dry-run --forward --input=${patch_file}
+fi

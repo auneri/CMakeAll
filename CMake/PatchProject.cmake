@@ -1,17 +1,20 @@
-if(EXISTS ${SOURCE_DIR}/.svn)
-  set(REVERT_COMMAND ${SVN_EXECUTABLE} revert --recursive .)
-elseif(EXISTS ${SOURCE_DIR}/.git)
+if(EXISTS ${SOURCE_DIR}/.git)
   set(REVERT_COMMAND ${GIT_EXECUTABLE} checkout .)
+  set(PATCH_COMMAND ${GIT_EXECUTABLE} apply ${PATCH_FILE})
+elseif(EXISTS ${SOURCE_DIR}/.svn)
+  set(REVERT_COMMAND ${SVN_EXECUTABLE} revert --recursive .)
+  set(PATCH_COMMAND ${SVN_EXECUTABLE} patch ${patch_file})
 else()
-  set(REVERT_COMMAND ${CMAKE_COMMAND} -E echo "Nothing to revert in ${SOURCE_DIR}")
+  set(REVERT_COMMAND ${CMAKE_COMMAND} -E echo "Skipping revert, \"${SOURCE_DIR}\" is not under git/hg/svn version control")
+  set(PATCH_COMMAND ${PATCH_EXECUTABLE} --input=${PATCH_FILE})
 endif()
 
 execute_process(
   COMMAND ${REVERT_COMMAND}
   WORKING_DIRECTORY ${SOURCE_DIR})
 
-if(DEFINED PATCH_EXECUTABLE AND DEFINED PATCH_FILE)
+if(DEFINED PATCH_FILE)
   execute_process(
-    COMMAND ${PATCH_EXECUTABLE} --fuzz 1 --strip 0 --input ${PATCH_FILE}
+    COMMAND ${PATCH_COMMAND}
     WORKING_DIRECTORY ${SOURCE_DIR})
 endif()
