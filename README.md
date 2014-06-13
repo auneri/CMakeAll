@@ -25,18 +25,18 @@ An example definition for ProjectA may be as follows.
 
 ~~~cmake
 set(EP_REQUIRED_PROJECTS ProjectB)
-set(EP_URL git://github.com/auneri/ProjectA.git)
+set(EP_URL "git://github.com/auneri/ProjectA.git")
 set(EP_OPTION_NAME USE_ProjectA)
 
 cma_list(APPEND EP_REQUIRED_PROJECTS Python IF USE_Python)
-cma_list(APPEND EP_PYTHONPATH @SOURCE_DIR@ IF USE_Python)
+cma_envvar(PYTHONPATH APPEND "@SOURCE_DIR@" IF USE_Python)
 
 cma_end_definition()
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG v1.0
+  GIT_TAG "v1.0"
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS -DBUILD_PYTHON_BINDINGS:BOOL=${USE_Python}
              -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
@@ -63,15 +63,10 @@ set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
 
 ## Launcher
 
-Each project may define its own modifications to the environment through the following variables.
+Each project may define its own environment variables using `cma_envvar`.
 
 ~~~cmake
-# environment variables for launcher
-set(EP_PATH "")
-set(EP_LIBRARYPATH "")
-set(EP_PYTHONPATH "")
-set(EP_MATLABPATH "")
-set(EP_ENVVAR "")
+cma_envvar(PATH PREPEND @BINARY_DIR@/@LIBDIR@/@INTDIR@)
 
 # variables that expand at build-time to help with environment variable
 set(INTDIR "@INTDIR@")
