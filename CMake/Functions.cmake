@@ -53,11 +53,6 @@ endfunction()
 #! Configure the CMake launcher script.
 function(cma_configure_launcher)
   set(EP_ENVVARS)
-  set(EP_PATHS "")
-  set(EP_LIBRARYPATHS "")
-  set(EP_PYTHONPATHS ${PROJECT_BINARY_DIR})
-  set(EP_MATLABPATHS "")
-
   foreach(DEFINITION ${CMA_DEFINITIONS})
     cma_read_definition(${DEFINITION})
     if(${EP_OPTION_NAME})
@@ -65,31 +60,14 @@ function(cma_configure_launcher)
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
       ExternalProject_Get_Property(${EP_NAME} INSTALL_DIR)
       string(CONFIGURE "${EP_ENVVAR}" EP_ENVVAR @ONLY)
-      string(CONFIGURE "${EP_PATH}" EP_PATH @ONLY)
-      string(CONFIGURE "${EP_LIBRARYPATH}" EP_LIBRARYPATH @ONLY)
-      string(CONFIGURE "${EP_PYTHONPATH}" EP_PYTHONPATH @ONLY)
-      string(CONFIGURE "${EP_MATLABPATH}" EP_MATLABPATH @ONLY)
       list(APPEND EP_ENVVARS ${EP_ENVVAR})
-      list(APPEND EP_PATHS ${EP_PATH})
-      list(APPEND EP_LIBRARYPATHS ${EP_LIBRARYPATH})
-      list(APPEND EP_PYTHONPATHS ${EP_PYTHONPATH})
-      list(APPEND EP_MATLABPATHS ${EP_MATLABPATH})
     endif()
   endforeach()
-
   string(REPLACE ";" "::" ENVVAR "${EP_ENVVARS}")
-  string(REPLACE ";" "::" PATH "${EP_PATHS}")
-  string(REPLACE ";" "::" LIBRARYPATH "${EP_LIBRARYPATHS}")
-  string(REPLACE ";" "::" PYTHONPATH "${EP_PYTHONPATHS}")
-  string(REPLACE ";" "::" MATLABPATH "${EP_MATLABPATHS}")
 
   add_custom_target(Launcher ALL
     COMMAND ${CMAKE_COMMAND}
       -DENVVAR:STRING=${ENVVAR}
-      -DPATH:STRING=${PATH}
-      -DLIBRARYPATH:STRING=${LIBRARYPATH}
-      -DPYTHONPATH:STRING=${PYTHONPATH}
-      -DMATLABPATH:STRING=${MATLABPATH}
       -DINTDIR:STRING=${CMAKE_CFG_INTDIR}
       -DSOURCE_DIR:PATH=${CMA_CMAKE_DIR}
       -DBINARY_DIR:PATH=${PROJECT_BINARY_DIR}

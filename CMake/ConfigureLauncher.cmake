@@ -2,18 +2,8 @@ set(LIBDIR lib)
 if(WIN32)
   set(LIBDIR bin)
 endif()
-
 string(REPLACE "::" ";" ENVVAR "${ENVVAR}")
-string(REPLACE "::" ";" PATH "${PATH}")
-string(REPLACE "::" ";" LIBRARYPATH "${LIBRARYPATH}")
-string(REPLACE "::" ";" PYTHONPATH "${PYTHONPATH}")
-string(REPLACE "::" ";" MATLABPATH "${MATLABPATH}")
-
 string(CONFIGURE "${ENVVAR}" ENVVAR @ONLY)
-string(CONFIGURE "${PATH}" PATH @ONLY)
-string(CONFIGURE "${LIBRARYPATH}" LIBRARYPATH @ONLY)
-string(CONFIGURE "${PYTHONPATH}" PYTHONPATH @ONLY)
-string(CONFIGURE "${MATLABPATH}" MATLABPATH @ONLY)
 
 # configure launcher
 configure_file(
@@ -22,23 +12,40 @@ configure_file(
   @ONLY)
 
 # configure path helpers
-foreach(X ${PYTHONPATH})
-  file(TO_NATIVE_PATH ${X} Y)
-  list(APPEND NATIVE_PYTHONPATH '${Y}')
-endforeach()
-foreach(X ${MATLABPATH})
-  file(TO_NATIVE_PATH ${X} Y)
-  list(APPEND NATIVE_MATLABPATH '${Y}')
-endforeach()
+file(WRITE ${BINARY_DIR}/Path.py "import sys\n")
+file(WRITE ${BINARY_DIR}/Path.m "")
 
-string(REPLACE ";" ", " PYTHONPATH "${NATIVE_PYTHONPATH}")
-string(REPLACE ";" ", " MATLABPATH "${NATIVE_MATLABPATH}")
-
-foreach(EXTENSION py m)
-  configure_file(
-    ${SOURCE_DIR}/Path.${EXTENSION}.in
-    ${BINARY_DIR}/Path.${EXTENSION}
-    @ONLY)
+foreach(X ${ENVVAR})
+  string(FIND ${X} "+=" ENVVAR_APPEND)
+  string(FIND ${X} "=+" ENVVAR_PREPEND)
+  string(FIND ${X} "==" ENVVAR_SET)
+  if(NOT ENVVAR_APPEND EQUAL -1)
+    string(REPLACE "+=" ";" X ${X})
+  elseif(NOT ENVVAR_PREPEND EQUAL -1)
+    string(REPLACE "=+" ";" X ${X})
+  elseif(NOT ENVVAR_SET EQUAL -1)
+    string(REPLACE "==" ";" X ${X})
+  endif()
+  list(GET X 0 KEY)
+  list(GET X 1 VALUE)
+  file(TO_NATIVE_PATH ${VALUE} VALUE)
+  if(${KEY} STREQUAL "PYTHONPATH")
+    if(NOT ENVVAR_APPEND EQUAL -1)
+      file(APPEND ${BINARY_DIR}/Path.py "sys.path.append(r'${VALUE}')\n")
+    elseif(NOT ENVVAR_PREPEND EQUAL -1)
+      file(APPEND ${BINARY_DIR}/Path.py "sys.path.insert(0, r'${VALUE}')\n")
+    elseif(NOT ENVVAR_SET EQUAL -1)
+      message(FATAL_ERROR "Can only append or prepend to PYTHONPATH")
+    endif()
+  elseif(${KEY} STREQUAL "MATLABPATH")
+    if(NOT ENVVAR_APPEND EQUAL -1)
+      file(APPEND ${BINARY_DIR}/Path.m "addpath('${VALUE}', '-end');\n")
+    elseif(NOT ENVVAR_PREPEND EQUAL -1)
+      file(APPEND ${BINARY_DIR}/Path.m "addpath('${VALUE}');\n")
+    elseif(NOT ENVVAR_SET EQUAL -1)
+      message(FATAL_ERROR "Can only append or prepend to MATLABPATH")
+    endif()
+  endif()
 endforeach()
 
 # configure patch helper
