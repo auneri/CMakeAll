@@ -4,7 +4,7 @@ set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
 
 cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)
 
-list(APPEND EP_LIBRARYPATH @BINARY_DIR@/@LIBDIR@/@INTDIR@)
+cma_envvar(@LIBRARYPATH@ PREPEND "@BINARY_DIR@/@LIBDIR@/@INTDIR@")
 
 cma_end_definition()
 # -----------------------------------------------------------------------------

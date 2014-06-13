@@ -3,10 +3,10 @@ set(EP_URL git://itk.org/SimpleITK.git)
 
 cma_list(APPEND EP_REQUIRED_PROJECTS VTK IF PROJECTS_VTK)
 
-list(APPEND EP_LIBRARYPATH @BINARY_DIR@/lib)
-list(APPEND EP_PYTHONPATH
-  @BINARY_DIR@/lib
-  @BINARY_DIR@/Wrapping)
+cma_envvar(@LIBRARYPATH@ PREPEND "@BINARY_DIR@/lib")
+cma_envvar(PYTHONPATH PREPEND
+  "@BINARY_DIR@/lib"
+  "@BINARY_DIR@/Wrapping")
 
 if(PROJECTS_VTK)
   set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)

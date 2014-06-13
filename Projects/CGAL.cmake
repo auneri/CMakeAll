@@ -1,7 +1,7 @@
 set(EP_URL http://cs.jhu.edu/istar/files/CGAL-3.9.zip)
 set(EP_OPTION_DESCRIPTION "Computational Geometry Algorithms Library")
 
-list(APPEND EP_LIBRARYPATH @BINARY_DIR@/lib)
+cma_envvar(@LIBRARYPATH@ PREPEND "@BINARY_DIR@/lib")
 
 cma_end_definition()
 # -----------------------------------------------------------------------------

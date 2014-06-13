@@ -4,9 +4,9 @@ set(EP_URL svn://svn.code.sf.net/p/cmusphinx/code/tags/sphinxbase-0.8
            svn://svn.code.sf.net/p/cmusphinx/code/tags/pocketsphinx-0.8)
 set(EP_OPTION_DESCRIPTION "CMU Sphinx")
 
-list(APPEND EP_PYTHONPATH
-  ${PROJECT_BINARY_DIR}/SphinxBase-install/lib/python2.7/site-packages
-  ${PROJECT_BINARY_DIR}/PocketSphinx-install/lib/python2.7/site-packages)
+cma_envvar(PYTHONPATH PREPEND
+  "@BINARY_DIR@/SphinxBase-install/lib/python2.7/site-packages"
+  "@BINARY_DIR@/PocketSphinx-install/lib/python2.7/site-packages")
 
 cma_end_definition()
 # -----------------------------------------------------------------------------
