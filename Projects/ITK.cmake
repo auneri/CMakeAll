@@ -1,5 +1,5 @@
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_URL git://itk.org/ITK.git)
+set(EP_URL "git://itk.org/ITK.git")
 set(EP_OPTION_DESCRIPTION "Insight Segmentation and Registration Toolkit")
 
 cma_list(APPEND EP_REQUIRED_PROJECTS CUDA IF PROJECTS_CUDA)
@@ -10,7 +10,7 @@ cma_list(APPEND EP_REQUIRED_PROJECTS zlib IF PROJECTS_zlib)
 cma_envvar(@LIBRARYPATH@ PREPEND "@BINARY_DIR@/@LIBDIR@/@INTDIR@")
 
 if(PROJECTS_CUDA)
-  set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)
+  set(EP_PATCH "${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch")
 endif()
 
 cma_end_definition()

@@ -1,5 +1,5 @@
 set(EP_REQUIRED_PROJECTS ITK SWIG)
-set(EP_URL git://itk.org/SimpleITK.git)
+set(EP_URL "git://itk.org/SimpleITK.git")
 
 cma_list(APPEND EP_REQUIRED_PROJECTS VTK IF PROJECTS_VTK)
 
@@ -9,7 +9,7 @@ cma_envvar(PYTHONPATH PREPEND
   "@BINARY_DIR@/Wrapping")
 
 if(PROJECTS_VTK)
-  set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)
+  set(EP_PATCH "${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch")
 endif()
 
 cma_end_definition()

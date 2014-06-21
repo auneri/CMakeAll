@@ -1,5 +1,5 @@
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_URL git://github.com/Itseez/opencv.git)
+set(EP_URL "git://github.com/Itseez/opencv.git")
 set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
 
 cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)

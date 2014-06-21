@@ -1,5 +1,5 @@
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_URL git://vtk.org/VTK.git)
+set(EP_URL "git://vtk.org/VTK.git")
 set(EP_OPTION_DESCRIPTION "Visualization Toolkit")
 
 cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)
@@ -12,7 +12,7 @@ cma_envvar(PYTHONPATH PREPEND
   "@BINARY_DIR@/Wrapping/Python")
 
 if(PROJECTS_Python)
-  set(EP_PATCH ${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch)
+  set(EP_PATCH "${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch")
 endif()
 
 cma_end_definition()
