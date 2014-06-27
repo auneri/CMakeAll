@@ -420,8 +420,8 @@ endfunction()
 # -----------------------------------------------------------------------------
 #! Include provided projects in testing, if marked accordingly.
 function(cma_test_projects)
-  add_custom_target("test")
-  set_property(TARGET "test" PROPERTY PROJECT_LABEL "RUN_TESTS")
+  add_custom_target("tests")
+  set_property(TARGET "tests" PROPERTY PROJECT_LABEL "ALL_TESTS")
   foreach(NAME ${ARGN})
     list(FIND CMA_PROJECTS ${NAME} I)
     if(I EQUAL -1)
@@ -434,7 +434,7 @@ function(cma_test_projects)
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
       add_custom_command(
         COMMENT "Testing '${EP_NAME}'"
-        TARGET "test"
+        TARGET "tests"
         COMMAND ${CMAKE_COMMAND}
           -DLAUNCHER:FILEPATH=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake
           -DINTDIR:STRING=${CMAKE_CFG_INTDIR}
