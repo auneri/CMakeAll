@@ -77,7 +77,10 @@ endif()
 
 # execute commands
 if(ARGV)
-  execute_process(COMMAND ${ARGV})
+  execute_process(COMMAND ${ARGV} RESULT_VARIABLE RESULT)
+  if("${RESULT}" STREQUAL "No such file or directory")
+    message("${RESULT}")
+  endif()
 else()
   message(${HELP})
 endif()
