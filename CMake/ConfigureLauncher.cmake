@@ -47,12 +47,3 @@ foreach(X ${ENVVAR})
     endif()
   endif()
 endforeach()
-
-# configure patch helper
-file(COPY
-  ${SOURCE_DIR}/Patch.sh
-  DESTINATION ${BINARY_DIR}
-  FILE_PERMISSIONS
-    OWNER_READ OWNER_WRITE OWNER_EXECUTE
-    GROUP_READ GROUP_EXECUTE
-    WORLD_READ WORLD_EXECUTE)
