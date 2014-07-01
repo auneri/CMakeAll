@@ -5,12 +5,14 @@ set(EP_VERSION 2.0.11)
 if(WIN32)
   set(EP_URL "http://sourceforge.net/projects/swig/files/swigwin/swigwin-${EP_VERSION}/swigwin-${EP_VERSION}.zip/download")
   set(EP_URL_MD5 b902bac6500eb3ea8c6e62c4e6b3832c)
-else()
+elseif(UNIX)
   set(PCRE_VERSION 8.33)
   set(EP_URL "http://sourceforge.net/projects/pcre/files/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.gz/download"
              "http://sourceforge.net/projects/swig/files/swig/swig-${EP_VERSION}/swig-${EP_VERSION}.tar.gz/download")
   set(EP_URL_MD5 94854c93dcc881edd37904bb6ef49ebc
                  291ba57c0acd218da0b0916c280dcbae)
+else()
+  message(FATAL_ERROR "Platform is not supported.")
 endif()
 
 cma_end_definition()
@@ -37,7 +39,7 @@ if(WIN32)
     INSTALL_COMMAND ""
     # test
     )
-else()
+elseif(UNIX)
   set(SWIG_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install/share/swig/${EP_VERSION})
   set(SWIG_EXECUTABLE ${PROJECT_BINARY_DIR}/${EP_NAME}-install/bin/swig)
 
@@ -82,6 +84,8 @@ else()
     # install
     INSTALL_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install
     )
+else()
+  message(FATAL_ERROR "Platform is not supported.")
 endif()
 
 set(CMA_SWIG_DIR "${SWIG_DIR}" CACHE INTERNAL "")

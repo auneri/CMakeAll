@@ -2,9 +2,12 @@ set(ENVVAR "@ENVVAR@")
 set(NAME "@NAME@")
 set(CUSTOMIZATIONS "@CUSTOMIZATIONS@")
 set(LAUNCHER_DIR "${CMAKE_CURRENT_LIST_DIR}")
-set(PATHSEP ":")
 if(WIN32)
   set(PATHSEP ";")
+elseif(UNIX)
+  set(PATHSEP ":")
+else()
+  message(FATAL_ERROR "Platform is not supported.")
 endif()
 
 # handle command-line arguments
