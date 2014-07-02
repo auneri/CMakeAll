@@ -35,18 +35,14 @@ set(EP_CMAKE_ARGS
   -DWRAP_TCL:BOOL=OFF)
 
 if(PROJECTS_VTK)
-  list(APPEND EP_CMAKE_ARGS
-    -DVTK_DIR:PATH=${PROJECT_BINARY_DIR}/VTK-build)
-else()
-  list(APPEND EP_CMAKE_ARGS
-    -DVTK_DIR:PATH="")
+  list(APPEND EP_CMAKE_ARGS -DVTK_DIR:PATH=${PROJECT_BINARY_DIR}/VTK-build)
 endif()
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG v0.6.1
+  GIT_TAG v0.8.0
   # patch
   # update
   # configure
