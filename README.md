@@ -1,4 +1,4 @@
-# CMakeAll [![Build Status](https://travis-ci.org/auneri/CMakeAll.png?branch=develop)](https://travis-ci.org/auneri/CMakeAll)
+# CMakeAll [![Build Status](https://travis-ci.org/auneri/CMakeAll.svg?branch=develop)](https://travis-ci.org/auneri/CMakeAll)
 A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
 
 
