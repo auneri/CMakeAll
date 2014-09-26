@@ -1,16 +1,16 @@
 set(EP_REQUIRED_PROJECTS Python)
 set(EP_OPTION_DESCRIPTION "Simplified Wrapper and Interface Generator")
 
-set(EP_VERSION 2.0.11)
+set(EP_VERSION 3.0.2)
 if(WIN32)
   set(EP_URL "http://sourceforge.net/projects/swig/files/swigwin/swigwin-${EP_VERSION}/swigwin-${EP_VERSION}.zip/download")
-  set(EP_URL_MD5 b902bac6500eb3ea8c6e62c4e6b3832c)
+  set(EP_URL_MD5 3f18de4fc09ab9abb0d3be37c11fbc8f)
 elseif(UNIX)
-  set(PCRE_VERSION 8.33)
+  set(PCRE_VERSION 8.35)
   set(EP_URL "http://sourceforge.net/projects/pcre/files/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.gz/download"
              "http://sourceforge.net/projects/swig/files/swig/swig-${EP_VERSION}/swig-${EP_VERSION}.tar.gz/download")
-  set(EP_URL_MD5 94854c93dcc881edd37904bb6ef49ebc
-                 291ba57c0acd218da0b0916c280dcbae)
+  set(EP_URL_MD5 ed58bcbe54d3b1d59e9f5415ef45ce1c
+                 62f9b0d010cef36a13a010dc530d0d41)
 else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()
@@ -19,9 +19,6 @@ cma_end_definition()
 # -----------------------------------------------------------------------------
 
 if(WIN32)
-  set(SWIG_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install)
-  set(SWIG_EXECUTABLE ${PROJECT_BINARY_DIR}/${EP_NAME}-install/swig.exe)
-
   ExternalProject_Add(${EP_NAME}
     DEPENDS ${EP_REQUIRED_PROJECTS}
     # download
@@ -39,10 +36,10 @@ if(WIN32)
     INSTALL_COMMAND ""
     # test
     )
-elseif(UNIX)
-  set(SWIG_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install/share/swig/${EP_VERSION})
-  set(SWIG_EXECUTABLE ${PROJECT_BINARY_DIR}/${EP_NAME}-install/bin/swig)
 
+  set(SWIG_DIR "${PROJECT_BINARY_DIR}/${EP_NAME}-install")
+  set(SWIG_EXECUTABLE "${PROJECT_BINARY_DIR}/${EP_NAME}-install/swig.exe")
+elseif(UNIX)
   list(GET EP_URL 0 URL)
   list(GET EP_URL_MD5 0 URL_MD5)
   ExternalProject_add(PCRE
@@ -84,6 +81,9 @@ elseif(UNIX)
     # install
     INSTALL_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install
     )
+
+  set(SWIG_DIR "${PROJECT_BINARY_DIR}/${EP_NAME}-install/share/swig/${EP_VERSION}")
+  set(SWIG_EXECUTABLE "${PROJECT_BINARY_DIR}/${EP_NAME}-install/bin/swig")
 else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()
