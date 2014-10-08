@@ -179,10 +179,10 @@ function(cma_launcher_shortcut)
     file(WRITE ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.vbs
       "set shell = WScript.CreateObject(\"WScript.Shell\")\n"
       "set shortcut = shell.CreateShortcut(\"${PROJECT_BINARY_NATIVE_DIR}\\${CMA_NAME}.lnk\")\n"
-      "shortcut.TargetPath = shell.ExpandEnvironmentStrings(\"%WinDir%\") & \"\\System32\\cmd.exe\"\n"
-      "shortcut.Arguments = \"/C\" & \" \"\"${CMAKE_COMMAND}\"\" -P ${PROJECT_BINARY_NATIVE_DIR}\\${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\"\n"
+      "shortcut.TargetPath = \"${CMAKE_COMMAND}\"\n"
+      "shortcut.Arguments = \"-P ${PROJECT_BINARY_NATIVE_DIR}\\${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\"\n"
       "shortcut.WorkingDirectory = \"${PROJECT_NATIVE_BINARY_DIR}\"\n"
-      "shortcut.WindowStyle = 1\n"
+      "shortcut.WindowStyle = 7\n"
       "shortcut.Description = \"${CMA_COMMENT}\"\n")
     if(CMA_ICON)
       file(TO_NATIVE_PATH ${CMA_ICON} CMA_ICON_NATIVE)
