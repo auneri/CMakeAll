@@ -4,11 +4,11 @@ A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module 
 
 ## Basic Example
 
-~~~cmake
+~~~{.cmake}
 cmake_minimum_required(VERSION 2.8.7)
 project(BasicExample)
 
-find_package(CMakeAll 1.1 REQUIRED)
+find_package(CMakeAll 1.0 REQUIRED)
 
 cma_add_projects(
   "/source/dir/ProjectA.cmake"
@@ -23,7 +23,7 @@ where `ProjectN.cmake` is referred to as a *project definition*.
 
 An example definition for ProjectA may be as follows.
 
-~~~cmake
+~~~{.cmake}
 set(EP_REQUIRED_PROJECTS ProjectB)
 set(EP_URL "git://github.com/auneri/ProjectA.git")
 set(EP_OPTION_NAME USE_ProjectA)
@@ -46,7 +46,7 @@ ExternalProject_Add(${EP_NAME}
 
 Variables listed below can be used to define a project, and should be set prior to calling `cma_end_definition`.
 
-~~~cmake
+~~~{.cmake}
 set(EP_NAME "${FILENAME}")    # project name
 set(EP_REQUIRED_PROJECTS "")  # list of required projects
 set(EP_REQUIRED_OPTIONS "")   # list of required options
@@ -65,10 +65,10 @@ set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
 
 Each project may define its own environment variables using `cma_envvar`.
 
-~~~cmake
+~~~{.cmake}
 cma_envvar(PATH PREPEND @BINARY_DIR@/@LIBDIR@/@INTDIR@)
 
-# variables that expand at build-time to help with environment variable
+# variables that expand at build-time
 set(INTDIR "@INTDIR@")
 set(LIBDIR "@LIBDIR@")
 set(SOURCE_DIR "@SOURCE_DIR@")
@@ -85,11 +85,11 @@ cmake -P /binary/dir/BasicExample.cmake
 
 ## Advanced Example
 
-~~~cmake
+~~~{.cmake}
 cmake_minimum_required(VERSION 2.8.7)
 project(AdvancedExample)
 
-find_package(CMakeAll 1.1 REQUIRED)
+find_package(CMakeAll 1.0 REQUIRED)
 
 cma_add_projects(
   ProjectA ProjectB ProjectC
@@ -106,13 +106,13 @@ cma_print_projects()
 ## Obtaining
 **Option 1.** Standard method where CMake will request the path to your local copy.
 
-~~~cmake
-find_package(CMakeAll 1.1 REQUIRED)
+~~~{.cmake}
+find_package(CMakeAll 1.0 REQUIRED)
 ~~~
 
-**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub, if `CMakeAll_DIR` is not provided. If version is not specified, master branch is cloned and updated with each configure.
+**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub. If version number is not specified master branch is cloned, and updated with each configure.
 
-~~~cmake
-list(APPEND CMAKE_MODULE_PATH "/dir/of/FindCMakeAll.cmake")
-find_package(CMakeAll 1.1 REQUIRED)
+~~~{.cmake}
+list(APPEND CMAKE_MODULE_PATH "/path/to/FindCMakeAll.cmake")
+find_package(CMakeAll 1.0 REQUIRED)
 ~~~
