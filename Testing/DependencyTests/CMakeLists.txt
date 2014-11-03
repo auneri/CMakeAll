@@ -14,4 +14,4 @@ set(TESTING_ProjectA OFF CACHE BOOL "" FORCE)
 set(TESTING_ProjectB OFF CACHE BOOL "" FORCE)
 set(TESTING_ProjectC ON CACHE BOOL "" FORCE)
 
-cma_configure_projects(RESOLVE_DEPENDENCIES)
+cma_configure_projects()

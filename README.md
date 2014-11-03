@@ -96,7 +96,7 @@ cma_add_projects(
   PREFIX "${CMA_PROJECTS_DIR}/"
   SUFFIX ".cmake")
 
-cma_configure_projects(RESOLVE_DEPENDENCIES)
+cma_configure_projects()
 cma_configure_launcher()
 
 cma_print_projects()
