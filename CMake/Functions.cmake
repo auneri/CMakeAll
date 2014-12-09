@@ -319,42 +319,69 @@ endfunction()
 
 
 # -----------------------------------------------------------------------------
-#! Include provided projects in packaging, if marked accordingly.
+#! Print dependenty graph to stdout and PROJECT_NAME.dot, try compiling to PDF.
 function(cma_print_projects)
   cmake_parse_arguments(CMA "SELECTED" "" "" ${ARGN})
+  set(BASENAME "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
+  file(WRITE ${BASENAME}.dot "digraph ${PROJECT_NAME} {\n")
+  file(APPEND ${BASENAME}.dot "  rankdir=LR;\n")
 
   # compute maximum name length for printing purposes
   set(LENGTH_MAX 0)
   foreach(DEFINITION ${CMA_DEFINITIONS})
     cma_read_definition(${DEFINITION})
-    if(NOT CMA_SELECTED OR ${EP_OPTION_NAME})
+    if(${EP_OPTION_NAME} OR NOT CMA_SELECTED)
       string(LENGTH ${EP_NAME} LENGTH_NAME)
       if(LENGTH_NAME GREATER LENGTH_MAX)
         set(LENGTH_MAX ${LENGTH_NAME})
       endif()
+    endif()
+    if(${EP_OPTION_NAME} AND CMA_SELECTED)
+      file(APPEND ${BASENAME}.dot "  ${EP_NAME};\n")
+    elseif(${EP_OPTION_NAME} AND NOT CMA_SELECTED)
+      file(APPEND ${BASENAME}.dot "  ${EP_NAME} [color=limegreen,style=filled];\n")
+    elseif(NOT CMA_SELECTED)
+      file(APPEND ${BASENAME}.dot "  ${EP_NAME} [color=lightgray,style=filled];\n")
     endif()
   endforeach()
 
   foreach(DEFINITION ${CMA_DEFINITIONS})
     cma_read_definition(${DEFINITION})
     cma_string_pad(${EP_NAME} ${LENGTH_MAX} " " NAME)
-
-    set(REQUIREDS ${EP_REQUIRED_PROJECTS} ${EP_REQUIRED_OPTIONS})
-    string(REPLACE ";" ", " REQUIREDS "${REQUIREDS}")
-    if(REQUIREDS)
-      set(REQUIREDS " < ${REQUIREDS}")
+    if(${EP_OPTION_NAME} AND CMA_SELECTED)
+      set(STATUS " ${NAME}")
+    elseif(${EP_OPTION_NAME} AND NOT CMA_SELECTED)
+      set(STATUS "[+] ${NAME}")
+    elseif(NOT CMA_SELECTED)
+      set(STATUS "[ ] ${NAME}")
+    endif()
+    if(EP_REQUIRED_PROJECTS)
+      set(STATUS "${STATUS} <")
     endif()
 
-    if(CMA_SELECTED AND ${EP_OPTION_NAME})
-      message(STATUS " ${NAME}${REQUIREDS}")
-    elseif(NOT CMA_SELECTED)
-      set(SELECTED " ")
+    foreach(REQUIRED ${EP_REQUIRED_PROJECTS})
       if(${EP_OPTION_NAME})
-        set(SELECTED "+")
+        set(STATUS "${STATUS} ${REQUIRED}")
+        file(APPEND ${BASENAME}.dot "  ${EP_NAME} -> ${REQUIRED};\n")
+      elseif(NOT CMA_SELECTED)
+        set(STATUS "${STATUS} ${REQUIRED}")
+        file(APPEND ${BASENAME}.dot "  ${EP_NAME} -> ${REQUIRED} [style=dotted];\n")
       endif()
-      message(STATUS "[${SELECTED}] ${NAME}${REQUIREDS}")
+    endforeach()
+
+    if(${EP_OPTION_NAME} OR NOT CMA_SELECTED)
+      message(STATUS "${STATUS}")
     endif()
   endforeach()
+  file(APPEND ${BASENAME}.dot "}\n")
+
+  find_package(Doxygen QUIET)
+  if(DOXYGEN_DOT_FOUND)
+    execute_process(
+      COMMAND ${DOXYGEN_DOT_EXECUTABLE} -Tpdf ${BASENAME}.dot -o ${BASENAME}.pdf
+      OUTPUT_QUIET
+      ERROR_QUIET)
+  endif()
 endfunction()
 
 
