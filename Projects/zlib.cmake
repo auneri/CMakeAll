@@ -28,12 +28,12 @@ ExternalProject_Add(${EP_NAME}
   # test
   )
 
-set(CMA_ZLIB_ROOT "${PROJECT_BINARY_DIR}/${EP_NAME}-install" CACHE INTERNAL "")
-set(CMA_ZLIB_INCLUDE_DIR "${CMA_ZLIB_ROOT}/include" CACHE INTERNAL "")
+set(ZLIB_ROOT "${PROJECT_BINARY_DIR}/${EP_NAME}-install" CACHE INTERNAL "")
+set(ZLIB_INCLUDE_DIR "${ZLIB_ROOT}/include" CACHE INTERNAL "")
 if(WIN32)
-  set(CMA_ZLIB_LIBRARY "${CMA_ZLIB_ROOT}/lib/zlib.lib" CACHE INTERNAL "")
+  set(ZLIB_LIBRARY "${ZLIB_ROOT}/lib/zlib.lib" CACHE INTERNAL "")
 elseif(UNIX)
-  set(CMA_ZLIB_LIBRARY "${CMA_ZLIB_ROOT}/lib/libzlib.a" CACHE INTERNAL "")
+  set(ZLIB_LIBRARY "${ZLIB_ROOT}/lib/libzlib.a" CACHE INTERNAL "")
 else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()

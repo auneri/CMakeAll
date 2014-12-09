@@ -123,14 +123,16 @@ function(cma_configure_projects)
       if(${EP_OPTION_NAME})
         foreach(URL ${EP_URL})
           if(URL MATCHES "^svn://")
+            find_package(Subversion QUIET)
             execute_process(
-              COMMAND ${CMA_SVN_EXECUTABLE} info ${URL}
+              COMMAND ${Subversion_SVN_EXECUTABLE} info ${URL}
               OUTPUT_QUIET
               ERROR_QUIET
               RESULT_VARIABLE RESULT)
           elseif(URL MATCHES "^git://")
+            find_package(Git QUIET)
             execute_process(
-              COMMAND ${CMA_GIT_EXECUTABLE} ls-remote ${URL}
+              COMMAND ${GIT_EXECUTABLE} ls-remote ${URL}
               OUTPUT_QUIET
               ERROR_QUIET
               RESULT_VARIABLE RESULT)
@@ -283,14 +285,18 @@ function(cma_patch_project NAME PATCH_FILE)
   if(NOT EXISTS ${PATCH_FILE})
     message(FATAL_ERROR "Failed to locate ${PATCH_FILE}")
   endif()
+  find_package(Git QUIET)
+  find_package(Hg QUIET)
+  find_package(Subversion QUIET)
+  find_program(PATCH_EXECUTABLE patch)
 
   ExternalProject_Add_Step(${NAME} RevertProject
     COMMENT "Reverting changes to '${NAME}'"
     COMMAND ${CMAKE_COMMAND}
       -DSOURCE_DIR:PATH=<SOURCE_DIR>
-      -DGIT_EXECUTABLE:FILEPATH=${CMA_GIT_EXECUTABLE}
-      -DHG_EXECUTABLE:FILEPATH=${CMA_HG_EXECUTABLE}
-      -DSVN_EXECUTABLE:FILEPATH=${CMA_SVN_EXECUTABLE}
+      -DGIT_EXECUTABLE:FILEPATH=${GIT_EXECUTABLE}
+      -DHG_EXECUTABLE:FILEPATH=${HG_EXECUTABLE}
+      -DSVN_EXECUTABLE:FILEPATH=${Subversion_SVN_EXECUTABLE}
       -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDERS download
     DEPENDS ${PATCH_FILE}  # or git_tag or svn_tag is updated.. perhaps EP_VERSION?
@@ -300,11 +306,11 @@ function(cma_patch_project NAME PATCH_FILE)
     COMMENT "Patching '${NAME}'"
     COMMAND ${CMAKE_COMMAND}
       -DSOURCE_DIR:PATH=<SOURCE_DIR>
-      -DPATCH_EXECUTABLE:FILEPATH=${CMA_PATCH_EXECUTABLE}
+      -DPATCH_EXECUTABLE:FILEPATH=${PATCH_EXECUTABLE}
       -DPATCH_FILE:FILEPATH=${PATCH_FILE}
-      -DGIT_EXECUTABLE:FILEPATH=${CMA_GIT_EXECUTABLE}
-      -DHG_EXECUTABLE:FILEPATH=${CMA_HG_EXECUTABLE}
-      -DSVN_EXECUTABLE:FILEPATH=${CMA_SVN_EXECUTABLE}
+      -DGIT_EXECUTABLE:FILEPATH=${GIT_EXECUTABLE}
+      -DHG_EXECUTABLE:FILEPATH=${HG_EXECUTABLE}
+      -DSVN_EXECUTABLE:FILEPATH=${Subversion_SVN_EXECUTABLE}
       -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDEES update
     DEPENDERS configure

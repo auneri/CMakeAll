@@ -9,4 +9,4 @@ ExternalProject_Add(${EP_NAME}
   BUILD_COMMAND ""
   INSTALL_COMMAND "")
 
-set(CMA_SVN_EXECUTABLE "${Subversion_SVN_EXECUTABLE}" CACHE INTERNAL "")
+set(Subversion_SVN_EXECUTABLE "${Subversion_SVN_EXECUTABLE}" CACHE INTERNAL "")
