@@ -18,6 +18,7 @@ ExternalProject_Add(${EP_NAME}
   GIT_TAG 66a753054b356da85e1838a081aa94287226823e
   # patch
   # update
+  UPDATE_COMMAND ""
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS ${EP_CMAKE_ARGS}

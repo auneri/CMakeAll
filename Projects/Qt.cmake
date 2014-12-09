@@ -1,7 +1,7 @@
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-find_package(Qt 4.7.4 REQUIRED)
+find_package(Qt 4.8.6 REQUIRED)
 
 ExternalProject_Add(${EP_NAME}
   DOWNLOAD_COMMAND ""

@@ -9,7 +9,7 @@ cma_envvar(PYTHONPATH PREPEND
   "@BINARY_DIR@/Wrapping")
 
 if(PROJECTS_VTK)
-  set(EP_PATCH "${CMAKE_CURRENT_LIST_DIR}/Patches/${EP_NAME}.patch")
+  set(EP_PATCH "${CMAKE_CURRENT_LIST_DIR}/${EP_NAME}.patch")
 endif()
 
 cma_end_definition()
@@ -45,6 +45,7 @@ ExternalProject_Add(${EP_NAME}
   GIT_TAG v0.8.0
   # patch
   # update
+  UPDATE_COMMAND ""
   # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS ${EP_CMAKE_ARGS}
