@@ -1,16 +1,16 @@
 set(EP_REQUIRED_PROJECTS Python)
 set(EP_OPTION_DESCRIPTION "Simplified Wrapper and Interface Generator")
 
-set(EP_VERSION 3.0.2)
+set(EP_VERSION 3.0.5)
 if(WIN32)
-  set(EP_URL "http://sourceforge.net/projects/swig/files/swigwin/swigwin-${EP_VERSION}/swigwin-${EP_VERSION}.zip/download")
-  set(EP_URL_MD5 3f18de4fc09ab9abb0d3be37c11fbc8f)
+  set(EP_URL "http://downloads.sourceforge.net/project/swig/swigwin/swigwin-${EP_VERSION}/swigwin-${EP_VERSION}.zip")
+  set(EP_URL_MD5 fd2e050f29e2a00b2348f5f7d3476490)
 elseif(UNIX)
-  set(PCRE_VERSION 8.36)
-  set(EP_URL "http://sourceforge.net/projects/pcre/files/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.gz/download"
-             "http://sourceforge.net/projects/swig/files/swig/swig-${EP_VERSION}/swig-${EP_VERSION}.tar.gz/download")
-  set(EP_URL_MD5 ff7b4bb14e355f04885cf18ff4125c98
-                 62f9b0d010cef36a13a010dc530d0d41)
+  set(PCRE_VERSION 8.37)
+  set(EP_URL "http://downloads.sourceforge.net/project/pcre/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.gz"
+             "http://downloads.sourceforge.net/project/swig/swig/swig-${EP_VERSION}/swig-${EP_VERSION}.tar.gz")
+  set(EP_URL_MD5 6e0cc6d1bdac7a4308151f9b3571b86e
+                 dcb9638324461b9baba8e044fe59031d)
 else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()
@@ -24,6 +24,7 @@ if(WIN32)
     # download
     URL ${EP_URL}
     URL_MD5 ${EP_URL_MD5}
+    TIMEOUT 60
     # patch
     # update
     UPDATE_COMMAND ""
@@ -42,11 +43,12 @@ if(WIN32)
 elseif(UNIX)
   list(GET EP_URL 0 URL)
   list(GET EP_URL_MD5 0 URL_MD5)
-  ExternalProject_add(PCRE
+  ExternalProject_Add(PCRE
     DEPENDS ${EP_REQUIRED_PROJECTS}
     # download
     URL ${URL}
     URL_MD5 ${URL_MD5}
+    TIMEOUT 60
     # patch
     # update
     UPDATE_COMMAND ""
@@ -63,11 +65,12 @@ elseif(UNIX)
 
   list(GET EP_URL 1 URL)
   list(GET EP_URL_MD5 1 URL_MD5)
-  ExternalProject_add(${EP_NAME}
+  ExternalProject_Add(${EP_NAME}
     DEPENDS PCRE
     # download
     URL ${URL}
     URL_MD5 ${URL_MD5}
+    TIMEOUT 60
     # patch
     # update
     UPDATE_COMMAND ""
