@@ -115,7 +115,7 @@ INPUT_FILTER           =
 FILTER_PATTERNS        = *.cmake=@PROJECT_BINARY_DIR@/Documentation/CMakeDoxygenFilter@CMAKE_EXECUTABLE_SUFFIX@  # modified
 FILTER_SOURCE_FILES    = NO
 FILTER_SOURCE_PATTERNS =
-USE_MDFILE_AS_MAINPAGE = README.md  # modified
+USE_MDFILE_AS_MAINPAGE = @PROJECT_SOURCE_DIR@/README.md  # modified
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
 #---------------------------------------------------------------------------
