@@ -36,7 +36,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG 2.4.10.1
+  GIT_TAG 2.4.11
   # patch
   # update
   UPDATE_COMMAND ""
