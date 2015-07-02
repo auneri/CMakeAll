@@ -3,19 +3,7 @@ cma_end_definition()
 
 find_package(PythonInterp REQUIRED)
 
-if(APPLE)
-  if(PYTHON_EXECUTABLE MATCHES "^/opt/local/bin/python")
-    set(PYTHON_INCLUDE_DIR "/opt/local/Library/Frameworks/Python.framework/Headers" CACHE PATH "")
-    set(PYTHON_LIBRARY "/opt/local/Library/Frameworks/Python.framework/Versions/Current/Python" CACHE PATH "")
-  elseif(PYTHON_EXECUTABLE MATCHES "conda")
-    get_filename_component(CONDA_BIN_DIR ${PYTHON_EXECUTABLE} PATH)
-    get_filename_component(CONDA_DIR ${CONDA_BIN_DIR} PATH)
-    set(PYTHON_INCLUDE_DIR "${CONDA_DIR}/include/python2.7" CACHE PATH "")
-    set(PYTHON_LIBRARY "${CONDA_DIR}/lib/libpython2.7.dylib" CACHE PATH "")
-  endif()
-endif()
-
-find_package(PythonLibs ${PYTHON_VERSION_STRING} REQUIRED)
+find_package(PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
 
 set(PYTHON_RELEASE_LIBRARY ${PYTHON_LIBRARY})
 if(WIN32)
