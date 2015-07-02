@@ -396,11 +396,11 @@ function(cma_git_revision SOURCE_DIR REVISION_)
     execute_process(
       COMMAND ${GIT_EXECUTABLE} rev-list HEAD --count
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-      RESULT_VARIABLE RESULT1
+      RESULT_VARIABLE RESULT
       OUTPUT_VARIABLE GIT_WC_REVISION
       OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_QUIET)
-    if(NOT RESULT1)
+    if(RESULT EQUAL 0)
       set(REVISION ${GIT_WC_REVISION})
     endif()
   endif()
@@ -422,7 +422,7 @@ function(cma_subversion_revision SOURCE_DIR REVISION_)
       RESULT_VARIABLE RESULT
       OUTPUT_QUIET
       ERROR_QUIET)
-    if(NOT RESULT)
+    if(RESULT EQUAL 0)
       Subversion_WC_INFO(${PROJECT_SOURCE_DIR} SVN)
       set(REVISION ${SVN_WC_REVISION})
     endif()
@@ -445,7 +445,7 @@ function(cma_subversion_revision SOURCE_DIR REVISION_)
       OUTPUT_VARIABLE SVN_WC_REVISION
       OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_QUIET)
-    if(NOT RESULT1 AND NOT RESULT2)
+    if(RESULT1 EQUAL 0 AND RESULT2 EQUAL 0)
       set(REVISION ${SVN_WC_REVISION})
     endif()
   endif()
