@@ -1,16 +1,16 @@
 set(EP_REQUIRED_PROJECTS Python)
 set(EP_OPTION_DESCRIPTION "Simplified Wrapper and Interface Generator")
 
-set(EP_VERSION 3.0.5)
+set(EP_VERSION 3.0.6)
 if(WIN32)
   set(EP_URL "http://downloads.sourceforge.net/project/swig/swigwin/swigwin-${EP_VERSION}/swigwin-${EP_VERSION}.zip")
-  set(EP_URL_MD5 fd2e050f29e2a00b2348f5f7d3476490)
+  set(EP_URL_MD5 aacecb356084ca18cf5d952621e2e1dd)
 elseif(UNIX)
   set(PCRE_VERSION 8.37)
   set(EP_URL "http://downloads.sourceforge.net/project/pcre/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.gz"
              "http://downloads.sourceforge.net/project/swig/swig/swig-${EP_VERSION}/swig-${EP_VERSION}.tar.gz")
   set(EP_URL_MD5 6e0cc6d1bdac7a4308151f9b3571b86e
-                 dcb9638324461b9baba8e044fe59031d)
+                 df43ae271642bcfa61c1e59f970f9963)
 else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()
