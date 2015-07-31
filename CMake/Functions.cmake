@@ -122,14 +122,14 @@ function(cma_configure_projects)
       cma_read_definition(${DEFINITION})
       if(${EP_OPTION_NAME})
         foreach(URL ${EP_URL})
-          if(URL MATCHES "^svn://")
+          if(URL MATCHES "^svn")
             find_package(Subversion QUIET)
             execute_process(
               COMMAND ${Subversion_SVN_EXECUTABLE} info ${URL}
               OUTPUT_QUIET
               ERROR_QUIET
               RESULT_VARIABLE RESULT)
-          elseif(URL MATCHES "^git://")
+          elseif(URL MATCHES "^git")
             find_package(Git QUIET)
             execute_process(
               COMMAND ${GIT_EXECUTABLE} ls-remote ${URL}
