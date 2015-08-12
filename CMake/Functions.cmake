@@ -139,10 +139,17 @@ function(cma_configure_projects)
           else()
             find_package(PythonInterp QUIET)
             if(PYTHONINTERP_FOUND)
-              execute_process(
-                COMMAND ${PYTHON_EXECUTABLE} -c "import urllib2; urllib2.urlopen('${URL}')"
-                ERROR_QUIET
-                RESULT_VARIABLE RESULT)
+              if(PYTHON_VERSION_MAJOR LESS 3)
+                execute_process(
+                  COMMAND ${PYTHON_EXECUTABLE} -c "from urllib2 import urlopen; urlopen('${URL}')"
+                  ERROR_QUIET
+                  RESULT_VARIABLE RESULT)
+              else()
+                execute_process(
+                  COMMAND ${PYTHON_EXECUTABLE} -c "from urllib.request import urlopen; urlopen('${URL}')"
+                  ERROR_QUIET
+                  RESULT_VARIABLE RESULT)
+              endif()
             else()
               set(RESULT -1)
             endif()
