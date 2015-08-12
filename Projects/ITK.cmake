@@ -11,6 +11,13 @@ cma_envvar(@LIBRARYPATH@ PREPEND "@BINARY_DIR@/@LIBDIR@/@INTDIR@")
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
+if(WIN32)
+  string(LENGTH "${PROJECT_BINARY_DIR}/${EP_NAME}-build" LENGTH)
+  if(LENGTH GREATER 50)
+    message(FATAL_ERROR "Shorter path for ${PROJECT_NAME} build directory is required, since ITK path is ${LENGTH} > 50 characters")
+  endif()
+endif()
+
 set(EP_CMAKE_ARGS
   -DBUILD_EXAMPLES:BOOL=OFF
   -DBUILD_TESTING:BOOL=OFF
