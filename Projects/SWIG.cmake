@@ -24,7 +24,7 @@ if(WIN32)
     # download
     URL ${EP_URL}
     URL_MD5 ${EP_URL_MD5}
-    TIMEOUT 60
+    TIMEOUT 300
     # patch
     # update
     UPDATE_COMMAND ""
@@ -48,7 +48,7 @@ elseif(UNIX)
     # download
     URL ${URL}
     URL_MD5 ${URL_MD5}
-    TIMEOUT 60
+    TIMEOUT 300
     # patch
     # update
     UPDATE_COMMAND ""
@@ -70,7 +70,7 @@ elseif(UNIX)
     # download
     URL ${URL}
     URL_MD5 ${URL_MD5}
-    TIMEOUT 60
+    TIMEOUT 300
     # patch
     # update
     UPDATE_COMMAND ""
