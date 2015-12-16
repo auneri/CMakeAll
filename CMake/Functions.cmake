@@ -262,7 +262,7 @@ function(cma_launcher_target)
   add_custom_target(${CMA_NAME}
     COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS})
   string(TOUPPER ${CMA_NAME} CMA_NAME_UPPER)
-  set_property(TARGET ${CMA_NAME} PROPERTY PROJECT_LABEL ${CMA_NAME_UPPER})
+  set_target_properties(${CMA_NAME} PROPERTIES PROJECT_LABEL ${CMA_NAME_UPPER} FOLDER "Launchers")
 endfunction()
 
 
@@ -465,7 +465,7 @@ endfunction()
 #! Include provided projects in testing, if marked accordingly.
 function(cma_test_projects)
   add_custom_target("tests")
-  set_property(TARGET "tests" PROPERTY PROJECT_LABEL "ALL_TESTS")
+  set_target_properties("tests" PROPERTIES PROJECT_LABEL "ALL_TESTS")
   foreach(NAME ${ARGN})
     list(FIND CMA_PROJECTS ${NAME} I)
     if(I EQUAL -1)
