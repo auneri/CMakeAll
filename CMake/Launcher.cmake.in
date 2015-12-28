@@ -74,7 +74,7 @@ endif()
 
 
 # command alias: Patch
-list(APPEND HELP "   Patch <path> - Create and dry-run a patch of a source directory under svn/git.\n")
+list(APPEND HELP "   Patch <source> [target] - Create and dry-run a patch of a source directory under svn/git.\n")
 if(ARGV MATCHES "^Patch")
   list(GET ARGV 1 SOURCE_DIR)
   list(GET ARGV 2 PATCH_FILE)
@@ -92,7 +92,7 @@ if(ARGV MATCHES "^Patch")
     if(NOT PATCH_EXECUTABLE)
       message(FATAL_ERROR "patch is required")
     endif()
-    execute_process(COMMAND ${HG_EXECUTABLE} export OUTPUT_FILE  ${PATCH_FILE} WORKING_DIRECTORY ${SOURCE_DIR})
+    execute_process(COMMAND ${HG_EXECUTABLE} export OUTPUT_FILE ${PATCH_FILE} WORKING_DIRECTORY ${SOURCE_DIR})
     execute_process(COMMAND ${PATCH_EXECUTABLE} --dry-run --reverse --strip=1 --input=${PATCH_FILE} WORKING_DIRECTORY ${SOURCE_DIR})
   elseif(IS_DIRECTORY "${SOURCE_DIR}/.svn")
     message("Detected '${SOURCE_DIR}' as Subversion repository")
