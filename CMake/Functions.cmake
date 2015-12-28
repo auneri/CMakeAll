@@ -139,7 +139,7 @@ function(cma_configure_projects)
           else()
             find_package(PythonInterp QUIET)
             if(PYTHONINTERP_FOUND)
-              if(PYTHON_VERSION_MAJOR LESS 3)
+              if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
                 execute_process(
                   COMMAND ${PYTHON_EXECUTABLE} -c "from urllib2 import urlopen; urlopen('${URL}')"
                   ERROR_QUIET
@@ -307,7 +307,7 @@ function(cma_patch_project NAME PATCH_FILE)
       -DSVN_EXECUTABLE:FILEPATH=${Subversion_SVN_EXECUTABLE}
       -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDERS download
-    DEPENDS ${PATCH_FILE}  # or git_tag or svn_tag is updated.. perhaps EP_VERSION?
+    DEPENDS ${PATCH_FILE}
     WORKING_DIRECTORY <SOURCE_DIR>)
 
   ExternalProject_Add_Step(${NAME} PatchProject
