@@ -1,0 +1,15 @@
+#titlearea {
+    padding: 10px;
+	border-bottom: none;
+}
+#MSearchBox {
+    right: auto;
+}
+body {
+    margin: auto;
+    max-width: 1000px;
+    color: #444;
+}
+hr.footer {
+    display: none;
+}
