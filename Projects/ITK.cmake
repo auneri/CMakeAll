@@ -49,7 +49,7 @@ ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG v4.8.2
+  GIT_TAG v4.9.0
   # patch
   # update
   UPDATE_COMMAND ""
