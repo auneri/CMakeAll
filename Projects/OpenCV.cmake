@@ -2,9 +2,9 @@ set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL "git://github.com/Itseez/opencv.git")
 set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
 
-cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)
-
 cma_envvar(@LIBRARYPATH@ PREPEND "@BINARY_DIR@/@LIBDIR@/@INTDIR@")
+
+cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)
 
 cma_end_definition()
 # -----------------------------------------------------------------------------
@@ -34,18 +34,10 @@ endif()
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
-  # download
   GIT_REPOSITORY ${EP_URL}
   GIT_TAG 2.4.11
-  # patch
-  # update
   UPDATE_COMMAND ""
-  # configure
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS ${EP_CMAKE_ARGS}
-  # build
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
-  # install
-  INSTALL_COMMAND ""
-  # test
-  )
+  INSTALL_COMMAND "")

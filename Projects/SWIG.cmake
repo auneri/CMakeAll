@@ -1,7 +1,7 @@
 set(EP_REQUIRED_PROJECTS Python)
 set(EP_OPTION_DESCRIPTION "Simplified Wrapper and Interface Generator")
-
 set(EP_VERSION 3.0.8)
+
 if(WIN32)
   set(EP_URL "http://downloads.sourceforge.net/project/swig/swigwin/swigwin-${EP_VERSION}/swigwin-${EP_VERSION}.zip")
   set(EP_URL_MD5 07bc00f7511b7d57516c50f59d705efa)
@@ -21,22 +21,14 @@ cma_end_definition()
 if(WIN32)
   ExternalProject_Add(${EP_NAME}
     DEPENDS ${EP_REQUIRED_PROJECTS}
-    # download
     URL ${EP_URL}
     URL_MD5 ${EP_URL_MD5}
     TIMEOUT 300
-    # patch
-    # update
     UPDATE_COMMAND ""
-    # configure
     SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install
     CONFIGURE_COMMAND ""
-    # build
     BUILD_COMMAND ""
-    # install
-    INSTALL_COMMAND ""
-    # test
-    )
+    INSTALL_COMMAND "")
 
   set(SWIG_DIR "${PROJECT_BINARY_DIR}/${EP_NAME}-install")
   set(SWIG_EXECUTABLE "${PROJECT_BINARY_DIR}/${EP_NAME}-install/swig.exe")
@@ -45,50 +37,34 @@ elseif(UNIX)
   list(GET EP_URL_MD5 0 URL_MD5)
   ExternalProject_Add(PCRE
     DEPENDS ${EP_REQUIRED_PROJECTS}
-    # download
     URL ${URL}
     URL_MD5 ${URL_MD5}
     TIMEOUT 300
-    # patch
-    # update
     UPDATE_COMMAND ""
-    # configure
     SOURCE_DIR ${PROJECT_BINARY_DIR}/PCRE
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
       --prefix=<INSTALL_DIR>
       --disable-shared
-    # build
     BINARY_DIR ${PROJECT_BINARY_DIR}/PCRE-build
-    # install
-    INSTALL_DIR ${PROJECT_BINARY_DIR}/PCRE-install
-    )
+    INSTALL_DIR ${PROJECT_BINARY_DIR}/PCRE-install)
 
   list(GET EP_URL 1 URL)
   list(GET EP_URL_MD5 1 URL_MD5)
   ExternalProject_Add(${EP_NAME}
     DEPENDS PCRE
-    # download
     URL ${URL}
     URL_MD5 ${URL_MD5}
     TIMEOUT 300
-    # patch
-    # update
     UPDATE_COMMAND ""
-    # configure
     SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
       --prefix=<INSTALL_DIR>
       --with-pcre-prefix=${PROJECT_BINARY_DIR}/PCRE-install
-    # build
     BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
-    # install
-    INSTALL_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install
-    )
+    INSTALL_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-install)
 
   set(SWIG_DIR "${PROJECT_BINARY_DIR}/${EP_NAME}-install/share/swig/${EP_VERSION}")
   set(SWIG_EXECUTABLE "${PROJECT_BINARY_DIR}/${EP_NAME}-install/bin/swig")
-else()
-  message(FATAL_ERROR "Platform is not supported.")
 endif()
 
 set(SWIG_DIR "${SWIG_DIR}" CACHE INTERNAL "")
