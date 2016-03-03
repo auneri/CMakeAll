@@ -53,6 +53,12 @@ set(HELP
   " Command aliases:\n")
 
 
+# include customizations
+if(CUSTOMIZATIONS)
+  include(${CUSTOMIZATIONS})
+endif()
+
+
 # command alias: Terminal
 list(APPEND HELP "   Terminal - Open a terminal.\n")
 if(ARGV MATCHES "^Terminal$")
@@ -108,12 +114,6 @@ if(ARGV MATCHES "^Patch")
     execute_process(COMMAND ${PATCH_EXECUTABLE} --dry-run --reverse --input=${PATCH_FILE} WORKING_DIRECTORY ${SOURCE_DIR})
   endif()
   set(ARGV ${CMAKE_COMMAND} -E echo "Updated '${PATCH_FILE}'")
-endif()
-
-
-# include customizations
-if(CUSTOMIZATIONS)
-  include(${CUSTOMIZATIONS})
 endif()
 
 
