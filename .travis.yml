@@ -1,26 +1,12 @@
-language: cpp
+language: c
 
-compiler:
-  - clang
-
-# install:
-#   - git clone git://github.com/doxygen/doxygen.git ./Doxygen
-#   - cd ./Doxygen
-#   - git checkout Release_1_8_6
-#   - ./configure
-#   - make
-#   - export PATH=$(pwd)/bin:${PATH}
-#   - cd ..
+compiler: clang
 
 before_script:
   - mkdir build
   - cd build
   - cmake -DCMakeAll_BUILD_TESTING:BOOL=ON ..
 
-script: make && make test
-
-# after_success:
-#   - ssh -oStrictHostKeyChecking=no auneri1@masters1.cs.jhu.edu rm -rf /users/istar/public_html/doxygen/CMakeAll
-#   - make doc
-#   - scp -oStrictHostKeyChecking=no -r Documentation/html auneri1@masters1.cs.jhu.edu:/users/istar/public_html/doxygen/CMakeAll
-#   - ssh -oStrictHostKeyChecking=no auneri1@masters1.cs.jhu.edu chmod -R 775 /users/istar/public_html/doxygen/CMakeAll
+script:
+  - make
+  - make test
