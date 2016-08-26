@@ -2,7 +2,7 @@ set(EP_REQUIRED_PROJECTS Git)
 set(EP_URL "git://itk.org/ITK.git")
 set(EP_OPTION_DESCRIPTION "Insight Segmentation and Registration Toolkit")
 
-cma_list(APPEND EP_REQUIRED_PROJECTS CUDA IF PROJECTS_CUDA)
+cma_list(APPEND EP_REQUIRED_PROJECTS CUDA IF ${EP_OPTION_NAME}_GPU)
 cma_list(APPEND EP_REQUIRED_PROJECTS SWIG IF ${EP_OPTION_NAME}_Python)
 cma_list(APPEND EP_REQUIRED_PROJECTS VTK IF ${EP_OPTION_NAME}_VtkGlue)
 cma_list(APPEND EP_REQUIRED_PROJECTS zlib IF PROJECTS_zlib)
@@ -18,7 +18,8 @@ endif()
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-cmake_dependent_option(${EP_OPTION_NAME}_Python "Enable ITK Python bindings" OFF ${EP_OPTION_NAME} OFF)
+cmake_dependent_option(${EP_OPTION_NAME}_GPU "Enable OpenCL support" OFF ${EP_OPTION_NAME} OFF)
+cmake_dependent_option(${EP_OPTION_NAME}_Python "Enable Python bindings" OFF ${EP_OPTION_NAME} OFF)
 cmake_dependent_option(${EP_OPTION_NAME}_VtkGlue "Enable ITKVtkGlue module" OFF ${EP_OPTION_NAME} OFF)
 
 if(WIN32)
@@ -36,7 +37,7 @@ set(EP_CMAKE_ARGS
   -DCMAKE_C_FLAGS:STRING=${CMAKE_C_FLAGS}
   -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
   -DITK_LEGACY_SILENT:BOOL=${${EP_OPTION_NAME}_Python}
-  -DITK_USE_GPU:BOOL=${PROJECTS_CUDA}
+  -DITK_USE_GPU:BOOL=${${EP_OPTION_NAME}_GPU}
   -DITK_USE_REVIEW:BOOL=ON
   -DITK_USE_SYSTEM_SWIG:BOOL=${${EP_OPTION_NAME}_Python}
   -DITK_USE_SYSTEM_ZLIB:BOOL=${PROJECTS_zlib}
