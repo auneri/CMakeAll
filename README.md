@@ -25,11 +25,11 @@ An example definition for ProjectA may be as follows.
 
 ~~~{.cmake}
 set(EP_REQUIRED_PROJECTS ProjectB)
-set(EP_URL "git://github.com/auneri/ProjectA.git")
+set(EP_URL "git://github.com/organization/ProjectA.git")
 set(EP_OPTION_NAME USE_ProjectA)
 
 cma_list(APPEND EP_REQUIRED_PROJECTS Python IF USE_Python)
-cma_envvar(PYTHONPATH APPEND "@SOURCE_DIR@" IF USE_Python)
+cma_envvar(PYTHONPATH PREPEND "@SOURCE_DIR@" IF USE_Python)
 
 cma_end_definition()
 
