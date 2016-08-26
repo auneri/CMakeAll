@@ -9,13 +9,6 @@ endif()
 get_filename_component(MATLAB_BIN_DIR ${MATLAB_EXECUTABLE} PATH)
 get_filename_component(MATLAB_DIR ${MATLAB_BIN_DIR} PATH)
 
-if(UNIX)
-  find_program(CSH_EXECUTABLE csh)
-  if(NOT CSH_EXECUTABLE)
-    message(FATAL_ERROR "Please specify CSH_EXECUTABLE")
-  endif()
-endif()
-
 ExternalProject_Add(${EP_NAME}
   DOWNLOAD_COMMAND ""
   CONFIGURE_COMMAND ""
