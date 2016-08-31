@@ -123,19 +123,29 @@ function(cma_configure_projects)
       if(${EP_OPTION_NAME})
         foreach(URL ${EP_URL})
           if(URL MATCHES "^svn")
-            find_package(Subversion QUIET)
-            execute_process(
-              COMMAND ${Subversion_SVN_EXECUTABLE} info ${URL}
-              OUTPUT_QUIET
-              ERROR_QUIET
-              RESULT_VARIABLE RESULT)
+            find_program(SVN_EXECUTABLE svn)
+            mark_as_advanced(SVN_EXECUTABLE)
+            if(SVN_EXECUTABLE)
+              execute_process(
+                COMMAND ${SVN_EXECUTABLE} info ${URL}
+                OUTPUT_QUIET
+                ERROR_QUIET
+                RESULT_VARIABLE RESULT)
+            else()
+              set(RESULT -1)
+            endif()
           elseif(URL MATCHES "^git")
-            find_package(Git QUIET)
-            execute_process(
-              COMMAND ${GIT_EXECUTABLE} ls-remote ${URL}
-              OUTPUT_QUIET
-              ERROR_QUIET
-              RESULT_VARIABLE RESULT)
+            find_program(GIT_EXECUTABLE git)
+            mark_as_advanced(GIT_EXECUTABLE)
+            if(GIT_EXECUTABLE)
+              execute_process(
+                COMMAND ${GIT_EXECUTABLE} ls-remote ${URL}
+                OUTPUT_QUIET
+                ERROR_QUIET
+                RESULT_VARIABLE RESULT)
+            else()
+              set(RESULT -1)
+            endif()
           else()
             find_package(PythonInterp QUIET)
             if(PYTHONINTERP_FOUND)
@@ -293,10 +303,14 @@ function(cma_patch_project NAME PATCH_FILE)
   if(NOT EXISTS ${PATCH_FILE})
     message(FATAL_ERROR "Failed to locate ${PATCH_FILE}")
   endif()
-  find_package(Git QUIET)
-  find_package(Hg QUIET)
-  find_package(Subversion QUIET)
+  find_program(GIT_EXECUTABLE git)
+  mark_as_advanced(GIT_EXECUTABLE)
+  find_program(HG_EXECUTABLE hg)
+  mark_as_advanced(HG_EXECUTABLE)
+  find_program(SVN_EXECUTABLE svn)
+  mark_as_advanced(SVN_EXECUTABLE)
   find_program(PATCH_EXECUTABLE patch)
+  mark_as_advanced(PATCH_EXECUTABLE)
 
   ExternalProject_Add_Step(${NAME} RevertProject
     COMMENT "Reverting changes to '${NAME}'"
@@ -304,7 +318,7 @@ function(cma_patch_project NAME PATCH_FILE)
       -DSOURCE_DIR:PATH=<SOURCE_DIR>
       -DGIT_EXECUTABLE:FILEPATH=${GIT_EXECUTABLE}
       -DHG_EXECUTABLE:FILEPATH=${HG_EXECUTABLE}
-      -DSVN_EXECUTABLE:FILEPATH=${Subversion_SVN_EXECUTABLE}
+      -DSVN_EXECUTABLE:FILEPATH=${SVN_EXECUTABLE}
       -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDERS download
     DEPENDS ${PATCH_FILE}
@@ -318,7 +332,7 @@ function(cma_patch_project NAME PATCH_FILE)
       -DPATCH_FILE:FILEPATH=${PATCH_FILE}
       -DGIT_EXECUTABLE:FILEPATH=${GIT_EXECUTABLE}
       -DHG_EXECUTABLE:FILEPATH=${HG_EXECUTABLE}
-      -DSVN_EXECUTABLE:FILEPATH=${Subversion_SVN_EXECUTABLE}
+      -DSVN_EXECUTABLE:FILEPATH=${SVN_EXECUTABLE}
       -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDEES update
     DEPENDERS configure
@@ -383,10 +397,11 @@ function(cma_print_projects)
   endforeach()
   file(APPEND ${BASENAME}.dot "}\n")
 
-  find_package(Doxygen QUIET)
-  if(DOXYGEN_DOT_FOUND)
+  find_program(DOT_EXECUTABLE dot)
+  mark_as_advanced(DOT_EXECUTABLE)
+  if(DOT_EXECUTABLE)
     execute_process(
-      COMMAND ${DOXYGEN_DOT_EXECUTABLE} -Tpdf ${BASENAME}.dot -o ${BASENAME}.pdf
+      COMMAND ${DOT_EXECUTABLE} -Tpdf ${BASENAME}.dot -o ${BASENAME}.pdf
       OUTPUT_QUIET
       ERROR_QUIET)
   endif()
@@ -398,8 +413,9 @@ endfunction()
 function(cma_git_revision SOURCE_DIR REVISION_)
   set(REVISION 0)  # default to 0
 
-  find_package(Git QUIET)
-  if(GIT_FOUND)
+  find_program(GIT_EXECUTABLE git)
+  mark_as_advanced(GIT_EXECUTABLE)
+  if(GIT_EXECUTABLE)
     execute_process(
       COMMAND ${GIT_EXECUTABLE} rev-list HEAD --count
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
@@ -421,10 +437,11 @@ endfunction()
 function(cma_subversion_revision SOURCE_DIR REVISION_)
   set(REVISION 0)  # default to 0
 
-  find_package(Subversion QUIET)
+  find_program(SVN_EXECUTABLE svn)
+  mark_as_advanced(SVN_EXECUTABLE)
   if(SUBVERSION_FOUND)
     execute_process(
-      COMMAND ${Subversion_SVN_EXECUTABLE} info
+      COMMAND ${SVN_EXECUTABLE} info
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       RESULT_VARIABLE RESULT
       OUTPUT_QUIET
@@ -436,8 +453,9 @@ function(cma_subversion_revision SOURCE_DIR REVISION_)
   endif()
 
   # if using git-svn
-  find_package(Git QUIET)
-  if(GIT_FOUND)
+  find_program(GIT_EXECUTABLE git)
+  mark_as_advanced(GIT_EXECUTABLE)
+  if(GIT_EXECUTABLE)
     execute_process(
       COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
