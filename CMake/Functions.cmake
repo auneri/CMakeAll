@@ -147,21 +147,16 @@ function(cma_configure_projects)
               set(RESULT -1)
             endif()
           else()
-            find_package(PythonInterp QUIET)
-            if(PYTHONINTERP_FOUND)
-              if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
-                execute_process(
-                  COMMAND ${PYTHON_EXECUTABLE} -c "from urllib2 import urlopen; urlopen('${URL}')"
-                  ERROR_QUIET
-                  RESULT_VARIABLE RESULT)
-              else()
-                execute_process(
-                  COMMAND ${PYTHON_EXECUTABLE} -c "from urllib.request import urlopen; urlopen('${URL}')"
-                  ERROR_QUIET
-                  RESULT_VARIABLE RESULT)
-              endif()
+            file(DOWNLOAD
+                ${URL}
+                ${CMAKE_CURRENT_BINARY_DIR}/CMakeAll_VERIFY_URLS
+                TIMEOUT 2
+              STATUS STATUS)
+            list(GET STATUS 0 STATUS_CODE)
+            if(STATUS_CODE EQUAL 28)  # expecting timeout (28)
+              set(RESULT 0)
             else()
-              set(RESULT -1)
+              set(RESULT 1)
             endif()
           endif()
           if(RESULT EQUAL 0)
