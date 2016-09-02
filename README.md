@@ -1,4 +1,4 @@
-# CMakeAll [![Build Status](https://travis-ci.org/auneri/CMakeAll.svg?branch=develop)](https://travis-ci.org/auneri/CMakeAll)
+# CMakeAll [![Build Status](https://travis-ci.org/auneri/CMakeAll.svg?branch=master)](https://travis-ci.org/auneri/CMakeAll)
 A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
 
 
@@ -8,7 +8,7 @@ A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module 
 cmake_minimum_required(VERSION 2.8.7)
 project(BasicExample)
 
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 
 cma_add_projects(
   "/source/dir/ProjectA.cmake"
@@ -89,7 +89,7 @@ cmake -P /binary/dir/BasicExample.cmake
 cmake_minimum_required(VERSION 2.8.7)
 project(AdvancedExample)
 
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 
 cma_add_projects(
   ProjectA ProjectB ProjectC
@@ -107,12 +107,12 @@ cma_print_projects()
 **Option 1.** Standard method where CMake will request the path to your local copy.
 
 ~~~{.cmake}
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 ~~~
 
 **Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub. If version number is not specified master branch is cloned, and updated with each configure.
 
 ~~~{.cmake}
 list(APPEND CMAKE_MODULE_PATH "/path/to/FindCMakeAll.cmake")
-find_package(CMakeAll 1.0 REQUIRED)
+find_package(CMakeAll 1.1 REQUIRED)
 ~~~
