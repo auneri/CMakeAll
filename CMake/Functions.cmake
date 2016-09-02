@@ -48,13 +48,8 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Configure the CMake launcher script.
-function(cma_configure_launcher)
+function(cma_configure_launcher CUSTOMIZATIONS)
   set(EP_ENVVARS)
-  set(EP_PATHS "")
-  set(EP_LIBRARYPATHS "")
-  set(EP_PYTHONPATHS ${PROJECT_BINARY_DIR})
-  set(EP_MATLABPATHS "")
-
   foreach(DEFINITION ${CMA_DEFINITIONS})
     cma_read_definition(${DEFINITION})
     if(${EP_OPTION_NAME})
@@ -62,40 +57,20 @@ function(cma_configure_launcher)
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
       ExternalProject_Get_Property(${EP_NAME} INSTALL_DIR)
       string(CONFIGURE "${EP_ENVVAR}" EP_ENVVAR @ONLY)
-      string(CONFIGURE "${EP_PATH}" EP_PATH @ONLY)
-      string(CONFIGURE "${EP_LIBRARYPATH}" EP_LIBRARYPATH @ONLY)
-      string(CONFIGURE "${EP_PYTHONPATH}" EP_PYTHONPATH @ONLY)
-      string(CONFIGURE "${EP_MATLABPATH}" EP_MATLABPATH @ONLY)
       list(APPEND EP_ENVVARS ${EP_ENVVAR})
-      list(APPEND EP_PATHS ${EP_PATH})
-      list(APPEND EP_LIBRARYPATHS ${EP_LIBRARYPATH})
-      list(APPEND EP_PYTHONPATHS ${EP_PYTHONPATH})
-      list(APPEND EP_MATLABPATHS ${EP_MATLABPATH})
     endif()
   endforeach()
-
   string(REPLACE ";" "::" ENVVAR "${EP_ENVVARS}")
-  string(REPLACE ";" "::" PATH "${EP_PATHS}")
-  string(REPLACE ";" "::" LIBRARYPATH "${EP_LIBRARYPATHS}")
-  string(REPLACE ";" "::" PYTHONPATH "${EP_PYTHONPATHS}")
-  string(REPLACE ";" "::" MATLABPATH "${EP_MATLABPATHS}")
 
   add_custom_target(Launcher ALL
     COMMAND ${CMAKE_COMMAND}
       -DENVVAR:STRING=${ENVVAR}
-      -DPATH:STRING=${PATH}
-      -DLIBRARYPATH:STRING=${LIBRARYPATH}
-      -DPYTHONPATH:STRING=${PYTHONPATH}
-      -DMATLABPATH:STRING=${MATLABPATH}
       -DINTDIR:STRING=${CMAKE_CFG_INTDIR}
       -DSOURCE_DIR:PATH=${CMA_CMAKE_DIR}
       -DBINARY_DIR:PATH=${PROJECT_BINARY_DIR}
       -DNAME:STRING=${PROJECT_NAME}
-      -DCUSTOMIZATIONS:PATH=${ARGV0}
+      -DCUSTOMIZATIONS:PATH=${CUSTOMIZATIONS}
       -P ${CMA_CMAKE_DIR}/ConfigureLauncher.cmake)
-
-  add_custom_target(run_terminal COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake Terminal)
-  set_property(TARGET run_terminal PROPERTY PROJECT_LABEL "RUN_TERMINAL")
 endfunction()
 
 
@@ -103,8 +78,14 @@ endfunction()
 #! Configure added projects.
 function(cma_configure_projects)
   cmake_parse_arguments(CMA "RESOLVE_DEPENDENCIES;VERIFY_URLS" "" "" ${ARGN})
-
   if(CMA_RESOLVE_DEPENDENCIES)
+    message(SEND_ERROR "Function argument RESOLVE_DEPENDENCIES is deprecated, use corresponding CMake option instead")
+  endif()
+  if(CMA_VERIFY_URLS)
+    message(SEND_ERROR "Function argument VERIFY_URLS is deprecated, use corresponding CMake option instead")
+  endif()
+
+  if(CMakeAll_RESOLVE_DEPENDENCIES)
     set(DEPENDENCY_RESOLVED ON)
     while(DEPENDENCY_RESOLVED)
       set(DEPENDENCY_RESOLVED OFF)
@@ -136,37 +117,52 @@ function(cma_configure_projects)
     endwhile()
   endif()
 
-  if(CMA_VERIFY_URLS)
+  if(CMakeAll_VERIFY_URLS)
     foreach(DEFINITION ${CMA_DEFINITIONS})
       cma_read_definition(${DEFINITION})
       if(${EP_OPTION_NAME})
         foreach(URL ${EP_URL})
-          if(URL MATCHES "^svn://")
-            execute_process(
-              COMMAND ${CMA_SVN_EXECUTABLE} info ${URL}
-              OUTPUT_QUIET
-              ERROR_QUIET
-              RESULT_VARIABLE RESULT)
-          elseif(URL MATCHES "^git://")
-            execute_process(
-              COMMAND ${CMA_GIT_EXECUTABLE} ls-remote ${URL}
-              OUTPUT_QUIET
-              ERROR_QUIET
-              RESULT_VARIABLE RESULT)
-          else()
-            find_package(PythonInterp)
-            if(PYTHONINTERP_FOUND)
+          if(URL MATCHES "^svn" OR URL MATCHES "^http.*/svn.*/trunk" OR URL MATCHES "^http.*/svn.*/branches" OR URL MATCHES "^http.*/svn.*/tags")
+            find_program(SVN_EXECUTABLE svn)
+            mark_as_advanced(SVN_EXECUTABLE)
+            if(SVN_EXECUTABLE)
               execute_process(
-                COMMAND ${PYTHON_EXECUTABLE} -c "import urllib2; urllib2.urlopen('${URL}')"
+                COMMAND ${SVN_EXECUTABLE} info ${URL}
+                OUTPUT_QUIET
                 ERROR_QUIET
                 RESULT_VARIABLE RESULT)
             else()
-              message(AUTHOR_WARNING "No tools to verify connection to ${URL}")
+              set(RESULT -1)
+            endif()
+          elseif(URL MATCHES "^git" OR URL MATCHES "^http.*\\.git$")
+            find_program(GIT_EXECUTABLE git)
+            mark_as_advanced(GIT_EXECUTABLE)
+            if(GIT_EXECUTABLE)
+              execute_process(
+                COMMAND ${GIT_EXECUTABLE} ls-remote ${URL}
+                OUTPUT_QUIET
+                ERROR_QUIET
+                RESULT_VARIABLE RESULT)
+            else()
+              set(RESULT -1)
+            endif()
+          else()
+            file(DOWNLOAD
+                ${URL}
+                ${CMAKE_CURRENT_BINARY_DIR}/CMakeAll_VERIFY_URLS
+                TIMEOUT 2
+              STATUS STATUS)
+            list(GET STATUS 0 STATUS_CODE)
+            if(STATUS_CODE EQUAL 28)  # expecting timeout (28)
+              set(RESULT 0)
+            else()
               set(RESULT 1)
             endif()
           endif()
-          if(NOT RESULT)
+          if(RESULT EQUAL 0)
             message(STATUS "Verified connection to ${URL}")
+          elseif(RESULT EQUAL -1)
+            message(AUTHOR_WARNING "No tools to verify connection to ${URL}")
           else()
             message(ERROR "Failed to verify connection to ${URL}")
           endif()
@@ -184,6 +180,94 @@ function(cma_configure_projects)
       cma_patch_project(${EP_NAME} ${EP_PATCH})
     endif()
   endforeach()
+endfunction()
+
+
+# -----------------------------------------------------------------------------
+#! Create a platform-specific shortcut for executing a command through launcher.
+function(cma_launcher_shortcut)
+  cmake_parse_arguments(CMA "" "NAME;ICON;COMMENT" "" ${ARGN})
+
+  if(WIN32)
+    if(CMA_ICON)
+      set(CMA_ICON ${CMA_ICON}.ico)
+      if(NOT EXISTS ${CMA_ICON})
+        message(FATAL_ERROR "Failed to locate ${CMA_ICON}")
+      endif()
+    endif()
+
+    file(TO_NATIVE_PATH ${PROJECT_BINARY_DIR} PROJECT_BINARY_NATIVE_DIR)
+    file(WRITE ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.vbs
+      "set shell = WScript.CreateObject(\"WScript.Shell\")\n"
+      "set shortcut = shell.CreateShortcut(\"${PROJECT_BINARY_NATIVE_DIR}\\${CMA_NAME}.lnk\")\n"
+      "shortcut.TargetPath = \"${CMAKE_COMMAND}\"\n"
+      "shortcut.Arguments = \"-P ${PROJECT_BINARY_NATIVE_DIR}\\${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\"\n"
+      "shortcut.WorkingDirectory = \"${PROJECT_NATIVE_BINARY_DIR}\"\n"
+      "shortcut.WindowStyle = 7\n"
+      "shortcut.Description = \"${CMA_COMMENT}\"\n")
+    if(CMA_ICON)
+      file(TO_NATIVE_PATH ${CMA_ICON} CMA_ICON_NATIVE)
+      file(APPEND ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.vbs
+        "shortcut.IconLocation = \"${CMA_ICON_NATIVE}\"\n")
+    endif()
+    file(APPEND ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.vbs
+      "shortcut.Save\n")
+    execute_process(COMMAND wscript.exe ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.vbs)
+
+  elseif(APPLE)
+    if(CMA_ICON)
+      set(CMA_ICON ${CMA_ICON}.icns)
+      if(NOT EXISTS ${CMA_ICON})
+        message(FATAL_ERROR "Failed to locate ${CMA_ICON}")
+      endif()
+    endif()
+
+    execute_process(COMMAND osacompile -o ${PROJECT_BINARY_DIR}/${CMA_NAME}.app -e "do shell script \"${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\"")
+    if(CMA_ICON)
+      file(REMOVE ${PROJECT_BINARY_DIR}/${CMA_NAME}.app/Contents/Resources/applet.icns)
+      configure_file(
+        ${CMA_ICON}
+        ${PROJECT_BINARY_DIR}/${CMA_NAME}.app/Contents/Resources/applet.icns
+        COPYONLY)
+    endif()
+
+  elseif(UNIX)
+    if(CMA_ICON)
+      set(CMA_ICON ${CMA_ICON}.png)
+      if(NOT EXISTS ${CMA_ICON})
+        message(FATAL_ERROR "Failed to locate ${CMA_ICON}")
+      endif()
+    endif()
+
+    file(WRITE ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.desktop
+      "[Desktop Entry]\n"
+      "Version=${PROJECT_VERSION}\n"
+      "Name=${CMA_NAME}\n"
+      "Comment=${CMA_COMMENT}\n"
+      "Exec=${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}\n"
+      "Icon=${CMA_ICON}\n"
+      "Terminal=true\n"
+      "Type=Application\n"
+      "Categories=Application;\n")
+    file(COPY
+      ${PROJECT_BINARY_DIR}/CMakeFiles/${CMA_NAME}.desktop
+      DESTINATION ${PROJECT_BINARY_DIR}
+      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+
+  else()
+    message(FATAL_ERROR "Platform is not supported.")
+  endif()
+endfunction()
+
+
+# -----------------------------------------------------------------------------
+#! Create a target for executing a command through launcher.
+function(cma_launcher_target)
+  cmake_parse_arguments(CMA "" "NAME" "" ${ARGN})
+  add_custom_target(${CMA_NAME}
+    COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS})
+  string(TOUPPER ${CMA_NAME} CMA_NAME_UPPER)
+  set_target_properties(${CMA_NAME} PROPERTIES PROJECT_LABEL ${CMA_NAME_UPPER} FOLDER "Launchers")
 endfunction()
 
 
@@ -214,13 +298,22 @@ function(cma_patch_project NAME PATCH_FILE)
   if(NOT EXISTS ${PATCH_FILE})
     message(FATAL_ERROR "Failed to locate ${PATCH_FILE}")
   endif()
+  find_program(GIT_EXECUTABLE git)
+  mark_as_advanced(GIT_EXECUTABLE)
+  find_program(HG_EXECUTABLE hg)
+  mark_as_advanced(HG_EXECUTABLE)
+  find_program(SVN_EXECUTABLE svn)
+  mark_as_advanced(SVN_EXECUTABLE)
+  find_program(PATCH_EXECUTABLE patch)
+  mark_as_advanced(PATCH_EXECUTABLE)
 
   ExternalProject_Add_Step(${NAME} RevertProject
     COMMENT "Reverting changes to '${NAME}'"
     COMMAND ${CMAKE_COMMAND}
-      -DGIT_EXECUTABLE:FILEPATH=${CMA_GIT_EXECUTABLE}
       -DSOURCE_DIR:PATH=<SOURCE_DIR>
-      -DSVN_EXECUTABLE:FILEPATH=${CMA_SVN_EXECUTABLE}
+      -DGIT_EXECUTABLE:FILEPATH=${GIT_EXECUTABLE}
+      -DHG_EXECUTABLE:FILEPATH=${HG_EXECUTABLE}
+      -DSVN_EXECUTABLE:FILEPATH=${SVN_EXECUTABLE}
       -P ${CMA_CMAKE_DIR}/PatchProject.cmake
     DEPENDERS download
     DEPENDS ${PATCH_FILE}
@@ -229,48 +322,84 @@ function(cma_patch_project NAME PATCH_FILE)
   ExternalProject_Add_Step(${NAME} PatchProject
     COMMENT "Patching '${NAME}'"
     COMMAND ${CMAKE_COMMAND}
-      -DGIT_EXECUTABLE:FILEPATH=${CMA_GIT_EXECUTABLE}
-      -DPATCH_EXECUTABLE:FILEPATH=${CMA_PATCH_EXECUTABLE}
-      -DPATCH_FILE:FILEPATH=${PATCH_FILE}
       -DSOURCE_DIR:PATH=<SOURCE_DIR>
-      -DSVN_EXECUTABLE:FILEPATH=${CMA_SVN_EXECUTABLE}
+      -DPATCH_EXECUTABLE:FILEPATH=${PATCH_EXECUTABLE}
+      -DPATCH_FILE:FILEPATH=${PATCH_FILE}
+      -DGIT_EXECUTABLE:FILEPATH=${GIT_EXECUTABLE}
+      -DHG_EXECUTABLE:FILEPATH=${HG_EXECUTABLE}
+      -DSVN_EXECUTABLE:FILEPATH=${SVN_EXECUTABLE}
       -P ${CMA_CMAKE_DIR}/PatchProject.cmake
-    DEPENDEES download
-    DEPENDERS update
+    DEPENDEES update
+    DEPENDERS configure
     WORKING_DIRECTORY <SOURCE_DIR>)
 endfunction()
 
 
 # -----------------------------------------------------------------------------
-#! Include provided projects in packaging, if marked accordingly.
+#! Print dependenty graph to stdout and PROJECT_NAME.dot, try compiling to PDF.
 function(cma_print_projects)
-  cmake_parse_arguments(CMA "SELECTED" "" "" ${ARGN})
+  cmake_parse_arguments(CMA "" "" "" ${ARGN})
+  set(BASENAME "${PROJECT_BINARY_DIR}/${PROJECT_NAME}")
+  file(WRITE ${BASENAME}.dot "digraph ${PROJECT_NAME} {\n")
+  file(APPEND ${BASENAME}.dot "  rankdir=LR;\n")
 
   # compute maximum name length for printing purposes
-  cma_string_length_max("${CMA_PROJECTS}" LENGTH_MAX)
+  set(LENGTH_MAX 0)
+  foreach(DEFINITION ${CMA_DEFINITIONS})
+    cma_read_definition(${DEFINITION})
+    if(${EP_OPTION_NAME} OR CMakeAll_PRINT_ALL_PROJECTS)
+      string(LENGTH ${EP_NAME} LENGTH_NAME)
+      if(LENGTH_NAME GREATER LENGTH_MAX)
+        set(LENGTH_MAX ${LENGTH_NAME})
+      endif()
+    endif()
+    if(${EP_OPTION_NAME} AND NOT CMakeAll_PRINT_ALL_PROJECTS)
+      file(APPEND ${BASENAME}.dot "  ${EP_NAME};\n")
+    elseif(${EP_OPTION_NAME} AND CMakeAll_PRINT_ALL_PROJECTS)
+      file(APPEND ${BASENAME}.dot "  ${EP_NAME} [color=limegreen,style=filled];\n")
+    elseif(CMakeAll_PRINT_ALL_PROJECTS)
+      file(APPEND ${BASENAME}.dot "  ${EP_NAME} [color=lightgray,style=filled];\n")
+    endif()
+  endforeach()
 
   foreach(DEFINITION ${CMA_DEFINITIONS})
     cma_read_definition(${DEFINITION})
-
-    set(SELECTED " ")
-    if(${EP_OPTION_NAME})
-      set(SELECTED "+")
-    endif()
-
     cma_string_pad(${EP_NAME} ${LENGTH_MAX} " " NAME)
-
-    set(REQUIREDS ${EP_REQUIRED_PROJECTS} ${EP_REQUIRED_OPTIONS})
-    string(REPLACE ";" ", " REQUIREDS "${REQUIREDS}")
-    if(REQUIREDS)
-      set(REQUIREDS " < ${REQUIREDS}")
+    if(${EP_OPTION_NAME} AND NOT CMakeAll_PRINT_ALL_PROJECTS)
+      set(STATUS " ${NAME}")
+    elseif(${EP_OPTION_NAME} AND CMakeAll_PRINT_ALL_PROJECTS)
+      set(STATUS "[+] ${NAME}")
+    elseif(CMakeAll_PRINT_ALL_PROJECTS)
+      set(STATUS "[ ] ${NAME}")
+    endif()
+    if(EP_REQUIRED_PROJECTS)
+      set(STATUS "${STATUS} <")
     endif()
 
-    if(CMA_SELECTED AND ${EP_OPTION_NAME})
-      message(STATUS "${NAME}${REQUIREDS}")
-    elseif(NOT CMA_SELECTED)
-      message(STATUS "[${SELECTED}] ${NAME}${REQUIREDS}")
+    foreach(REQUIRED ${EP_REQUIRED_PROJECTS})
+      if(${EP_OPTION_NAME})
+        set(STATUS "${STATUS} ${REQUIRED}")
+        file(APPEND ${BASENAME}.dot "  ${EP_NAME} -> ${REQUIRED};\n")
+      elseif(CMakeAll_PRINT_ALL_PROJECTS)
+        set(STATUS "${STATUS} ${REQUIRED}")
+        file(APPEND ${BASENAME}.dot "  ${EP_NAME} -> ${REQUIRED} [style=dotted];\n")
+      endif()
+    endforeach()
+
+    if(${EP_OPTION_NAME} OR CMakeAll_PRINT_ALL_PROJECTS)
+      message(STATUS "${STATUS}")
     endif()
   endforeach()
+  file(APPEND ${BASENAME}.dot "}\n")
+
+  find_program(DOT_EXECUTABLE dot)
+  mark_as_advanced(DOT_EXECUTABLE)
+  if(DOT_EXECUTABLE)
+    execute_process(
+      COMMAND ${DOT_EXECUTABLE} -Tpdf ${BASENAME}.dot -o ${BASENAME}.pdf
+      OUTPUT_QUIET
+      ERROR_QUIET)
+  endif()
 endfunction()
 
 
@@ -279,16 +408,17 @@ endfunction()
 function(cma_git_revision SOURCE_DIR REVISION_)
   set(REVISION 0)  # default to 0
 
-  find_package(Git QUIET)
-  if(GIT_FOUND)
+  find_program(GIT_EXECUTABLE git)
+  mark_as_advanced(GIT_EXECUTABLE)
+  if(GIT_EXECUTABLE)
     execute_process(
       COMMAND ${GIT_EXECUTABLE} rev-list HEAD --count
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-      RESULT_VARIABLE RESULT1
+      RESULT_VARIABLE RESULT
       OUTPUT_VARIABLE GIT_WC_REVISION
       OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_QUIET)
-    if(NOT RESULT1)
+    if(RESULT EQUAL 0)
       set(REVISION ${GIT_WC_REVISION})
     endif()
   endif()
@@ -302,23 +432,25 @@ endfunction()
 function(cma_subversion_revision SOURCE_DIR REVISION_)
   set(REVISION 0)  # default to 0
 
-  find_package(Subversion QUIET)
+  find_program(SVN_EXECUTABLE svn)
+  mark_as_advanced(SVN_EXECUTABLE)
   if(SUBVERSION_FOUND)
     execute_process(
-      COMMAND ${Subversion_SVN_EXECUTABLE} info
+      COMMAND ${SVN_EXECUTABLE} info
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       RESULT_VARIABLE RESULT
       OUTPUT_QUIET
       ERROR_QUIET)
-    if(NOT RESULT)
+    if(RESULT EQUAL 0)
       Subversion_WC_INFO(${PROJECT_SOURCE_DIR} SVN)
       set(REVISION ${SVN_WC_REVISION})
     endif()
   endif()
 
   # if using git-svn
-  find_package(Git QUIET)
-  if(GIT_FOUND)
+  find_program(GIT_EXECUTABLE git)
+  mark_as_advanced(GIT_EXECUTABLE)
+  if(GIT_EXECUTABLE)
     execute_process(
       COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
@@ -333,7 +465,7 @@ function(cma_subversion_revision SOURCE_DIR REVISION_)
       OUTPUT_VARIABLE SVN_WC_REVISION
       OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_QUIET)
-    if(NOT RESULT1 AND NOT RESULT2)
+    if(RESULT1 EQUAL 0 AND RESULT2 EQUAL 0)
       set(REVISION ${SVN_WC_REVISION})
     endif()
   endif()
@@ -345,8 +477,8 @@ endfunction()
 # -----------------------------------------------------------------------------
 #! Include provided projects in testing, if marked accordingly.
 function(cma_test_projects)
-  add_custom_target("test")
-  set_property(TARGET "test" PROPERTY PROJECT_LABEL "RUN_TESTS")
+  add_custom_target("tests")
+  set_target_properties("tests" PROPERTIES PROJECT_LABEL "ALL_TESTS")
   foreach(NAME ${ARGN})
     list(FIND CMA_PROJECTS ${NAME} I)
     if(I EQUAL -1)
@@ -359,7 +491,7 @@ function(cma_test_projects)
       ExternalProject_Get_Property(${EP_NAME} BINARY_DIR)
       add_custom_command(
         COMMENT "Testing '${EP_NAME}'"
-        TARGET "test"
+        TARGET "tests"
         COMMAND ${CMAKE_COMMAND}
           -DLAUNCHER:FILEPATH=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake
           -DINTDIR:STRING=${CMAKE_CFG_INTDIR}
@@ -391,17 +523,4 @@ function(cma_touch_projects)
         ALWAYS 1)
     endif()
   endforeach()
-endfunction()
-
-
-# -----------------------------------------------------------------------------
-#! Verify existence of an executable via successful execution of provided command.
-function(cma_verify_executable)
-  execute_process(
-    COMMAND ${ARGN}
-    RESULT_VARIABLE RESULT
-    OUTPUT_QUIET)
-  if(NOT RESULT MATCHES "^-?[01]$")
-    message(FATAL_ERROR "Failed to find '${ARGV0}' in PATH")
-  endif()
 endfunction()

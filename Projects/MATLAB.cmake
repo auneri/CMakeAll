@@ -1,18 +1,19 @@
-# Author: Ali Uneri
-# Date: 2013-05-02
-
 cma_end_definition()
 # -----------------------------------------------------------------------------
 
-cma_verify_executable(matlab -h)
-if(UNIX)
-  cma_verify_executable(csh -c exit)
+find_program(MATLAB_EXECUTABLE matlab)
+if(NOT MATLAB_EXECUTABLE)
+  message(FATAL_ERROR "Please specify MATLAB_EXECUTABLE")
 endif()
 
-find_program(CMA_MATLAB_EXECUTABLE matlab)
+get_filename_component(MATLAB_BIN_DIR ${MATLAB_EXECUTABLE} PATH)
+get_filename_component(MATLAB_DIR ${MATLAB_BIN_DIR} PATH)
 
 ExternalProject_Add(${EP_NAME}
   DOWNLOAD_COMMAND ""
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND "")
+
+set(MATLAB_EXECUTABLE "${MATLAB_EXECUTABLE}" CACHE INTERNAL "")
+set(MATLAB_DIR "${MATLAB_DIR}" CACHE INTERNAL "")

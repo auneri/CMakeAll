@@ -57,20 +57,6 @@ endfunction()
 
 
 # -----------------------------------------------------------------------------
-#! Compute maximum length of provided list of strings.
-function(cma_string_length_max INPUTS LENGTH_MAX_)
-  set(LENGTH_MAX 0)
-  foreach(INPUT ${INPUTS})
-    string(LENGTH ${INPUT} LENGTH_INPUT)
-    if(LENGTH_INPUT GREATER LENGTH_MAX)
-      set(LENGTH_MAX ${LENGTH_INPUT})
-    endif()
-  endforeach()
-  set(${LENGTH_MAX_} ${LENGTH_MAX} PARENT_SCOPE)
-endfunction()
-
-
-# -----------------------------------------------------------------------------
 #! Left pad provided string until desired length is reached.
 function(cma_string_pad INPUT LENGTH_OUTPUT PAD_CHAR OUTPUT_)
   string(LENGTH ${INPUT} LENGTH_INPUT)

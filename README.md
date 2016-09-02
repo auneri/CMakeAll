@@ -1,69 +1,52 @@
-# CMakeAll
-A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of external project dependencies.
+# CMakeAll [![Build Status](https://travis-ci.org/auneri/CMakeAll.svg?branch=develop)](https://travis-ci.org/auneri/CMakeAll)
+A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
 
 
-## Minimal Example
+## Basic Example
 
-```cmake
+~~~{.cmake}
 cmake_minimum_required(VERSION 2.8.7)
-project(MyProject)
+project(BasicExample)
 
 find_package(CMakeAll 1.0 REQUIRED)
 
 cma_add_projects(
-  "/path/to/ProjectA.cmake"
-  "/path/to/ProjectB.cmake")
+  "/source/dir/ProjectA.cmake"
+  "/source/dir/ProjectB.cmake")
 
 cma_configure_projects()
-```
+~~~
 where `ProjectN.cmake` is referred to as a *project definition*.
 
 
 ## Project Definition
 
-An example project definition for [OpenCV](http://opencv.org/) may be as follows.
+An example definition for ProjectA may be as follows.
 
-```cmake
-set(EP_REQUIRED_PROJECTS Git)
-set(EP_URL git://github.com/Itseez/opencv.git)
-set(EP_OPTION_NAME USE_OpenCV)
-set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
+~~~{.cmake}
+set(EP_REQUIRED_PROJECTS ProjectB)
+set(EP_URL "git://github.com/organization/ProjectA.git")
+set(EP_OPTION_NAME USE_ProjectA)
 
-list(APPEND EP_LIBRARYPATH @BINARY_DIR@/@LIBDIR@/@INTDIR@)
-
-if(USE_Python)
-  list(APPEND EP_REQUIRED_PROJECTS Python)
-endif()
+cma_list(APPEND EP_REQUIRED_PROJECTS Python IF USE_Python)
+cma_envvar(PYTHONPATH PREPEND "@SOURCE_DIR@" IF USE_Python)
 
 cma_end_definition()
-# -----------------------------------------------------------------------------
-
-set(EP_REVISION 2.4.7)
-set(EP_CMAKE_ARGS
-  -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-  -DBUILD_opencv_python:BOOL=${USE_Python})
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
-  # download
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG ${EP_REVISION}
-  # patch
-  # update
-  UPDATE_COMMAND ""
-  # configure
+  GIT_TAG "v1.0"
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
-  CMAKE_ARGS ${EP_CMAKE_ARGS}
-  # build
+  CMAKE_ARGS -DBUILD_PYTHON_BINDINGS:BOOL=${USE_Python}
+             -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
-  # install
-  INSTALL_COMMAND ""
-  # test)
-```
+  INSTALL_COMMAND "")
+~~~
 
 Variables listed below can be used to define a project, and should be set prior to calling `cma_end_definition`.
 
-```cmake
+~~~{.cmake}
 set(EP_NAME "${FILENAME}")    # project name
 set(EP_REQUIRED_PROJECTS "")  # list of required projects
 set(EP_REQUIRED_OPTIONS "")   # list of required options
@@ -75,41 +58,36 @@ set(EP_OPTION_DEFAULT OFF)                   # default value of option
 set(EP_OPTION_DEPENDENT OFF)                 # hide option until requirements are met
 set(EP_OPTION_DESCRIPTION "")                # option description
 set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
-```
+~~~
 
 
 ## Launcher
 
-Each project may define its own modifications to the environment through the following variables.
+Each project may define its own environment variables using `cma_envvar`.
 
-```cmake
-# environment variables for launcher
-set(EP_PATH "")
-set(EP_LIBRARYPATH "")
-set(EP_PYTHONPATH "")
-set(EP_MATLABPATH "")
-set(EP_ENVVAR "")
+~~~{.cmake}
+cma_envvar(PATH PREPEND @BINARY_DIR@/@LIBDIR@/@INTDIR@)
 
-# variables that expand at build-time to help with environment variable
+# variables that expand at build-time
 set(INTDIR "@INTDIR@")
 set(LIBDIR "@LIBDIR@")
 set(SOURCE_DIR "@SOURCE_DIR@")
 set(BINARY_DIR "@BINARY_DIR@")
 set(INSTALL_DIR "@INSTALL_DIR@")
-```
+~~~
 
 which are then used to configure a cross-platform launcher script that can be used as follows.
 
-```bash
-cmake -P MyProject.cmake
-```
+~~~bash
+cmake -P /binary/dir/BasicExample.cmake
+~~~
 
 
 ## Advanced Example
 
-```cmake
+~~~{.cmake}
 cmake_minimum_required(VERSION 2.8.7)
-project(MyProject)
+project(AdvancedExample)
 
 find_package(CMakeAll 1.0 REQUIRED)
 
@@ -118,13 +96,23 @@ cma_add_projects(
   PREFIX "${CMA_PROJECTS_DIR}/"
   SUFFIX ".cmake")
 
-cma_configure_projects(RESOLVE_DEPENDENCIES VERIFY_URLS)
-
-cma_print_projects(SELECTED)
-
-cma_test_projects(ProjectA ProjectB)
-
-cma_package_projects(ProjectA ProjectC)
-
+cma_configure_projects()
 cma_configure_launcher()
-```
+
+cma_print_projects()
+~~~
+
+
+## Obtaining
+**Option 1.** Standard method where CMake will request the path to your local copy.
+
+~~~{.cmake}
+find_package(CMakeAll 1.0 REQUIRED)
+~~~
+
+**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub. If version number is not specified master branch is cloned, and updated with each configure.
+
+~~~{.cmake}
+list(APPEND CMAKE_MODULE_PATH "/path/to/FindCMakeAll.cmake")
+find_package(CMakeAll 1.0 REQUIRED)
+~~~

@@ -1,4 +1,4 @@
-# Doxyfile 1.8.5
+# Doxyfile 1.8.7
 
 #---------------------------------------------------------------------------
 # Project related configuration options
@@ -10,6 +10,7 @@ PROJECT_BRIEF          =
 PROJECT_LOGO           =
 OUTPUT_DIRECTORY       = @PROJECT_BINARY_DIR@/Documentation  # modified
 CREATE_SUBDIRS         = NO
+ALLOW_UNICODE_NAMES    = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
@@ -63,6 +64,7 @@ INTERNAL_DOCS          = NO
 CASE_SENSE_NAMES       = NO
 HIDE_SCOPE_NAMES       = NO
 SHOW_INCLUDE_FILES     = YES
+SHOW_GROUPED_MEMB_INC  = NO
 FORCE_LOCAL_INCLUDES   = NO
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
@@ -98,7 +100,8 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = @PROJECT_SOURCE_DIR@  # modified
 INPUT_ENCODING         = UTF-8
-FILE_PATTERNS          = *.cmake *.dox  # modified
+FILE_PATTERNS          = *.cmake \
+                         *.md  # modified
 RECURSIVE              = YES  # modified
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
@@ -112,7 +115,7 @@ INPUT_FILTER           =
 FILTER_PATTERNS        = *.cmake=@PROJECT_BINARY_DIR@/Documentation/CMakeDoxygenFilter@CMAKE_EXECUTABLE_SUFFIX@  # modified
 FILTER_SOURCE_FILES    = NO
 FILTER_SOURCE_PATTERNS =
-USE_MDFILE_AS_MAINPAGE =
+USE_MDFILE_AS_MAINPAGE = @PROJECT_SOURCE_DIR@/README.md  # modified
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
 #---------------------------------------------------------------------------
@@ -140,7 +143,7 @@ HTML_FILE_EXTENSION    = .html
 HTML_HEADER            =
 HTML_FOOTER            =
 HTML_STYLESHEET        =
-HTML_EXTRA_STYLESHEET  =
+HTML_EXTRA_STYLESHEET  = @PROJECT_SOURCE_DIR@/Documentation/custom.css  # modified
 HTML_EXTRA_FILES       =
 HTML_COLORSTYLE_HUE    = 220
 HTML_COLORSTYLE_SAT    = 100
@@ -223,14 +226,13 @@ RTF_EXTENSIONS_FILE    =
 GENERATE_MAN           = NO
 MAN_OUTPUT             = man
 MAN_EXTENSION          = .3
+MAN_SUBDIR             =
 MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the XML output
 #---------------------------------------------------------------------------
 GENERATE_XML           = NO
 XML_OUTPUT             = xml
-XML_SCHEMA             =
-XML_DTD                =
 XML_PROGRAMLISTING     = YES
 #---------------------------------------------------------------------------
 # Configuration options related to the DOCBOOK output
@@ -274,6 +276,7 @@ PERL_PATH              = /usr/bin/perl
 #---------------------------------------------------------------------------
 CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            =
+DIA_PATH               =
 HIDE_UNDOC_RELATIONS   = YES
 HAVE_DOT               = YES  # modified
 DOT_NUM_THREADS        = 0
@@ -297,6 +300,7 @@ INTERACTIVE_SVG        = YES  # modified
 DOT_PATH               =
 DOTFILE_DIRS           =
 MSCFILE_DIRS           =
+DIAFILE_DIRS           =
 DOT_GRAPH_MAX_NODES    = 50
 MAX_DOT_GRAPH_DEPTH    = 0
 DOT_TRANSPARENT        = NO

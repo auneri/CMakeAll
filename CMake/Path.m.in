@@ -1,4 +1,0 @@
-for i = {@MATLABPATH@}
-  addpath(char(i));
-end
-clear i;
