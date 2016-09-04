@@ -77,13 +77,7 @@ endfunction()
 # -----------------------------------------------------------------------------
 #! Configure added projects.
 function(cma_configure_projects)
-  cmake_parse_arguments(CMA "RESOLVE_DEPENDENCIES;VERIFY_URLS" "" "" ${ARGN})
-  if(CMA_RESOLVE_DEPENDENCIES)
-    message(SEND_ERROR "Function argument RESOLVE_DEPENDENCIES is deprecated, use corresponding CMake option instead")
-  endif()
-  if(CMA_VERIFY_URLS)
-    message(SEND_ERROR "Function argument VERIFY_URLS is deprecated, use corresponding CMake option instead")
-  endif()
+  cmake_parse_arguments(CMA "" "" "" ${ARGN})
 
   if(CMakeAll_RESOLVE_DEPENDENCIES)
     set(DEPENDENCY_RESOLVED ON)
