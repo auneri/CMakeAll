@@ -1,5 +1,5 @@
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_URL "git://github.com/opencv/opencv.git")
+set(EP_URL "https://github.com/opencv/opencv.git")
 set(EP_OPTION_DESCRIPTION "Open Source Computer Vision")
 
 cma_envvar(@LIBRARYPATH@ PREPEND "@BINARY_DIR@/@LIBDIR@/@INTDIR@")

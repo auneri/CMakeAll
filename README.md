@@ -25,7 +25,7 @@ An example definition for ProjectA may be as follows.
 
 ~~~{.cmake}
 set(EP_REQUIRED_PROJECTS ProjectB)
-set(EP_URL "git://github.com/organization/ProjectA.git")
+set(EP_URL "https://github.com/organization/ProjectA.git")
 set(EP_OPTION_NAME USE_ProjectA)
 
 cma_list(APPEND EP_REQUIRED_PROJECTS Python IF USE_Python)
