@@ -21,8 +21,7 @@ if(NOT CMakeAll_DIR)
 endif()
 
 find_package(CMakeAll ${CMakeAll_FIND_VERSION} HINTS ${CMakeAll_DIR})
+mark_as_advanced(CMakeAll_DIR)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(CMakeAll
-  FOUND_VAR CMakeAll_FOUND
-  REQUIRED_VARS CMakeAll_DIR CMakeAll_FOUND)
+find_package_handle_standard_args(CMakeAll REQUIRED_VARS CMakeAll_DIR)
