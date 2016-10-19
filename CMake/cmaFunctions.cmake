@@ -71,6 +71,8 @@ function(cma_configure_launcher CUSTOMIZATIONS)
       -DNAME:STRING=${PROJECT_NAME}
       -DCUSTOMIZATIONS:PATH=${CUSTOMIZATIONS}
       -P ${CMA_CMAKE_DIR}/ConfigureLauncher.cmake)
+  set_target_properties(Launcher PROPERTIES
+    FOLDER "Launchers")
 endfunction()
 
 
@@ -256,13 +258,17 @@ endfunction()
 
 
 # -----------------------------------------------------------------------------
-#! Create a target for executing a command through launcher.
+#! Create a target for executing a command via the launcher.
 function(cma_launcher_target)
-  cmake_parse_arguments(CMA "" "NAME" "" ${ARGN})
-  add_custom_target(${CMA_NAME}
-    COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS})
-  string(TOUPPER ${CMA_NAME} CMA_NAME_UPPER)
-  set_target_properties(${CMA_NAME} PROPERTIES PROJECT_LABEL ${CMA_NAME_UPPER} FOLDER "Launchers")
+  cmake_parse_arguments(CMA "" "NAME" "DEPENDS" ${ARGN})
+  set(TARGET_LABEL "Launch ${CMA_NAME}")
+  string(REPLACE " " "" TARGET_NAME "${TARGET_LABEL}")
+  add_custom_target(${TARGET_NAME}
+    COMMAND ${CMAKE_COMMAND} -P ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.cmake ${CMA_UNPARSED_ARGUMENTS}
+    DEPENDS ${CMA_DEPENDS})
+  set_target_properties(${TARGET_NAME} PROPERTIES
+    PROJECT_LABEL ${TARGET_LABEL}
+    FOLDER "Launchers")
 endfunction()
 
 
