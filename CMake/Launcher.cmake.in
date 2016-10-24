@@ -62,7 +62,7 @@ endif()
 
 
 # command alias: Terminal
-list(APPEND HELP "   Terminal - Open a terminal.\n")
+list(APPEND HELP "   Terminal - Default shell with a configured environment.\n")
 if(ARGV MATCHES "^Terminal$")
   if(WIN32)
     set(ARGV $ENV{COMSPEC})
