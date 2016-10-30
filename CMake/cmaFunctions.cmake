@@ -70,7 +70,8 @@ function(cma_configure_launcher CUSTOMIZATIONS)
       -DBINARY_DIR:PATH=${PROJECT_BINARY_DIR}
       -DNAME:STRING=${PROJECT_NAME}
       -DCUSTOMIZATIONS:PATH=${CUSTOMIZATIONS}
-      -P ${CMA_CMAKE_DIR}/ConfigureLauncher.cmake)
+      -P ${CMA_CMAKE_DIR}/ConfigureLauncher.cmake
+    DEPENDS ${CMA_CMAKE_DIR}/Launcher.cmake.in)
   set_target_properties(Launcher PROPERTIES
     FOLDER "Launchers")
 endfunction()
