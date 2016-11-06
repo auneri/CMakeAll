@@ -16,7 +16,7 @@ endmacro()
 #! Initialize, [document] and read project definition.
 macro(cma_read_definition DEFINITION)
   get_filename_component(FILENAME ${DEFINITION} NAME_WE)
-  get_filename_component(DIR ${DEFINITION} PATH)
+  get_filename_component(DIR ${DEFINITION} DIRECTORY)
   get_filename_component(DIRNAME ${DIR} NAME)
   string(TOUPPER ${DIRNAME} DIRNAME)
 
