@@ -6,8 +6,8 @@ if(NOT MATLAB_EXECUTABLE)
   message(FATAL_ERROR "Please specify MATLAB_EXECUTABLE")
 endif()
 
-get_filename_component(MATLAB_BIN_DIR ${MATLAB_EXECUTABLE} DIRECTORY)
-get_filename_component(MATLAB_DIR ${MATLAB_BIN_DIR} DIRECTORY)
+get_filename_component(MATLAB_BIN_DIR ${MATLAB_EXECUTABLE} PATH)
+get_filename_component(MATLAB_DIR ${MATLAB_BIN_DIR} PATH)
 
 ExternalProject_Add(${EP_NAME}
   DOWNLOAD_COMMAND ""
