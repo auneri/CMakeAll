@@ -5,7 +5,7 @@ A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module 
 ## Basic Example
 
 ~~~{.cmake}
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.7)
 project(BasicExample)
 
 find_package(CMakeAll 1.1 REQUIRED)
@@ -86,7 +86,7 @@ cmake -P /binary/dir/BasicExample.cmake
 ## Advanced Example
 
 ~~~{.cmake}
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.7)
 project(AdvancedExample)
 
 find_package(CMakeAll 1.1 REQUIRED)
