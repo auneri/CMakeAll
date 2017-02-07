@@ -1,9 +1,9 @@
 # CMakeAll
 A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
 
-[![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)](https://github.com/auneri/CMakeAll/releases)
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/auneri/CMakeAll)
-[![GitHub issues](https://img.shields.io/github/issues/badges/shields.svg)](https://github.com/auneri/CMakeAll/issues)
+[![GitHub release](https://img.shields.io/github/release/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/releases)
+[![Travis](https://img.shields.io/travis/auneri/CMakeAll.svg)](https://travis-ci.org/auneri/CMakeAll)
+[![GitHub issues](https://img.shields.io/github/issues/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/issues)
 
 
 ## Basic Example
