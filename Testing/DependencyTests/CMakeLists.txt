@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
-project(DependencyTests LANGUAGES NONE)
+project(DependencyTests NONE)
 
 find_package(CMakeAll REQUIRED
   HINTS "${CMAKE_CURRENT_LIST_DIR}/../../")
