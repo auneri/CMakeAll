@@ -48,7 +48,7 @@ endfunction()
 
 # -----------------------------------------------------------------------------
 #! Configure the CMake launcher script.
-function(cma_configure_launcher CUSTOMIZATIONS)
+function(cma_configure_launcher)
   set(EP_ENVVARS)
   foreach(DEFINITION ${CMA_DEFINITIONS})
     cma_read_definition(${DEFINITION})
@@ -69,7 +69,7 @@ function(cma_configure_launcher CUSTOMIZATIONS)
       -DSOURCE_DIR:PATH=${CMA_CMAKE_DIR}
       -DBINARY_DIR:PATH=${PROJECT_BINARY_DIR}
       -DNAME:STRING=${PROJECT_NAME}
-      -DCUSTOMIZATIONS:PATH=${CUSTOMIZATIONS}
+      -DCUSTOMIZATIONS:PATH=${ARGV0}
       -P ${CMA_CMAKE_DIR}/ConfigureLauncher.cmake
     DEPENDS ${CMA_CMAKE_DIR}/Launcher.cmake.in)
   set_target_properties(Launcher PROPERTIES
