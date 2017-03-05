@@ -1,6 +1,6 @@
 if(EXISTS ${SOURCE_DIR}/.git)
   set(REVERT_COMMAND ${GIT_EXECUTABLE} checkout .)
-  set(PATCH_COMMAND ${GIT_EXECUTABLE} apply ${PATCH_FILE})
+  set(PATCH_COMMAND ${GIT_EXECUTABLE} apply --whitespace=fix ${PATCH_FILE})
 elseif(EXISTS ${SOURCE_DIR}/.hg)
   set(REVERT_COMMAND ${HG_EXECUTABLE} revert --all)
   set(PATCH_COMMAND ${HG_EXECUTABLE} import --no-commit ${PATCH_FILE})
