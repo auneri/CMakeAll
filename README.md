@@ -1,5 +1,5 @@
 # CMakeAll
-A solution built on [CMake](http://cmake.org/) and its *ExternalProject* module to provide explicit and extensible management of dependencies.
+A solution built on [CMake](https://cmake.org) and its [ExternalProject module](https://cmake.org/cmake/help/latest/module/ExternalProject.html) to provide explicit and extensible management of dependencies.
 
 [![release](https://img.shields.io/github/release/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/releases)
 [![license](https://img.shields.io/github/license/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/blob/master/LICENSE.md)
@@ -21,30 +21,20 @@ cma_add_projects(
 
 cma_configure_projects()
 ~~~
-where `ProjectN.cmake` is referred to as a *project definition*.
-
-
-## Project Definition
-
-An example definition for ProjectA may be as follows.
+where a simple *project definition script* for `ProjectA` may contain:
 
 ~~~{.cmake}
 set(EP_REQUIRED_PROJECTS ProjectB)
 set(EP_URL "https://github.com/organization/ProjectA.git")
-set(EP_OPTION_NAME USE_ProjectA)
-
-cma_list(APPEND EP_REQUIRED_PROJECTS Python IF USE_Python)
-cma_envvar(PYTHONPATH PREPEND "@SOURCE_DIR@" IF USE_Python)
 
 cma_end_definition()
 
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG "v1.0"
+  GIT_TAG v1.0
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
-  CMAKE_ARGS -DBUILD_PYTHON_BINDINGS:BOOL=${USE_Python}
-             -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+  CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Relase
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
   INSTALL_COMMAND "")
 ~~~
@@ -66,7 +56,23 @@ set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
 ~~~
 
 
-## Launcher
+## Advanced Example
+
+~~~{.cmake}
+cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
+project(AdvancedExample)
+
+find_package(CMakeAll 1.1 REQUIRED)
+
+cma_add_projects(
+  ProjectA ProjectB ProjectC
+  PREFIX "${PROJECT_SOURCE_DIR}/"
+  SUFFIX ".cmake")
+
+cma_configure_projects()
+cma_configure_launcher()
+cma_print_projects()
+~~~
 
 Each project may define its own environment variables using `cma_envvar`.
 
@@ -81,30 +87,10 @@ set(BINARY_DIR "@BINARY_DIR@")
 set(INSTALL_DIR "@INSTALL_DIR@")
 ~~~
 
-which are then used to configure a cross-platform launcher script that can be used as follows.
+which are then used to configure a *launcher script* that may be used as:
 
 ~~~bash
-cmake -P /binary/dir/BasicExample.cmake
-~~~
-
-
-## Advanced Example
-
-~~~{.cmake}
-cmake_minimum_required(VERSION 2.8.7)
-project(AdvancedExample)
-
-find_package(CMakeAll 1.1 REQUIRED)
-
-cma_add_projects(
-  ProjectA ProjectB ProjectC
-  PREFIX "${CMA_PROJECTS_DIR}/"
-  SUFFIX ".cmake")
-
-cma_configure_projects()
-cma_configure_launcher()
-
-cma_print_projects()
+cmake -P /binary/dir/AdvancedExample.cmake
 ~~~
 
 
@@ -115,7 +101,7 @@ cma_print_projects()
 find_package(CMakeAll 1.1 REQUIRED)
 ~~~
 
-**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/develop/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub. If version number is not specified master branch is cloned, and updated with each configure.
+**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/v1.1/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub. If version number is not specified master branch is cloned, and updated with each configure.
 
 ~~~{.cmake}
 list(APPEND CMAKE_MODULE_PATH "/path/to/FindCMakeAll.cmake")
