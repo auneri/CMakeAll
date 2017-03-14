@@ -7,20 +7,25 @@ A solution built on [CMake](https://cmake.org) and its [ExternalProject module](
 [![issues](https://img.shields.io/github/issues/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/issues)
 
 
-## Basic Example
+## Getting Started
 
 ~~~{.cmake}
 cmake_minimum_required(VERSION 2.8.7)
-project(BasicExample)
+project(HelloWorld)
 
 find_package(CMakeAll 1.1 REQUIRED)
 
-cma_add_projects(
-  "/source/dir/ProjectA.cmake"
-  "/source/dir/ProjectB.cmake")
+cma_add_projects("/source/dir/ProjectA.cmake")
+
+cma_add_projects(ProjectB ProjectC ProjectD
+  PREFIX "${PROJECT_SOURCE_DIR}/"
+  SUFFIX ".cmake")
 
 cma_configure_projects()
+cma_configure_launcher()
+cma_print_projects()
 ~~~
+
 where a simple *project definition script* for `ProjectA` may contain:
 
 ~~~{.cmake}
@@ -55,25 +60,6 @@ set(EP_OPTION_DESCRIPTION "")                # option description
 set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
 ~~~
 
-
-## Advanced Example
-
-~~~{.cmake}
-cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
-project(AdvancedExample)
-
-find_package(CMakeAll 1.1 REQUIRED)
-
-cma_add_projects(
-  ProjectA ProjectB ProjectC
-  PREFIX "${PROJECT_SOURCE_DIR}/"
-  SUFFIX ".cmake")
-
-cma_configure_projects()
-cma_configure_launcher()
-cma_print_projects()
-~~~
-
 Each project may define its own environment variables using `cma_envvar`.
 
 ~~~{.cmake}
@@ -89,8 +75,8 @@ set(INSTALL_DIR "@INSTALL_DIR@")
 
 which are then used to configure a *launcher script* that may be used as:
 
-~~~bash
-cmake -P /binary/dir/AdvancedExample.cmake
+~~~{.sh}
+cmake -P /binary/dir/HelloWorld.cmake
 ~~~
 
 
@@ -101,7 +87,7 @@ cmake -P /binary/dir/AdvancedExample.cmake
 find_package(CMakeAll 1.1 REQUIRED)
 ~~~
 
-**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/v1.1/CMake/FindCMakeAll.cmake) where the project is cloned from GitHub. If version number is not specified master branch is cloned, and updated with each configure.
+**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/v1.1/CMake/FindCMakeAll.cmake) where the project is automatically cloned from GitHub. If version number is not specified master branch is cloned and updated with each *configure*.
 
 ~~~{.cmake}
 list(APPEND CMAKE_MODULE_PATH "/path/to/FindCMakeAll.cmake")
