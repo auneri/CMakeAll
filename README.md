@@ -9,7 +9,7 @@ A solution built on [CMake](https://cmake.org) and its [ExternalProject module](
 
 ## Getting Started
 
-~~~{.cmake}
+```cmake
 cmake_minimum_required(VERSION 2.8.7)
 project(HelloWorld)
 
@@ -24,11 +24,11 @@ cma_add_projects(ProjectB ProjectC ProjectD
 cma_configure_projects()
 cma_configure_launcher()
 cma_print_projects()
-~~~
+```
 
 where a simple *project definition script* for `ProjectA` may contain:
 
-~~~{.cmake}
+```cmake
 set(EP_REQUIRED_PROJECTS ProjectB)
 set(EP_URL "https://github.com/organization/ProjectA.git")
 
@@ -42,11 +42,11 @@ ExternalProject_Add(${EP_NAME}
   CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Relase
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
   INSTALL_COMMAND "")
-~~~
+```
 
 Variables listed below can be used to define a project, and should be set prior to calling `cma_end_definition`.
 
-~~~{.cmake}
+```cmake
 set(EP_NAME "${FILENAME}")    # project name
 set(EP_REQUIRED_PROJECTS "")  # list of required projects
 set(EP_REQUIRED_OPTIONS "")   # list of required options
@@ -58,11 +58,11 @@ set(EP_OPTION_DEFAULT OFF)                   # default value of option
 set(EP_OPTION_DEPENDENT OFF)                 # hide option until requirements are met
 set(EP_OPTION_DESCRIPTION "")                # option description
 set(EP_OPTION_ADVANCED OFF)                  # mark option as advanced
-~~~
+```
 
 Each project may define its own environment variables using `cma_envvar`.
 
-~~~{.cmake}
+```cmake
 cma_envvar(PATH PREPEND @BINARY_DIR@/@LIBDIR@/@INTDIR@)
 
 # variables that expand at build-time
@@ -71,25 +71,25 @@ set(LIBDIR "@LIBDIR@")
 set(SOURCE_DIR "@SOURCE_DIR@")
 set(BINARY_DIR "@BINARY_DIR@")
 set(INSTALL_DIR "@INSTALL_DIR@")
-~~~
+```
 
 which are then used to configure a *launcher script* that may be used as:
 
-~~~{.sh}
+```sh
 cmake -P /binary/dir/HelloWorld.cmake
-~~~
+```
 
 
 ## Obtaining
 **Option 1.** Standard method where CMake will request the path to your local copy.
 
-~~~{.cmake}
+```cmake
 find_package(CMakeAll 1.1 REQUIRED)
-~~~
+```
 
 **Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/v1.1/CMake/FindCMakeAll.cmake) where the project is automatically cloned from GitHub. If version number is not specified master branch is cloned and updated with each *configure*.
 
-~~~{.cmake}
+```cmake
 list(APPEND CMAKE_MODULE_PATH "/path/to/FindCMakeAll.cmake")
 find_package(CMakeAll 1.1 REQUIRED)
-~~~
+```
