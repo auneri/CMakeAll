@@ -1,6 +1,16 @@
 language: c
 
-compiler: clang
+matrix:
+  include:
+    - os: linux
+      sudo: false
+    - os: linux
+      dist: trusty
+      sudo: false
+    - os: osx
+
+install:
+  - cmake --version
 
 before_script:
   - mkdir build
