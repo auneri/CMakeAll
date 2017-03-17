@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
 project(CMakeAll)
 
-set(PROJECT_VERSION 1.1)
+set(PROJECT_VERSION 1.2)
 
 option(${PROJECT_NAME}_BUILD_DOCUMENTATION "" OFF)
 option(${PROJECT_NAME}_BUILD_TESTING "" OFF)
