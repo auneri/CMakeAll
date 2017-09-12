@@ -11,7 +11,8 @@ if(${EP_OPTION_NAME}_Python)
   cma_envvar(@LIBRARYPATH@ PREPEND
     "@BINARY_DIR@/@LIBDIR@/@INTDIR@")
   cma_envvar(PYTHONPATH PREPEND
-    "@BINARY_DIR@/@LIBDIR@/@INTDIR@"
+    "@BINARY_DIR@/lib"
+    "@BINARY_DIR@/lib/@INTDIR@"
     "@BINARY_DIR@/Wrapping/Generators/Python/@INTDIR@")
 endif()
 
@@ -68,7 +69,7 @@ endif()
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG v4.11.0
+  GIT_TAG v4.12.2
   UPDATE_COMMAND ""
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS ${EP_CMAKE_ARGS}
