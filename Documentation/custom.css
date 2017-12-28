@@ -1,15 +1,23 @@
-#titlearea {
-    padding: 10px;
-	border-bottom: none;
-}
-#MSearchBox {
-    right: auto;
-}
 body {
-    margin: auto;
-    max-width: 1000px;
     color: #444;
+    margin: auto;
 }
+
+div.header {
+    border-bottom: none;
+}
+
+div#titlearea {
+    border-bottom: none;
+    padding: 10px;
+}
+
 hr.footer {
-    display: none;
+    border-top: none;
+}
+
+@media (min-width: 1200px) {
+    body {
+        max-width: 960px;
+    }
 }
