@@ -124,7 +124,7 @@ function(cma_configure_projects)
             mark_as_advanced(SVN_EXECUTABLE)
             if(SVN_EXECUTABLE)
               execute_process(
-                COMMAND ${SVN_EXECUTABLE} info ${URL}
+                COMMAND ${SVN_EXECUTABLE} --non-interactive --trust-server-cert info ${URL}
                 OUTPUT_QUIET
                 ERROR_QUIET
                 RESULT_VARIABLE RESULT)
