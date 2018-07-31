@@ -30,7 +30,7 @@ if(WIN32)
     BUILD_COMMAND ""
     INSTALL_COMMAND "")
 
-  set(SWIG_DIR "${PROJECT_BINARY_DIR}/${EP_NAME}-install")
+  set(SWIG_DIR "${PROJECT_BINARY_DIR}/${EP_NAME}-install/Lib")
   set(SWIG_EXECUTABLE "${PROJECT_BINARY_DIR}/${EP_NAME}-install/swig.exe")
 elseif(UNIX)
   list(GET EP_URL 0 URL)
