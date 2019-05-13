@@ -1,11 +1,10 @@
 # CMakeAll
-A solution built on [CMake](https://cmake.org) and its [ExternalProject module](https://cmake.org/cmake/help/latest/module/ExternalProject.html) to provide explicit and extensible management of dependencies.
 
-[![release](https://img.shields.io/github/release/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/releases)
+Dependency management using [CMake](https://cmake.org) and its [ExternalProject module](https://cmake.org/cmake/help/latest/module/ExternalProject.html).
+
 [![license](https://img.shields.io/github/license/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/blob/master/LICENSE.md)
+[![release](https://img.shields.io/github/release/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/releases)
 [![build](https://img.shields.io/travis/auneri/CMakeAll.svg)](https://travis-ci.org/auneri/CMakeAll)
-[![issues](https://img.shields.io/github/issues/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/issues)
-
 
 ## Getting Started
 
@@ -75,12 +74,12 @@ set(INSTALL_DIR "@INSTALL_DIR@")
 
 which are then used to configure a *launcher script* that may be used as:
 
-```sh
+```shell
 cmake -P /binary/dir/HelloWorld.cmake
 ```
 
-
 ## Obtaining
+
 **Option 1.** Standard method where CMake will request the path to your local copy.
 
 ```cmake
