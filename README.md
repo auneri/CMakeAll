@@ -6,7 +6,7 @@ Dependency management using [CMake](https://cmake.org) and its [ExternalProject 
 [![release](https://img.shields.io/github/release/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/releases)
 [![build](https://img.shields.io/github/workflow/status/auneri/CMakeAll/cmakeall)](https://github.com/auneri/CMakeAll/actions)
 
-## Getting Started
+## Getting started
 
 ```cmake
 cmake_minimum_required(VERSION 2.8.7)

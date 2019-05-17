@@ -12,7 +12,7 @@ elseif(UNIX)
   set(EP_URL_MD5 fc18afa0f14a25475cf097ee102a3e4f
                  3bcd2441024d00009a5fee43f058987c)
 else()
-  message(FATAL_ERROR "Platform is not supported.")
+  message(FATAL_ERROR "Platform is not supported")
 endif()
 
 cma_end_definition()
