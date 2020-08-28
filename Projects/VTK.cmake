@@ -1,5 +1,5 @@
 set(EP_REQUIRED_PROJECTS Git)
-set(EP_URL "git://vtk.org/VTK.git")
+set(EP_URL "https://github.com/Kitware/VTK.git")
 set(EP_OPTION_DESCRIPTION "Visualization Toolkit")
 
 cma_list(APPEND EP_REQUIRED_PROJECTS Python IF PROJECTS_Python)
@@ -72,7 +72,8 @@ endif()
 ExternalProject_Add(${EP_NAME}
   DEPENDS ${EP_REQUIRED_PROJECTS}
   GIT_REPOSITORY ${EP_URL}
-  GIT_TAG v8.0.1
+  GIT_SHALLOW ON
+  GIT_TAG "v9.0.1"
   SOURCE_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}
   CMAKE_ARGS ${EP_CMAKE_ARGS}
   BINARY_DIR ${PROJECT_BINARY_DIR}/${EP_NAME}-build
