@@ -12,9 +12,7 @@ if(${PROJECT_NAME}_BUILD_DOCUMENTATION)
 endif()
 
 if(${PROJECT_NAME}_BUILD_TESTING)
-  include(CTest)
   enable_testing()
-
   add_test(
     NAME DependencyTests
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Testing
