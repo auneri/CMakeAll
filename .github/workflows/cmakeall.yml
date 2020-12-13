@@ -1,0 +1,15 @@
+name: cmakeall
+
+on: push
+
+jobs:
+
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: cmake --version
+      - run: cmake -S . -B ./build -DCMakeAll_BUILD_TESTING=ON
+      - run: cmake --build ./build
+      - run: cmake --build ./build --target test

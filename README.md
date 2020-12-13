@@ -4,7 +4,7 @@ Dependency management using [CMake](https://cmake.org) and its [ExternalProject 
 
 [![license](https://img.shields.io/github/license/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/blob/master/LICENSE.md)
 [![release](https://img.shields.io/github/release/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/releases)
-[![build](https://img.shields.io/travis/auneri/CMakeAll.svg)](https://travis-ci.org/auneri/CMakeAll)
+[![build](https://img.shields.io/github/workflow/status/auneri/CMakeAll/cmakeall)](https://github.com/auneri/CMakeAll/actions)
 
 ## Getting Started
 
