@@ -6,11 +6,11 @@ if(WIN32)
   set(EP_URL "http://downloads.sourceforge.net/project/swig/swigwin/swigwin-${EP_VERSION}/swigwin-${EP_VERSION}.zip")
   set(EP_URL_MD5 a49524dad2c91ae1920974e7062bfc93)
 elseif(UNIX)
-  set(PCRE_VERSION 8.40)
+  set(PCRE_VERSION 8.44)
   set(EP_URL "http://downloads.sourceforge.net/project/pcre/pcre/${PCRE_VERSION}/pcre-${PCRE_VERSION}.tar.gz"
              "http://downloads.sourceforge.net/project/swig/swig/swig-${EP_VERSION}/swig-${EP_VERSION}.tar.gz")
-  set(EP_URL_MD5 890c808122bd90f398e6bc40ec862102
-                 82133dfa7bba75ff9ad98a7046be687c)
+  set(EP_URL_MD5 fc18afa0f14a25475cf097ee102a3e4f
+                 3bcd2441024d00009a5fee43f058987c)
 else()
   message(FATAL_ERROR "Platform is not supported.")
 endif()
