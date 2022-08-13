@@ -2,7 +2,7 @@
 
 Dependency management using [CMake](https://cmake.org) and its [ExternalProject module](https://cmake.org/cmake/help/latest/module/ExternalProject.html).
 
-[![license](https://img.shields.io/github/license/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/blob/master/LICENSE.md)
+[![license](https://img.shields.io/github/license/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/blob/main/LICENSE.md)
 [![release](https://img.shields.io/github/release/auneri/CMakeAll.svg)](https://github.com/auneri/CMakeAll/releases)
 [![build](https://img.shields.io/github/workflow/status/auneri/CMakeAll/cmakeall)](https://github.com/auneri/CMakeAll/actions)
 
@@ -87,7 +87,7 @@ cmake -P /binary/dir/HelloWorld.cmake
 find_package(CMakeAll 1.2 REQUIRED)
 ```
 
-**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/v1.2/CMake/FindCMakeAll.cmake) where the project is automatically cloned from GitHub. If version number is not specified master branch is cloned and updated with each *configure*.
+**Option 2.** Using [FindCMakeAll.cmake](https://github.com/auneri/CMakeAll/blob/v1.2/CMake/FindCMakeAll.cmake) where the project is automatically cloned from GitHub. If version number is not specified main branch is cloned and updated with each *configure*.
 
 ```cmake
 list(APPEND CMAKE_MODULE_PATH "/path/to/FindCMakeAll.cmake")
