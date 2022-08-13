@@ -1,6 +1,6 @@
-name: cmakeall
+name: CI
 
-on: push
+on: [push]
 
 jobs:
 
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: cmake --version
       - run: cmake -S . -B ./build -DCMakeAll_BUILD_TESTING=ON
       - run: cmake --build ./build
